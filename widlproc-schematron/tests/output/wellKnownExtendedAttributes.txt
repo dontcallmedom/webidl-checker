@@ -1,0 +1,1 @@
+Extended attribute of Unknown is unknown in WebIDL.

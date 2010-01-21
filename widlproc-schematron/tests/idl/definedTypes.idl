@@ -1,0 +1,9 @@
+/* Uses an undefined type */
+interface UseUndefinedType {
+  attribute UndefinedType att;
+};
+
+/* uses a defined type */
+interface UseDefinedType {
+  attribute UseUndefinedType att;
+};

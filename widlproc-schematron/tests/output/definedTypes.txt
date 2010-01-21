@@ -1,0 +1,1 @@
+UndefinedType type used in UseUndefinedType.att declaration undefined.

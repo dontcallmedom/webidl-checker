@@ -1,0 +1,16 @@
+Extended attribute Callback used on Module — Callback expected only on interfaces.
+Extended attribute Callback used on UnknownCallbackExtendedAttribute uses an unknown argument Unknown.
+The interface CallbackUsedOnInheritingInterface has extended attribute Callback but inherits from another interface (InheritedInterface).
+The interface CallbackUsedWithConstructor has both extended attributes Callback and Constructor).
+The interface CallbackUsedWithNamedConstructor has both extended attributes Callback and NamedConstructor).
+The interface CallbackUsedWithGetter has a Callback extended attribute, but offers a either  getters, setters, creators, deleters, caller or stringifier.
+The interface CallbackUsedWithSetter has a Callback extended attribute, but offers a either  getters, setters, creators, deleters, caller or stringifier.
+The interface CallbackUsedWithCreator has a Callback extended attribute, but offers a either  getters, setters, creators, deleters, caller or stringifier.
+The interface CallbackUsedWithDeleter has a Callback extended attribute, but offers a either  getters, setters, creators, deleters, caller or stringifier.
+The interface CallbackUsedWithStringifier has a Callback extended attribute, but offers a either  getters, setters, creators, deleters, caller or stringifier.
+The interface CallbackWithPutForwards has a Callback extended attribute, but exposes an attribute with a PutForwards extended attribute.
+The interface CallbackWithTreatNullAs has a Callback extended attribute, but exposes an attribute with a TreatNullAs extended attribute.
+The interface CallbackWithTreatUndefinedAs has a Callback extended attribute, but exposes an attribute with a TreatUndefinedAs extended attribute.
+The interface FunctionOnlyCallbackWithAttribute uses a Callback extended attribute with an argument, but exposes at least one attribute.
+The interface FunctionOnlyCallbackWithoutOperation uses a Callback extended attribute with an argument, but exposes zero or multiple operations with different identifiers.
+The interface PropertyOnlyCallbackWithDifferentOperations uses a Callback extended attribute with an argument, but exposes zero or multiple operations with different identifiers.
