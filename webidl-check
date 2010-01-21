@@ -1,0 +1,393 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+"""
+WebIDL extractor and checker based on widlproc http://widl.webvm.net/
+In the commandline, takes one parameter: the URI from which to extract the WebIDLs
+and optionally --extract-only to only get the extracted WebIDL
+$Id$
+"""
+
+
+import cgi
+import sys
+import os
+import urlparse
+import urllib
+import httplib
+
+class WrongConfigurationException(Exception):
+    """Exception raised when the script is not properly configured."""
+    pass
+
+
+class UnparseableDocumentException(Exception):
+    """Exception raised when submitted document can't be turned into XHTML."""
+    pass
+
+
+Page = """
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
+<head><title>WebIDL checker</title>
+<link rel="stylesheet" href="http://www.w3.org/StyleSheets/base" />
+<style type="text/css">
+.error { color:red}
+.highlight { background-color:#fcc;}
+.report {
+ border-top:thin solid black;
+}
+</style>
+</head>
+<body>
+
+<p><a href="http://www.w3.org/"><img src="http://www.w3.org/Icons/w3c_home" alt="W3C"/></a> <a href="http://www.w3.org/2003/Editors">W3C Editors homepage</a> <a href="http://dev.w3.org/2006/webapi/WebIDL/">WebIDL spec</a></p>
+
+<h1>WebIDL checker</h1>
+"""
+Page2 = """
+<form method="GET">
+<p><label>Source document: <input name="doc" value="%s"/></label></p>
+<p><strong>OR</strong></p>
+<p><label>Direct input: <textarea name="input" rows="10" cols="70">%s</textarea></p>
+<p><label>Ouput format: <select name="output"><option value="html">HTML</option><option value="text" %s>Text (GNU Error format)</option></select></label></p>
+<p><input type="submit" value="Check WebIDL"/></p>
+</form>
+
+<address>
+script $Revision$ of $Date$<br />
+by <a href="http://www.w3.org/People/Dom/">Dominique Hazaël-Massieux</a><br />
+the heavy work is done by <a href="http://widl.webvm.net/">widlproc</a>.
+</address>
+</body>
+</html>
+"""
+
+	
+
+def serveRequest():
+    fields = cgi.FieldStorage()
+
+    if (not fields.has_key('doc') and not fields.has_key('input')):
+        print "Content-Type: text/html;charset=utf-8"
+	print
+        print Page
+	print Page2 % ("","","")
+    else:
+        doc = ""
+        inp = ""
+        if fields.has_key('doc') and fields['doc'].value:
+            doc = fields['doc'].value
+        elif fields.has_key('input'):
+            inp = fields['input'].value
+        if doc:
+            if "'" in doc:
+		print "Status: 403"
+		print "Content-Type: text/plain"
+		print
+		print "sorry, I can't handle addresses with ' in them"
+                sys.exit()
+            elif doc[:5] == 'file:' or len(urlparse.urlparse(doc)[0])<2:
+                print "Status: 403"
+                print "Content-Type: text/plain"
+                print
+                print "sorry, I decline to handle file: addresses"
+                sys.exit()
+        # working around needed re-ident for now
+        if True:
+                output = "html"
+                textoutputselected=""
+                if fields.has_key('output') and fields['output'].value=='text':
+                    # we'll output using http://www.gnu.org/prep/standards/standards.html#Errors
+                    output = "text"
+                    textoutputselected=" selected='selected'"
+                extraRequestHeaders = []
+                if fields.headers.has_key('If-Modified-Since'):
+                    extraRequestHeaders.append("If-Modified-Since: %s" % (fields.headers["If-Modified-Since"]))
+		if os.environ.has_key('REMOTE_ADDR') and os.environ['REMOTE_ADDR']:
+                    extraRequestHeaders.append('X_Forward_IP_Addr: %s' %(os.environ['REMOTE_ADDR']))
+                idls = []
+                xmlOutput = []
+                errors = []
+                if doc:
+                    try:
+                        srcheaders,idls,xmlOutput,errors = extractIdls(doc,extraRequestHeaders)
+                            
+                    except UnparseableDocumentException,e:
+                        print Page
+                        print "<p class='error'>Failed to turn document into XHTML for extracting WebIDLs: <code>%s</code>.</p>" % (cgi.escape(str(e)))
+                        print Page2 % (doc,"",textoutputselected)
+                        sys.exit()
+                    except WrongConfigurationException,e:
+                        print Page
+                        print "<p class='error'>Could not run <code><a href='http://widl.webvm.net/'>widlproc</a></code>: <code>%s</code>.</p>" % (cgi.escape(str(e)))
+                        print Page2 % (doc,"",textoutputselected)
+                        sys.exit()
+                    if srcheaders.has_key('Last-Modified'):
+                        print "Last-Modified: %s" % ( srcheaders["Last-Modified"] )
+                    if srcheaders.has_key("Expires"):
+                        print "Expires: %s" % (srcheaders['Expires'] )
+                elif inp:
+                    idls.append(inp)
+                    xmlout,error = widlproc(inp,0,1)
+                    if xmlout:
+                        xmlOutput.append(xmlout)
+                    if error:
+                        errors.append(error)                    
+
+                # sending content type header based on ouput param
+                if output=='text':
+                    print "Content-Type: text/plain;charset=utf-8"
+                else:
+                    print "Content-Type: text/html;charset=utf-8"
+                print
+
+                # payload starts here
+                if output=='text':
+                    if len(errors):
+                        for error in errors:
+                            idl,errormsg,idlline,position=error
+                            errorline,msg = errormsg.split(':',1)
+                            if idlline:
+                                line = int(errorline) + idlline
+                                print "%d:%s" % (line,msg)
+                            else:
+                                print "Line %d of IDL #%d:%s" % (int(errorline),position,msg)
+                    elif len(idls)==0:
+                        print "# No WebIDL found in document at %s" % (cgi.escape(doc))
+                    sys.exit()
+                else:
+                    print Page
+                    if len(errors):
+                        print "<p class='error'>The following errors were found in the extracted WebIDLs:</p>"
+                        for e in errors:
+                            try:
+                                errorline = int(e[1].split(':')[0])
+                            except:
+                                errorline = None
+                            # highlighting said line in IDL
+                            idllines = e[0].split("\n")
+                            highlightedidl = e[0]
+                            if errorline!=None and errorline < len(idllines)+1 and errorline > 0:
+                                highlightedidl = cgi.escape("\n".join(idllines[0:errorline-1])) + "\n" + "<span class='highlight'>%s</span>" % (cgi.escape(idllines[errorline-1]))
+                                if errorline < len(idllines):
+                                    highlightedidl = highlightedidl + "\n" + cgi.escape("\n".join(idllines[errorline:]))
+                            # and printing out the report
+                            print "<div class='report'>"
+                            if e[2]:
+                                idldesc = "IDL at line %d" %(e[2])
+                            else:
+                                idldesc = "IDL #%d" %(e[3])
+                            print "<pre class='error'>Line %s</pre><p>error in %s</p><pre class='idl'>%s</pre>" % (cgi.escape(e[1]),idldesc,highlightedidl,)
+                            print "</div>"
+                        if len(xmlOutput):
+                            # @@@ print name of valid interfaces?
+                            print "<p>%d syntactically correct IDLs also detected.</p>" % (len(xmlOutput))
+                    elif len(xmlOutput):
+                        from lxml import etree
+                        print "<p>%d syntactically correct IDLs detected:</p>" % (len(xmlOutput))
+                        xslt_doc = etree.parse("/afs/w3.org/pub/WWW/2009/07/widlprocxmltohtmlfragment.xsl")
+                        transform = etree.XSLT(xslt_doc)
+                        for x in xmlOutput:
+                            from StringIO import StringIO
+                            f = StringIO(x)
+                            xmldoc = etree.parse(f)
+                            print "<div class='report'>"
+                            print transform(xmldoc)
+                            print "</div>"
+                    else:
+                        print "<p class='error'>No WebIDL found in the document at <a href='%s'>%s</a>.</p>" % (doc,doc)
+                    print Page2 % (doc,inp,textoutputselected)
+
+def extractIdls(doc,extraRequestHeaders=[]):
+    # the function below is used to replace
+    # the http_error handling to raise an exception in the url_opener
+    # OK, this is ugly, but I don't want to create two derivative classes just for that
+    def raise_on_http_error(self, url, fp, errcode, errmsg, headers):
+        raise UnparseableDocumentException("HTTP Error: %d %s" %(errcode,errmsg))
+    import new
+    try:
+        # http_auth is at http://dev.w3.org/cvsweb/2000/tidy-svc/http_auth.py
+        # only useful for accessing Basic-Auth protected resources
+        # in CGI service
+        import http_auth
+        url_opener = http_auth.ProxyAuthURLopener()
+        url_opener.http_error_default=new.instancemethod(raise_on_http_error,url_opener,http_auth.ProxyAuthURLopener)
+    except ImportError:
+        url_opener = urllib.FancyURLopener()
+        url_opener.http_error_default=new.instancemethod(raise_on_http_error,url_opener,urllib.FancyURLopener)
+
+    for header in extraRequestHeaders:
+        url_opener.addheader(header)
+    try:
+        srcdoc = url_opener.open(doc)
+    except IOError, (errno, strerror):
+        raise UnparseableDocumentException("I/O error: %s %s" % (errno,strerror))
+    except httplib.InvalidURL:
+        raise UnparseableDocumentException("Invalid URL submitted")
+    if srcdoc:
+        srcheaders = srcdoc.info()
+        charset = ""
+        contentType="text/html"
+        if srcheaders.has_key('Content-Type'):
+            contentType = cgi.parse_header(srcheaders["Content-Type"])
+            if contentType[1].has_key('charset'):
+                from string import lower
+                charset = lower(contentType[1]['charset'])
+                        
+        # Extract WebIDLs from source document in invidual files
+        # is the document already XML?
+        from lxml import etree
+        try:
+            parser = etree.XMLParser(resolve_entities=False)
+            tree = etree.parse(doc,parser)
+        except (etree.XMLSyntaxError,TypeError): #TypeError is raised by old versions of lxml :(
+            try:
+                # we try the HTMLParser
+                tree = etree.parse(doc,etree.HTMLParser())
+            except Exception, e:
+                # we run tidy on the document
+                # to make it XHTML
+                import tidy
+                # option for tidy
+                htmldoc = srcdoc.read()
+                options = dict(output_xhtml=1, # we want XHTML out
+                               tidy_mark=0, # we don't want to change the markup
+                               numeric_entities=1 # but non numeric entities ess up lxml
+                               )
+                if charset == "iso-8859-1":
+                    options["char_encoding"]='latin1'
+                else:
+                    options["char_encoding"]='utf8'
+                
+                t = str(tidy.parseString(htmldoc, **options))
+                from StringIO import StringIO
+                xmldoc = StringIO(t)
+                try:
+                    tree = etree.parse(xmldoc)
+                except UnparseableDocumentException, e:
+                    print t
+                    raise UnparseableDocumentException(str(e))
+        errors = []
+        xmlOutput = []
+        idlOutput = []
+        # and then get extracts IDLs through XPath
+        idls = tree.xpath("/html:html/html:body//html:pre[@class='idl' or @class='webidl' or html:code[@class='idl-code']]",namespaces={'html': 'http://www.w3.org/1999/xhtml'})
+        # handling the no-namespace case (source is in HTML)
+        idls += tree.xpath("/html/body//pre[@class='idl' or @class='webidl' or code[@class='idl-code']]")
+        from tempfile import NamedTemporaryFile
+        counter = 0
+        for idlXml in idls:
+            counter = counter + 1
+            idl = "".join(idlXml.xpath("descendant-or-self::text()"))
+            idlOutput.append(idl)
+            idlline = None
+            try:
+                idlline = idlXml.sourceline
+            except AttributeError:
+                idlline = None
+            # run widlproc on each of  them
+            xmlout,error = widlproc(idl,idlline,counter)
+            if xmlout:
+                xmlOutput.append(xmlout)
+            if error:
+                errors.append(error)
+        return srcheaders,idlOutput,xmlOutput,errors
+    else:
+        raise UnparseableDocumentException("could not load resource: ")
+
+# process an IDL fragment with widlproc
+# returns the XML representation of the fragment, and a list of errors
+def widlproc(idl,idlline,counter):
+    command = ['/usr/local/bin/widlproc','-no-dtd-ref','/dev/stdin']
+    error = None
+    xmlOutput = None
+    from subprocess import Popen, PIPE
+    try:
+        p =  Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+    except OSError:
+        raise WrongConfigurationException("widlproc not available at %s" % (command[0]))
+    p.stdin.write(idl)
+    p.stdin.close()
+    retcode = p.wait()
+    errmsg = None
+    if retcode!=0:
+        # widlproc prepends the error message with the filename - we don't need that
+        errmsg = p.stderr.read()[len("/dev/stdin: "):]
+    if errmsg:
+        error = (idl,errmsg,idlline,counter)
+    else:
+        xmlOutput = p.stdout.read()
+    return (xmlOutput,error)
+
+def process(url,output='default'):
+    import sys
+    try:
+        (info,idls,xmlOutput,errors)=extractIdls(url)
+    except UnparseableDocumentException,e:
+        sys.stderr.write( "Couldn't parse document at %s:%s" % (url,str(e)))
+        sys.exit(1)
+    except WrongConfigurationException,e:
+        sys.stderr.write( "Couldn't run wildproc: %s\n" % (str(e)))
+        sys.stderr.write( "Install it from http://widl.webvm.net/\n")
+        sys.exit(1)
+        
+    if output=='default':
+        if len(errors):
+            for error in errors:
+                try:
+                    errorline = int(error[1].split(':')[0])
+                except:
+                    errorline = None
+                # highlighting said line in IDL
+                idllines = error[0].split("\n")
+                highlightedidl = error[0]
+                if errorline!=None and errorline < len(idllines)+1 and errorline > 0:
+                    highlightedidl = "\n".join(idllines[0:errorline-1]) + "\n" + "*** %s" % (idllines[errorline-1])
+                    if errorline < len(idllines):
+                        highlightedidl = highlightedidl + "\n" + "\n".join(idllines[errorline:])
+                if error[2]:
+                    idldesc="IDL at line %d" % (error[2])
+                else:
+                    idldesc="IDL #%d" % (error[3])
+
+                # and printing out the report
+                
+                sys.stderr.write("%s\nerror found in %s\n%s" % (error[1],idldesc,highlightedidl))
+                sys.stderr.write("-" * 30 + "\n")
+        if len(xmlOutput):
+            print "<Definitions>"
+            for x in xmlOutput:
+                # getting rid of xml declaration
+                print x.split("?>",1)[1]
+            print "</Definitions>"
+        if len(idls)==0:
+            sys.stderr.write( "No WebIDL found in %s" % (url))
+            sys.exit(1)
+    elif output=='extract-only':
+        for idl in idls:
+            print idl
+
+
+
+if __name__ == '__main__':
+    if os.environ.has_key('SCRIPT_NAME'):
+        serveRequest()
+    else:
+        import sys
+        import getopt
+        try:
+            opts, args = getopt.getopt(sys.argv[1:], "he", ["help","extract-only"])
+        except getopt.error, msg:
+            print msg
+            print "for help use --help"
+            sys.exit(2)
+        # process options
+        output='default'
+        for o, a in opts:
+            if o in ("-h", "--help"):
+                print __doc__
+                sys.exit(0)
+            if o in ("-e", "--extract-only"):
+                output='extract-only'
+        # process arguments
+        process(args[0],output)
