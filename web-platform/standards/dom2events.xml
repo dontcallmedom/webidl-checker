@@ -1,0 +1,619 @@
+<Definitions>
+  <Module name="events" id="::events">
+    <webidl>module events {
+
+  typedef <ref>dom::DOMTimeStamp</ref> DOMTimeStamp;
+  typedef <ref>dom::Node</ref> Node;
+  typedef <ref>dom::DOMException</ref> DOMException;
+
+  exception EventException {
+    const unsigned short      UNSPECIFIED_EVENT_TYPE_ERR     = 0;
+
+    unsigned short   code;
+  };
+
+
+  interface EventTarget {
+    void               addEventListener(in DOMString type, 
+                                        in <ref>EventListener</ref> listener, 
+                                        in boolean useCapture);
+    void               removeEventListener(in DOMString type, 
+                                           in <ref>EventListener</ref> listener, 
+                                           in boolean useCapture);
+    boolean            dispatchEvent(in <ref>Event</ref> evt)
+                                        raises(<ref>EventException</ref>);
+  };
+
+  <ref>Node</ref> implements <ref>EventTarget</ref>;
+
+  [Callback]
+  interface EventListener {
+    void               handleEvent(in <ref>Event</ref> evt);
+  };
+
+  [PrototypeRoot]
+  interface Event {
+
+    const unsigned short      CAPTURING_PHASE                = 1;
+    const unsigned short      AT_TARGET                      = 2;
+    const unsigned short      BUBBLING_PHASE                 = 3;
+
+    readonly attribute DOMString        type;
+    readonly attribute <ref>EventTarget</ref>      target;
+    readonly attribute <ref>EventTarget</ref>      currentTarget;
+    readonly attribute unsigned short   eventPhase;
+    readonly attribute boolean          bubbles;
+    readonly attribute boolean          cancelable;
+    readonly attribute <ref>DOMTimeStamp</ref>     timeStamp;
+    void               stopPropagation();
+    void               preventDefault();
+    void               initEvent(in DOMString eventTypeArg, 
+                                 in boolean canBubbleArg, 
+                                 in boolean cancelableArg);
+  };
+
+  interface DocumentEvent {
+    <ref>Event</ref>              createEvent(in DOMString eventType)
+                                        raises(<ref>DOMException</ref>);
+  };
+
+  <ref>Document</ref> implements <ref>DocumentEvent</ref>;
+
+  interface UIEvent : <ref>Event</ref> {
+    readonly attribute <ref>views::AbstractView</ref>  view;
+    readonly attribute long             detail;
+    void               initUIEvent(in DOMString typeArg, 
+                                   in boolean canBubbleArg, 
+                                   in boolean cancelableArg, 
+                                   in <ref>views::AbstractView</ref> viewArg, 
+                                   in long detailArg);
+  };
+
+  interface MouseEvent : <ref>UIEvent</ref> {
+    readonly attribute long             screenX;
+    readonly attribute long             screenY;
+    readonly attribute long             clientX;
+    readonly attribute long             clientY;
+    readonly attribute boolean          ctrlKey;
+    readonly attribute boolean          shiftKey;
+    readonly attribute boolean          altKey;
+    readonly attribute boolean          metaKey;
+    readonly attribute unsigned short   button;
+    readonly attribute <ref>EventTarget</ref>      relatedTarget;
+    void               initMouseEvent(in DOMString typeArg, 
+                                      in boolean canBubbleArg, 
+                                      in boolean cancelableArg, 
+                                      in <ref>views::AbstractView</ref> viewArg, 
+                                      in long detailArg, 
+                                      in long screenXArg, 
+                                      in long screenYArg, 
+                                      in long clientXArg, 
+                                      in long clientYArg, 
+                                      in boolean ctrlKeyArg, 
+                                      in boolean altKeyArg, 
+                                      in boolean shiftKeyArg, 
+                                      in boolean metaKeyArg, 
+                                      in unsigned short buttonArg, 
+                                      in <ref>EventTarget</ref> relatedTargetArg);
+  };
+
+  interface MutationEvent : <ref>Event</ref> {
+
+    const unsigned short      MODIFICATION                   = 1;
+    const unsigned short      ADDITION                       = 2;
+    const unsigned short      REMOVAL                        = 3;
+
+    readonly attribute <ref>Node</ref>             relatedNode;
+    readonly attribute DOMString?       prevValue;
+    readonly attribute DOMString?       newValue;
+    readonly attribute DOMString?       attrName;
+    readonly attribute unsigned short   attrChange;
+    void               initMutationEvent(in DOMString typeArg, 
+                                         in boolean canBubbleArg, 
+                                         in boolean cancelableArg, 
+                                         in <ref>Node</ref> relatedNodeArg, 
+                                         in DOMString? prevValueArg, 
+                                         in DOMString? newValueArg, 
+                                         in DOMString? attrNameArg, 
+                                         in unsigned short attrChangeArg);
+  };
+};</webidl>
+    <Typedef name="DOMTimeStamp" id="::events::DOMTimeStamp">
+      <webidl>  typedef <ref>dom::DOMTimeStamp</ref> DOMTimeStamp;</webidl>
+      <Type name="domDOMTimeStamp"/>
+    </Typedef>
+    <Typedef name="Node" id="::events::Node">
+      <webidl>  typedef <ref>dom::Node</ref> Node;</webidl>
+      <Type name="domNode"/>
+    </Typedef>
+    <Typedef name="DOMException" id="::events::DOMException">
+      <webidl>  typedef <ref>dom::DOMException</ref> DOMException;</webidl>
+      <Type name="domDOMException"/>
+    </Typedef>
+    <Exception name="EventException" id="::events::EventException">
+      <webidl>  exception EventException {
+    const unsigned short      UNSPECIFIED_EVENT_TYPE_ERR     = 0;
+
+    unsigned short   code;
+  };</webidl>
+      <Const name="UNSPECIFIED_EVENT_TYPE_ERR" value="0" id="::events::EventException::UNSPECIFIED_EVENT_TYPE_ERR">
+        <Type type="unsigned short"/>
+      </Const>
+      <ExceptionField name="code" id="::events::EventException::code">
+        <Type type="unsigned short"/>
+      </ExceptionField>
+    </Exception>
+    <Interface name="EventTarget" id="::events::EventTarget">
+      <webidl>  interface EventTarget {
+    void               addEventListener(in DOMString type, 
+                                        in <ref>EventListener</ref> listener, 
+                                        in boolean useCapture);
+    void               removeEventListener(in DOMString type, 
+                                           in <ref>EventListener</ref> listener, 
+                                           in boolean useCapture);
+    boolean            dispatchEvent(in <ref>Event</ref> evt)
+                                        raises(<ref>EventException</ref>);
+  };</webidl>
+      <Operation name="addEventListener" id="::events::EventTarget::addEventListener">
+        <webidl>    void               addEventListener(in DOMString type, 
+                                        in <ref>EventListener</ref> listener, 
+                                        in boolean useCapture);</webidl>
+        <Type type="void"/>
+        <ArgumentList>
+          <Argument in="in" name="type">
+            <Type type="DOMString"/>
+          </Argument>
+          <Argument in="in" name="listener">
+            <Type name="EventListener"/>
+          </Argument>
+          <Argument in="in" name="useCapture">
+            <Type type="boolean"/>
+          </Argument>
+        </ArgumentList>
+      </Operation>
+      <Operation name="removeEventListener" id="::events::EventTarget::removeEventListener">
+        <webidl>    void               removeEventListener(in DOMString type, 
+                                           in <ref>EventListener</ref> listener, 
+                                           in boolean useCapture);</webidl>
+        <Type type="void"/>
+        <ArgumentList>
+          <Argument in="in" name="type">
+            <Type type="DOMString"/>
+          </Argument>
+          <Argument in="in" name="listener">
+            <Type name="EventListener"/>
+          </Argument>
+          <Argument in="in" name="useCapture">
+            <Type type="boolean"/>
+          </Argument>
+        </ArgumentList>
+      </Operation>
+      <Operation name="dispatchEvent" id="::events::EventTarget::dispatchEvent">
+        <webidl>    boolean            dispatchEvent(in <ref>Event</ref> evt)
+                                        raises(<ref>EventException</ref>);</webidl>
+        <Type type="boolean"/>
+        <ArgumentList>
+          <Argument in="in" name="evt">
+            <Type name="Event"/>
+          </Argument>
+        </ArgumentList>
+        <Raises>
+          <RaiseException name="EventException"/>
+        </Raises>
+      </Operation>
+    </Interface>
+    <Implements name1="Node" name2="EventTarget">
+      <webidl>  <ref>Node</ref> implements <ref>EventTarget</ref>;</webidl>
+    </Implements>
+    <Interface name="EventListener" id="::events::EventListener">
+      <webidl>  [Callback]
+  interface EventListener {
+    void               handleEvent(in <ref>Event</ref> evt);
+  };</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="Callback"/>
+      </ExtendedAttributeList>
+      <Operation name="handleEvent" id="::events::EventListener::handleEvent">
+        <webidl>    void               handleEvent(in <ref>Event</ref> evt);</webidl>
+        <Type type="void"/>
+        <ArgumentList>
+          <Argument in="in" name="evt">
+            <Type name="Event"/>
+          </Argument>
+        </ArgumentList>
+      </Operation>
+    </Interface>
+    <Interface name="Event" id="::events::Event">
+      <webidl>  [PrototypeRoot]
+  interface Event {
+
+    const unsigned short      CAPTURING_PHASE                = 1;
+    const unsigned short      AT_TARGET                      = 2;
+    const unsigned short      BUBBLING_PHASE                 = 3;
+
+    readonly attribute DOMString        type;
+    readonly attribute <ref>EventTarget</ref>      target;
+    readonly attribute <ref>EventTarget</ref>      currentTarget;
+    readonly attribute unsigned short   eventPhase;
+    readonly attribute boolean          bubbles;
+    readonly attribute boolean          cancelable;
+    readonly attribute <ref>DOMTimeStamp</ref>     timeStamp;
+    void               stopPropagation();
+    void               preventDefault();
+    void               initEvent(in DOMString eventTypeArg, 
+                                 in boolean canBubbleArg, 
+                                 in boolean cancelableArg);
+  };</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="PrototypeRoot"/>
+      </ExtendedAttributeList>
+      <Const name="CAPTURING_PHASE" value="1" id="::events::Event::CAPTURING_PHASE">
+        <webidl>    const unsigned short      CAPTURING_PHASE                = 1;</webidl>
+        <Type type="unsigned short"/>
+      </Const>
+      <Const name="AT_TARGET" value="2" id="::events::Event::AT_TARGET">
+        <webidl>    const unsigned short      AT_TARGET                      = 2;</webidl>
+        <Type type="unsigned short"/>
+      </Const>
+      <Const name="BUBBLING_PHASE" value="3" id="::events::Event::BUBBLING_PHASE">
+        <webidl>    const unsigned short      BUBBLING_PHASE                 = 3;</webidl>
+        <Type type="unsigned short"/>
+      </Const>
+      <Attribute readonly="readonly" name="type" id="::events::Event::type">
+        <webidl>    readonly attribute DOMString        type;</webidl>
+        <Type type="DOMString"/>
+      </Attribute>
+      <Attribute readonly="readonly" name="target" id="::events::Event::target">
+        <webidl>    readonly attribute <ref>EventTarget</ref>      target;</webidl>
+        <Type name="EventTarget"/>
+      </Attribute>
+      <Attribute readonly="readonly" name="currentTarget" id="::events::Event::currentTarget">
+        <webidl>    readonly attribute <ref>EventTarget</ref>      currentTarget;</webidl>
+        <Type name="EventTarget"/>
+      </Attribute>
+      <Attribute readonly="readonly" name="eventPhase" id="::events::Event::eventPhase">
+        <webidl>    readonly attribute unsigned short   eventPhase;</webidl>
+        <Type type="unsigned short"/>
+      </Attribute>
+      <Attribute readonly="readonly" name="bubbles" id="::events::Event::bubbles">
+        <webidl>    readonly attribute boolean          bubbles;</webidl>
+        <Type type="boolean"/>
+      </Attribute>
+      <Attribute readonly="readonly" name="cancelable" id="::events::Event::cancelable">
+        <webidl>    readonly attribute boolean          cancelable;</webidl>
+        <Type type="boolean"/>
+      </Attribute>
+      <Attribute readonly="readonly" name="timeStamp" id="::events::Event::timeStamp">
+        <webidl>    readonly attribute <ref>DOMTimeStamp</ref>     timeStamp;</webidl>
+        <Type name="DOMTimeStamp"/>
+      </Attribute>
+      <Operation name="stopPropagation" id="::events::Event::stopPropagation">
+        <webidl>    void               stopPropagation();</webidl>
+        <Type type="void"/>
+        <ArgumentList/>
+      </Operation>
+      <Operation name="preventDefault" id="::events::Event::preventDefault">
+        <webidl>    void               preventDefault();</webidl>
+        <Type type="void"/>
+        <ArgumentList/>
+      </Operation>
+      <Operation name="initEvent" id="::events::Event::initEvent">
+        <webidl>    void               initEvent(in DOMString eventTypeArg, 
+                                 in boolean canBubbleArg, 
+                                 in boolean cancelableArg);</webidl>
+        <Type type="void"/>
+        <ArgumentList>
+          <Argument in="in" name="eventTypeArg">
+            <Type type="DOMString"/>
+          </Argument>
+          <Argument in="in" name="canBubbleArg">
+            <Type type="boolean"/>
+          </Argument>
+          <Argument in="in" name="cancelableArg">
+            <Type type="boolean"/>
+          </Argument>
+        </ArgumentList>
+      </Operation>
+    </Interface>
+    <Interface name="DocumentEvent" id="::events::DocumentEvent">
+      <webidl>  interface DocumentEvent {
+    <ref>Event</ref>              createEvent(in DOMString eventType)
+                                        raises(<ref>DOMException</ref>);
+  };</webidl>
+      <Operation name="createEvent" id="::events::DocumentEvent::createEvent">
+        <webidl>    <ref>Event</ref>              createEvent(in DOMString eventType)
+                                        raises(<ref>DOMException</ref>);</webidl>
+        <Type name="Event"/>
+        <ArgumentList>
+          <Argument in="in" name="eventType">
+            <Type type="DOMString"/>
+          </Argument>
+        </ArgumentList>
+        <Raises>
+          <RaiseException name="DOMException"/>
+        </Raises>
+      </Operation>
+    </Interface>
+    <Implements name1="Document" name2="DocumentEvent">
+      <webidl>  <ref>Document</ref> implements <ref>DocumentEvent</ref>;</webidl>
+    </Implements>
+    <Interface name="UIEvent" id="::events::UIEvent">
+      <webidl>  interface UIEvent : <ref>Event</ref> {
+    readonly attribute <ref>views::AbstractView</ref>  view;
+    readonly attribute long             detail;
+    void               initUIEvent(in DOMString typeArg, 
+                                   in boolean canBubbleArg, 
+                                   in boolean cancelableArg, 
+                                   in <ref>views::AbstractView</ref> viewArg, 
+                                   in long detailArg);
+  };</webidl>
+      <InterfaceInheritance>
+        <Name name="Event"/>
+      </InterfaceInheritance>
+      <Attribute readonly="readonly" name="view" id="::events::UIEvent::view">
+        <webidl>    readonly attribute <ref>views::AbstractView</ref>  view;</webidl>
+        <Type name="viewsAbstractView"/>
+      </Attribute>
+      <Attribute readonly="readonly" name="detail" id="::events::UIEvent::detail">
+        <webidl>    readonly attribute long             detail;</webidl>
+        <Type type="long"/>
+      </Attribute>
+      <Operation name="initUIEvent" id="::events::UIEvent::initUIEvent">
+        <webidl>    void               initUIEvent(in DOMString typeArg, 
+                                   in boolean canBubbleArg, 
+                                   in boolean cancelableArg, 
+                                   in <ref>views::AbstractView</ref> viewArg, 
+                                   in long detailArg);</webidl>
+        <Type type="void"/>
+        <ArgumentList>
+          <Argument in="in" name="typeArg">
+            <Type type="DOMString"/>
+          </Argument>
+          <Argument in="in" name="canBubbleArg">
+            <Type type="boolean"/>
+          </Argument>
+          <Argument in="in" name="cancelableArg">
+            <Type type="boolean"/>
+          </Argument>
+          <Argument in="in" name="viewArg">
+            <Type name="viewsAbstractView"/>
+          </Argument>
+          <Argument in="in" name="detailArg">
+            <Type type="long"/>
+          </Argument>
+        </ArgumentList>
+      </Operation>
+    </Interface>
+    <Interface name="MouseEvent" id="::events::MouseEvent">
+      <webidl>  interface MouseEvent : <ref>UIEvent</ref> {
+    readonly attribute long             screenX;
+    readonly attribute long             screenY;
+    readonly attribute long             clientX;
+    readonly attribute long             clientY;
+    readonly attribute boolean          ctrlKey;
+    readonly attribute boolean          shiftKey;
+    readonly attribute boolean          altKey;
+    readonly attribute boolean          metaKey;
+    readonly attribute unsigned short   button;
+    readonly attribute <ref>EventTarget</ref>      relatedTarget;
+    void               initMouseEvent(in DOMString typeArg, 
+                                      in boolean canBubbleArg, 
+                                      in boolean cancelableArg, 
+                                      in <ref>views::AbstractView</ref> viewArg, 
+                                      in long detailArg, 
+                                      in long screenXArg, 
+                                      in long screenYArg, 
+                                      in long clientXArg, 
+                                      in long clientYArg, 
+                                      in boolean ctrlKeyArg, 
+                                      in boolean altKeyArg, 
+                                      in boolean shiftKeyArg, 
+                                      in boolean metaKeyArg, 
+                                      in unsigned short buttonArg, 
+                                      in <ref>EventTarget</ref> relatedTargetArg);
+  };</webidl>
+      <InterfaceInheritance>
+        <Name name="UIEvent"/>
+      </InterfaceInheritance>
+      <Attribute readonly="readonly" name="screenX" id="::events::MouseEvent::screenX">
+        <webidl>    readonly attribute long             screenX;</webidl>
+        <Type type="long"/>
+      </Attribute>
+      <Attribute readonly="readonly" name="screenY" id="::events::MouseEvent::screenY">
+        <webidl>    readonly attribute long             screenY;</webidl>
+        <Type type="long"/>
+      </Attribute>
+      <Attribute readonly="readonly" name="clientX" id="::events::MouseEvent::clientX">
+        <webidl>    readonly attribute long             clientX;</webidl>
+        <Type type="long"/>
+      </Attribute>
+      <Attribute readonly="readonly" name="clientY" id="::events::MouseEvent::clientY">
+        <webidl>    readonly attribute long             clientY;</webidl>
+        <Type type="long"/>
+      </Attribute>
+      <Attribute readonly="readonly" name="ctrlKey" id="::events::MouseEvent::ctrlKey">
+        <webidl>    readonly attribute boolean          ctrlKey;</webidl>
+        <Type type="boolean"/>
+      </Attribute>
+      <Attribute readonly="readonly" name="shiftKey" id="::events::MouseEvent::shiftKey">
+        <webidl>    readonly attribute boolean          shiftKey;</webidl>
+        <Type type="boolean"/>
+      </Attribute>
+      <Attribute readonly="readonly" name="altKey" id="::events::MouseEvent::altKey">
+        <webidl>    readonly attribute boolean          altKey;</webidl>
+        <Type type="boolean"/>
+      </Attribute>
+      <Attribute readonly="readonly" name="metaKey" id="::events::MouseEvent::metaKey">
+        <webidl>    readonly attribute boolean          metaKey;</webidl>
+        <Type type="boolean"/>
+      </Attribute>
+      <Attribute readonly="readonly" name="button" id="::events::MouseEvent::button">
+        <webidl>    readonly attribute unsigned short   button;</webidl>
+        <Type type="unsigned short"/>
+      </Attribute>
+      <Attribute readonly="readonly" name="relatedTarget" id="::events::MouseEvent::relatedTarget">
+        <webidl>    readonly attribute <ref>EventTarget</ref>      relatedTarget;</webidl>
+        <Type name="EventTarget"/>
+      </Attribute>
+      <Operation name="initMouseEvent" id="::events::MouseEvent::initMouseEvent">
+        <webidl>    void               initMouseEvent(in DOMString typeArg, 
+                                      in boolean canBubbleArg, 
+                                      in boolean cancelableArg, 
+                                      in <ref>views::AbstractView</ref> viewArg, 
+                                      in long detailArg, 
+                                      in long screenXArg, 
+                                      in long screenYArg, 
+                                      in long clientXArg, 
+                                      in long clientYArg, 
+                                      in boolean ctrlKeyArg, 
+                                      in boolean altKeyArg, 
+                                      in boolean shiftKeyArg, 
+                                      in boolean metaKeyArg, 
+                                      in unsigned short buttonArg, 
+                                      in <ref>EventTarget</ref> relatedTargetArg);</webidl>
+        <Type type="void"/>
+        <ArgumentList>
+          <Argument in="in" name="typeArg">
+            <Type type="DOMString"/>
+          </Argument>
+          <Argument in="in" name="canBubbleArg">
+            <Type type="boolean"/>
+          </Argument>
+          <Argument in="in" name="cancelableArg">
+            <Type type="boolean"/>
+          </Argument>
+          <Argument in="in" name="viewArg">
+            <Type name="viewsAbstractView"/>
+          </Argument>
+          <Argument in="in" name="detailArg">
+            <Type type="long"/>
+          </Argument>
+          <Argument in="in" name="screenXArg">
+            <Type type="long"/>
+          </Argument>
+          <Argument in="in" name="screenYArg">
+            <Type type="long"/>
+          </Argument>
+          <Argument in="in" name="clientXArg">
+            <Type type="long"/>
+          </Argument>
+          <Argument in="in" name="clientYArg">
+            <Type type="long"/>
+          </Argument>
+          <Argument in="in" name="ctrlKeyArg">
+            <Type type="boolean"/>
+          </Argument>
+          <Argument in="in" name="altKeyArg">
+            <Type type="boolean"/>
+          </Argument>
+          <Argument in="in" name="shiftKeyArg">
+            <Type type="boolean"/>
+          </Argument>
+          <Argument in="in" name="metaKeyArg">
+            <Type type="boolean"/>
+          </Argument>
+          <Argument in="in" name="buttonArg">
+            <Type type="unsigned short"/>
+          </Argument>
+          <Argument in="in" name="relatedTargetArg">
+            <Type name="EventTarget"/>
+          </Argument>
+        </ArgumentList>
+      </Operation>
+    </Interface>
+    <Interface name="MutationEvent" id="::events::MutationEvent">
+      <webidl>  interface MutationEvent : <ref>Event</ref> {
+
+    const unsigned short      MODIFICATION                   = 1;
+    const unsigned short      ADDITION                       = 2;
+    const unsigned short      REMOVAL                        = 3;
+
+    readonly attribute <ref>Node</ref>             relatedNode;
+    readonly attribute DOMString?       prevValue;
+    readonly attribute DOMString?       newValue;
+    readonly attribute DOMString?       attrName;
+    readonly attribute unsigned short   attrChange;
+    void               initMutationEvent(in DOMString typeArg, 
+                                         in boolean canBubbleArg, 
+                                         in boolean cancelableArg, 
+                                         in <ref>Node</ref> relatedNodeArg, 
+                                         in DOMString? prevValueArg, 
+                                         in DOMString? newValueArg, 
+                                         in DOMString? attrNameArg, 
+                                         in unsigned short attrChangeArg);
+  };</webidl>
+      <InterfaceInheritance>
+        <Name name="Event"/>
+      </InterfaceInheritance>
+      <Const name="MODIFICATION" value="1" id="::events::MutationEvent::MODIFICATION">
+        <webidl>    const unsigned short      MODIFICATION                   = 1;</webidl>
+        <Type type="unsigned short"/>
+      </Const>
+      <Const name="ADDITION" value="2" id="::events::MutationEvent::ADDITION">
+        <webidl>    const unsigned short      ADDITION                       = 2;</webidl>
+        <Type type="unsigned short"/>
+      </Const>
+      <Const name="REMOVAL" value="3" id="::events::MutationEvent::REMOVAL">
+        <webidl>    const unsigned short      REMOVAL                        = 3;</webidl>
+        <Type type="unsigned short"/>
+      </Const>
+      <Attribute readonly="readonly" name="relatedNode" id="::events::MutationEvent::relatedNode">
+        <webidl>    readonly attribute <ref>Node</ref>             relatedNode;</webidl>
+        <Type name="Node"/>
+      </Attribute>
+      <Attribute readonly="readonly" name="prevValue" id="::events::MutationEvent::prevValue">
+        <webidl>    readonly attribute DOMString?       prevValue;</webidl>
+        <Type type="DOMString" nullable="nullable"/>
+      </Attribute>
+      <Attribute readonly="readonly" name="newValue" id="::events::MutationEvent::newValue">
+        <webidl>    readonly attribute DOMString?       newValue;</webidl>
+        <Type type="DOMString" nullable="nullable"/>
+      </Attribute>
+      <Attribute readonly="readonly" name="attrName" id="::events::MutationEvent::attrName">
+        <webidl>    readonly attribute DOMString?       attrName;</webidl>
+        <Type type="DOMString" nullable="nullable"/>
+      </Attribute>
+      <Attribute readonly="readonly" name="attrChange" id="::events::MutationEvent::attrChange">
+        <webidl>    readonly attribute unsigned short   attrChange;</webidl>
+        <Type type="unsigned short"/>
+      </Attribute>
+      <Operation name="initMutationEvent" id="::events::MutationEvent::initMutationEvent">
+        <webidl>    void               initMutationEvent(in DOMString typeArg, 
+                                         in boolean canBubbleArg, 
+                                         in boolean cancelableArg, 
+                                         in <ref>Node</ref> relatedNodeArg, 
+                                         in DOMString? prevValueArg, 
+                                         in DOMString? newValueArg, 
+                                         in DOMString? attrNameArg, 
+                                         in unsigned short attrChangeArg);</webidl>
+        <Type type="void"/>
+        <ArgumentList>
+          <Argument in="in" name="typeArg">
+            <Type type="DOMString"/>
+          </Argument>
+          <Argument in="in" name="canBubbleArg">
+            <Type type="boolean"/>
+          </Argument>
+          <Argument in="in" name="cancelableArg">
+            <Type type="boolean"/>
+          </Argument>
+          <Argument in="in" name="relatedNodeArg">
+            <Type name="Node"/>
+          </Argument>
+          <Argument in="in" name="prevValueArg">
+            <Type type="DOMString" nullable="nullable"/>
+          </Argument>
+          <Argument in="in" name="newValueArg">
+            <Type type="DOMString" nullable="nullable"/>
+          </Argument>
+          <Argument in="in" name="attrNameArg">
+            <Type type="DOMString" nullable="nullable"/>
+          </Argument>
+          <Argument in="in" name="attrChangeArg">
+            <Type type="unsigned short"/>
+          </Argument>
+        </ArgumentList>
+      </Operation>
+    </Interface>
+  </Module>
+</Definitions>

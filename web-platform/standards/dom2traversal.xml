@@ -1,0 +1,386 @@
+<Definitions>
+  <Module name="traversal" id="::traversal">
+    <webidl>module traversal {
+
+  typedef <ref>dom::Node</ref> Node;
+  typedef <ref>dom::DOMException</ref> DOMException;
+
+  interface NodeFilter {};
+
+  interface NodeIterator {
+    readonly attribute <ref>Node</ref>             root;
+    readonly attribute unsigned long    whatToShow;
+    readonly attribute <ref>NodeFilter</ref>       filter;
+    readonly attribute boolean          expandEntityReferences;
+    <ref>Node</ref>               nextNode()
+                                        raises(<ref>DOMException</ref>);
+    <ref>Node</ref>               previousNode()
+                                        raises(<ref>DOMException</ref>);
+    void               detach();
+  };
+
+  [Callback]
+  interface NodeFilter {
+
+    const short               FILTER_ACCEPT                  = 1;
+    const short               FILTER_REJECT                  = 2;
+    const short               FILTER_SKIP                    = 3;
+
+
+    const unsigned long       SHOW_ALL                       = 0xFFFFFFFF;
+    const unsigned long       SHOW_ELEMENT                   = 0x00000001;
+    const unsigned long       SHOW_ATTRIBUTE                 = 0x00000002;
+    const unsigned long       SHOW_TEXT                      = 0x00000004;
+    const unsigned long       SHOW_CDATA_SECTION             = 0x00000008;
+    const unsigned long       SHOW_ENTITY_REFERENCE          = 0x00000010;
+    const unsigned long       SHOW_ENTITY                    = 0x00000020;
+    const unsigned long       SHOW_PROCESSING_INSTRUCTION    = 0x00000040;
+    const unsigned long       SHOW_COMMENT                   = 0x00000080;
+    const unsigned long       SHOW_DOCUMENT                  = 0x00000100;
+    const unsigned long       SHOW_DOCUMENT_TYPE             = 0x00000200;
+    const unsigned long       SHOW_DOCUMENT_FRAGMENT         = 0x00000400;
+    const unsigned long       SHOW_NOTATION                  = 0x00000800;
+
+    short              acceptNode(in <ref>Node</ref> n);
+  };
+
+  interface TreeWalker {
+    readonly attribute <ref>Node</ref>             root;
+    readonly attribute unsigned long    whatToShow;
+    readonly attribute <ref>NodeFilter</ref>       filter;
+    readonly attribute boolean          expandEntityReferences;
+             attribute <ref>Node</ref>             currentNode setraises(<ref>DOMException</ref>);
+
+    <ref>Node</ref>               parentNode();
+    <ref>Node</ref>               firstChild();
+    <ref>Node</ref>               lastChild();
+    <ref>Node</ref>               previousSibling();
+    <ref>Node</ref>               nextSibling();
+    <ref>Node</ref>               previousNode();
+    <ref>Node</ref>               nextNode();
+  };
+
+  interface DocumentTraversal {
+    <ref>NodeIterator</ref>       createNodeIterator(in <ref>Node</ref> root, 
+                                          in unsigned long whatToShow, 
+                                          in <ref>NodeFilter</ref> filter, 
+                                          in boolean entityReferenceExpansion)
+                                        raises(<ref>DOMException</ref>);
+    <ref>TreeWalker</ref>         createTreeWalker(in <ref>Node</ref> root, 
+                                        in unsigned long whatToShow, 
+                                        in <ref>NodeFilter</ref> filter, 
+                                        in boolean entityReferenceExpansion)
+                                        raises(<ref>DOMException</ref>);
+  };
+
+  <ref>Document</ref> implements <ref>DocumentTraversal</ref>;
+};</webidl>
+    <Typedef name="Node" id="::traversal::Node">
+      <webidl>  typedef <ref>dom::Node</ref> Node;</webidl>
+      <Type name="domNode"/>
+    </Typedef>
+    <Typedef name="DOMException" id="::traversal::DOMException">
+      <webidl>  typedef <ref>dom::DOMException</ref> DOMException;</webidl>
+      <Type name="domDOMException"/>
+    </Typedef>
+    <Interface name="NodeFilter" id="::traversal::NodeFilter">
+      <webidl>  interface NodeFilter {};</webidl>
+    </Interface>
+    <Interface name="NodeIterator" id="::traversal::NodeIterator">
+      <webidl>  interface NodeIterator {
+    readonly attribute <ref>Node</ref>             root;
+    readonly attribute unsigned long    whatToShow;
+    readonly attribute <ref>NodeFilter</ref>       filter;
+    readonly attribute boolean          expandEntityReferences;
+    <ref>Node</ref>               nextNode()
+                                        raises(<ref>DOMException</ref>);
+    <ref>Node</ref>               previousNode()
+                                        raises(<ref>DOMException</ref>);
+    void               detach();
+  };</webidl>
+      <Attribute readonly="readonly" name="root" id="::traversal::NodeIterator::root">
+        <webidl>    readonly attribute <ref>Node</ref>             root;</webidl>
+        <Type name="Node"/>
+      </Attribute>
+      <Attribute readonly="readonly" name="whatToShow" id="::traversal::NodeIterator::whatToShow">
+        <webidl>    readonly attribute unsigned long    whatToShow;</webidl>
+        <Type type="unsigned long"/>
+      </Attribute>
+      <Attribute readonly="readonly" name="filter" id="::traversal::NodeIterator::filter">
+        <webidl>    readonly attribute <ref>NodeFilter</ref>       filter;</webidl>
+        <Type name="NodeFilter"/>
+      </Attribute>
+      <Attribute readonly="readonly" name="expandEntityReferences" id="::traversal::NodeIterator::expandEntityReferences">
+        <webidl>    readonly attribute boolean          expandEntityReferences;</webidl>
+        <Type type="boolean"/>
+      </Attribute>
+      <Operation name="nextNode" id="::traversal::NodeIterator::nextNode">
+        <webidl>    <ref>Node</ref>               nextNode()
+                                        raises(<ref>DOMException</ref>);</webidl>
+        <Type name="Node"/>
+        <ArgumentList/>
+        <Raises>
+          <RaiseException name="DOMException"/>
+        </Raises>
+      </Operation>
+      <Operation name="previousNode" id="::traversal::NodeIterator::previousNode">
+        <webidl>    <ref>Node</ref>               previousNode()
+                                        raises(<ref>DOMException</ref>);</webidl>
+        <Type name="Node"/>
+        <ArgumentList/>
+        <Raises>
+          <RaiseException name="DOMException"/>
+        </Raises>
+      </Operation>
+      <Operation name="detach" id="::traversal::NodeIterator::detach">
+        <webidl>    void               detach();</webidl>
+        <Type type="void"/>
+        <ArgumentList/>
+      </Operation>
+    </Interface>
+    <Interface name="NodeFilter" id="::traversal::NodeFilter">
+      <webidl>  [Callback]
+  interface NodeFilter {
+
+    const short               FILTER_ACCEPT                  = 1;
+    const short               FILTER_REJECT                  = 2;
+    const short               FILTER_SKIP                    = 3;
+
+
+    const unsigned long       SHOW_ALL                       = 0xFFFFFFFF;
+    const unsigned long       SHOW_ELEMENT                   = 0x00000001;
+    const unsigned long       SHOW_ATTRIBUTE                 = 0x00000002;
+    const unsigned long       SHOW_TEXT                      = 0x00000004;
+    const unsigned long       SHOW_CDATA_SECTION             = 0x00000008;
+    const unsigned long       SHOW_ENTITY_REFERENCE          = 0x00000010;
+    const unsigned long       SHOW_ENTITY                    = 0x00000020;
+    const unsigned long       SHOW_PROCESSING_INSTRUCTION    = 0x00000040;
+    const unsigned long       SHOW_COMMENT                   = 0x00000080;
+    const unsigned long       SHOW_DOCUMENT                  = 0x00000100;
+    const unsigned long       SHOW_DOCUMENT_TYPE             = 0x00000200;
+    const unsigned long       SHOW_DOCUMENT_FRAGMENT         = 0x00000400;
+    const unsigned long       SHOW_NOTATION                  = 0x00000800;
+
+    short              acceptNode(in <ref>Node</ref> n);
+  };</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="Callback"/>
+      </ExtendedAttributeList>
+      <Const name="FILTER_ACCEPT" value="1" id="::traversal::NodeFilter::FILTER_ACCEPT">
+        <webidl>    const short               FILTER_ACCEPT                  = 1;</webidl>
+        <Type type="short"/>
+      </Const>
+      <Const name="FILTER_REJECT" value="2" id="::traversal::NodeFilter::FILTER_REJECT">
+        <webidl>    const short               FILTER_REJECT                  = 2;</webidl>
+        <Type type="short"/>
+      </Const>
+      <Const name="FILTER_SKIP" value="3" id="::traversal::NodeFilter::FILTER_SKIP">
+        <webidl>    const short               FILTER_SKIP                    = 3;</webidl>
+        <Type type="short"/>
+      </Const>
+      <Const name="SHOW_ALL" value="0xFFFFFFFF" id="::traversal::NodeFilter::SHOW_ALL">
+        <webidl>    const unsigned long       SHOW_ALL                       = 0xFFFFFFFF;</webidl>
+        <Type type="unsigned long"/>
+      </Const>
+      <Const name="SHOW_ELEMENT" value="0x00000001" id="::traversal::NodeFilter::SHOW_ELEMENT">
+        <webidl>    const unsigned long       SHOW_ELEMENT                   = 0x00000001;</webidl>
+        <Type type="unsigned long"/>
+      </Const>
+      <Const name="SHOW_ATTRIBUTE" value="0x00000002" id="::traversal::NodeFilter::SHOW_ATTRIBUTE">
+        <webidl>    const unsigned long       SHOW_ATTRIBUTE                 = 0x00000002;</webidl>
+        <Type type="unsigned long"/>
+      </Const>
+      <Const name="SHOW_TEXT" value="0x00000004" id="::traversal::NodeFilter::SHOW_TEXT">
+        <webidl>    const unsigned long       SHOW_TEXT                      = 0x00000004;</webidl>
+        <Type type="unsigned long"/>
+      </Const>
+      <Const name="SHOW_CDATA_SECTION" value="0x00000008" id="::traversal::NodeFilter::SHOW_CDATA_SECTION">
+        <webidl>    const unsigned long       SHOW_CDATA_SECTION             = 0x00000008;</webidl>
+        <Type type="unsigned long"/>
+      </Const>
+      <Const name="SHOW_ENTITY_REFERENCE" value="0x00000010" id="::traversal::NodeFilter::SHOW_ENTITY_REFERENCE">
+        <webidl>    const unsigned long       SHOW_ENTITY_REFERENCE          = 0x00000010;</webidl>
+        <Type type="unsigned long"/>
+      </Const>
+      <Const name="SHOW_ENTITY" value="0x00000020" id="::traversal::NodeFilter::SHOW_ENTITY">
+        <webidl>    const unsigned long       SHOW_ENTITY                    = 0x00000020;</webidl>
+        <Type type="unsigned long"/>
+      </Const>
+      <Const name="SHOW_PROCESSING_INSTRUCTION" value="0x00000040" id="::traversal::NodeFilter::SHOW_PROCESSING_INSTRUCTION">
+        <webidl>    const unsigned long       SHOW_PROCESSING_INSTRUCTION    = 0x00000040;</webidl>
+        <Type type="unsigned long"/>
+      </Const>
+      <Const name="SHOW_COMMENT" value="0x00000080" id="::traversal::NodeFilter::SHOW_COMMENT">
+        <webidl>    const unsigned long       SHOW_COMMENT                   = 0x00000080;</webidl>
+        <Type type="unsigned long"/>
+      </Const>
+      <Const name="SHOW_DOCUMENT" value="0x00000100" id="::traversal::NodeFilter::SHOW_DOCUMENT">
+        <webidl>    const unsigned long       SHOW_DOCUMENT                  = 0x00000100;</webidl>
+        <Type type="unsigned long"/>
+      </Const>
+      <Const name="SHOW_DOCUMENT_TYPE" value="0x00000200" id="::traversal::NodeFilter::SHOW_DOCUMENT_TYPE">
+        <webidl>    const unsigned long       SHOW_DOCUMENT_TYPE             = 0x00000200;</webidl>
+        <Type type="unsigned long"/>
+      </Const>
+      <Const name="SHOW_DOCUMENT_FRAGMENT" value="0x00000400" id="::traversal::NodeFilter::SHOW_DOCUMENT_FRAGMENT">
+        <webidl>    const unsigned long       SHOW_DOCUMENT_FRAGMENT         = 0x00000400;</webidl>
+        <Type type="unsigned long"/>
+      </Const>
+      <Const name="SHOW_NOTATION" value="0x00000800" id="::traversal::NodeFilter::SHOW_NOTATION">
+        <webidl>    const unsigned long       SHOW_NOTATION                  = 0x00000800;</webidl>
+        <Type type="unsigned long"/>
+      </Const>
+      <Operation name="acceptNode" id="::traversal::NodeFilter::acceptNode">
+        <webidl>    short              acceptNode(in <ref>Node</ref> n);</webidl>
+        <Type type="short"/>
+        <ArgumentList>
+          <Argument in="in" name="n">
+            <Type name="Node"/>
+          </Argument>
+        </ArgumentList>
+      </Operation>
+    </Interface>
+    <Interface name="TreeWalker" id="::traversal::TreeWalker">
+      <webidl>  interface TreeWalker {
+    readonly attribute <ref>Node</ref>             root;
+    readonly attribute unsigned long    whatToShow;
+    readonly attribute <ref>NodeFilter</ref>       filter;
+    readonly attribute boolean          expandEntityReferences;
+             attribute <ref>Node</ref>             currentNode setraises(<ref>DOMException</ref>);
+
+    <ref>Node</ref>               parentNode();
+    <ref>Node</ref>               firstChild();
+    <ref>Node</ref>               lastChild();
+    <ref>Node</ref>               previousSibling();
+    <ref>Node</ref>               nextSibling();
+    <ref>Node</ref>               previousNode();
+    <ref>Node</ref>               nextNode();
+  };</webidl>
+      <Attribute readonly="readonly" name="root" id="::traversal::TreeWalker::root">
+        <webidl>    readonly attribute <ref>Node</ref>             root;</webidl>
+        <Type name="Node"/>
+      </Attribute>
+      <Attribute readonly="readonly" name="whatToShow" id="::traversal::TreeWalker::whatToShow">
+        <webidl>    readonly attribute unsigned long    whatToShow;</webidl>
+        <Type type="unsigned long"/>
+      </Attribute>
+      <Attribute readonly="readonly" name="filter" id="::traversal::TreeWalker::filter">
+        <webidl>    readonly attribute <ref>NodeFilter</ref>       filter;</webidl>
+        <Type name="NodeFilter"/>
+      </Attribute>
+      <Attribute readonly="readonly" name="expandEntityReferences" id="::traversal::TreeWalker::expandEntityReferences">
+        <webidl>    readonly attribute boolean          expandEntityReferences;</webidl>
+        <Type type="boolean"/>
+      </Attribute>
+      <Attribute name="currentNode" id="::traversal::TreeWalker::currentNode">
+        <webidl>             attribute <ref>Node</ref>             currentNode setraises(<ref>DOMException</ref>);</webidl>
+        <Type name="Node"/>
+        <SetRaises>
+          <RaiseException name="DOMException"/>
+        </SetRaises>
+      </Attribute>
+      <Operation name="parentNode" id="::traversal::TreeWalker::parentNode">
+        <webidl>    <ref>Node</ref>               parentNode();</webidl>
+        <Type name="Node"/>
+        <ArgumentList/>
+      </Operation>
+      <Operation name="firstChild" id="::traversal::TreeWalker::firstChild">
+        <webidl>    <ref>Node</ref>               firstChild();</webidl>
+        <Type name="Node"/>
+        <ArgumentList/>
+      </Operation>
+      <Operation name="lastChild" id="::traversal::TreeWalker::lastChild">
+        <webidl>    <ref>Node</ref>               lastChild();</webidl>
+        <Type name="Node"/>
+        <ArgumentList/>
+      </Operation>
+      <Operation name="previousSibling" id="::traversal::TreeWalker::previousSibling">
+        <webidl>    <ref>Node</ref>               previousSibling();</webidl>
+        <Type name="Node"/>
+        <ArgumentList/>
+      </Operation>
+      <Operation name="nextSibling" id="::traversal::TreeWalker::nextSibling">
+        <webidl>    <ref>Node</ref>               nextSibling();</webidl>
+        <Type name="Node"/>
+        <ArgumentList/>
+      </Operation>
+      <Operation name="previousNode" id="::traversal::TreeWalker::previousNode">
+        <webidl>    <ref>Node</ref>               previousNode();</webidl>
+        <Type name="Node"/>
+        <ArgumentList/>
+      </Operation>
+      <Operation name="nextNode" id="::traversal::TreeWalker::nextNode">
+        <webidl>    <ref>Node</ref>               nextNode();</webidl>
+        <Type name="Node"/>
+        <ArgumentList/>
+      </Operation>
+    </Interface>
+    <Interface name="DocumentTraversal" id="::traversal::DocumentTraversal">
+      <webidl>  interface DocumentTraversal {
+    <ref>NodeIterator</ref>       createNodeIterator(in <ref>Node</ref> root, 
+                                          in unsigned long whatToShow, 
+                                          in <ref>NodeFilter</ref> filter, 
+                                          in boolean entityReferenceExpansion)
+                                        raises(<ref>DOMException</ref>);
+    <ref>TreeWalker</ref>         createTreeWalker(in <ref>Node</ref> root, 
+                                        in unsigned long whatToShow, 
+                                        in <ref>NodeFilter</ref> filter, 
+                                        in boolean entityReferenceExpansion)
+                                        raises(<ref>DOMException</ref>);
+  };</webidl>
+      <Operation name="createNodeIterator" id="::traversal::DocumentTraversal::createNodeIterator">
+        <webidl>    <ref>NodeIterator</ref>       createNodeIterator(in <ref>Node</ref> root, 
+                                          in unsigned long whatToShow, 
+                                          in <ref>NodeFilter</ref> filter, 
+                                          in boolean entityReferenceExpansion)
+                                        raises(<ref>DOMException</ref>);</webidl>
+        <Type name="NodeIterator"/>
+        <ArgumentList>
+          <Argument in="in" name="root">
+            <Type name="Node"/>
+          </Argument>
+          <Argument in="in" name="whatToShow">
+            <Type type="unsigned long"/>
+          </Argument>
+          <Argument in="in" name="filter">
+            <Type name="NodeFilter"/>
+          </Argument>
+          <Argument in="in" name="entityReferenceExpansion">
+            <Type type="boolean"/>
+          </Argument>
+        </ArgumentList>
+        <Raises>
+          <RaiseException name="DOMException"/>
+        </Raises>
+      </Operation>
+      <Operation name="createTreeWalker" id="::traversal::DocumentTraversal::createTreeWalker">
+        <webidl>    <ref>TreeWalker</ref>         createTreeWalker(in <ref>Node</ref> root, 
+                                        in unsigned long whatToShow, 
+                                        in <ref>NodeFilter</ref> filter, 
+                                        in boolean entityReferenceExpansion)
+                                        raises(<ref>DOMException</ref>);</webidl>
+        <Type name="TreeWalker"/>
+        <ArgumentList>
+          <Argument in="in" name="root">
+            <Type name="Node"/>
+          </Argument>
+          <Argument in="in" name="whatToShow">
+            <Type type="unsigned long"/>
+          </Argument>
+          <Argument in="in" name="filter">
+            <Type name="NodeFilter"/>
+          </Argument>
+          <Argument in="in" name="entityReferenceExpansion">
+            <Type type="boolean"/>
+          </Argument>
+        </ArgumentList>
+        <Raises>
+          <RaiseException name="DOMException"/>
+        </Raises>
+      </Operation>
+    </Interface>
+    <Implements name1="Document" name2="DocumentTraversal">
+      <webidl>  <ref>Document</ref> implements <ref>DocumentTraversal</ref>;</webidl>
+    </Implements>
+  </Module>
+</Definitions>

@@ -1,0 +1,48 @@
+<Definitions>
+  <Module name="views" id="::views">
+    <webidl>module views {
+
+  typedef <ref>dom::Document</ref> Document;
+
+  [PrototypeRoot]
+  interface AbstractView {
+    readonly attribute <ref>DocumentView</ref>     document;
+  };
+
+  interface DocumentView {
+    readonly attribute <ref>AbstractView</ref>     defaultView;
+  };
+
+  <ref>Document</ref> implements <ref>DocumentView</ref>;
+};</webidl>
+    <Typedef name="Document" id="::views::Document">
+      <webidl>  typedef <ref>dom::Document</ref> Document;</webidl>
+      <Type name="domDocument"/>
+    </Typedef>
+    <Interface name="AbstractView" id="::views::AbstractView">
+      <webidl>  [PrototypeRoot]
+  interface AbstractView {
+    readonly attribute <ref>DocumentView</ref>     document;
+  };</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="PrototypeRoot"/>
+      </ExtendedAttributeList>
+      <Attribute readonly="readonly" name="document" id="::views::AbstractView::document">
+        <webidl>    readonly attribute <ref>DocumentView</ref>     document;</webidl>
+        <Type name="DocumentView"/>
+      </Attribute>
+    </Interface>
+    <Interface name="DocumentView" id="::views::DocumentView">
+      <webidl>  interface DocumentView {
+    readonly attribute <ref>AbstractView</ref>     defaultView;
+  };</webidl>
+      <Attribute readonly="readonly" name="defaultView" id="::views::DocumentView::defaultView">
+        <webidl>    readonly attribute <ref>AbstractView</ref>     defaultView;</webidl>
+        <Type name="AbstractView"/>
+      </Attribute>
+    </Interface>
+    <Implements name1="Document" name2="DocumentView">
+      <webidl>  <ref>Document</ref> implements <ref>DocumentView</ref>;</webidl>
+    </Implements>
+  </Module>
+</Definitions>
