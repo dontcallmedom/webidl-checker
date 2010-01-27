@@ -17,6 +17,12 @@ interface BogusPutForwardsWithUnknownIdentifier {
   [PutForwards=quub] readonly attribute Foo foo;
 };
 
+/* PutForwards can only be used on read-only attribute */
+interface BogusPutForwardsUsedOnNotReadOnlyAttribute {
+  [PutForwards=baz]  attribute Foo foo;
+};
+
+
 /* Valid PutForwards Usage */
 interface Bar {
   [PutForwards=baz] readonly attribute Foo foo;
