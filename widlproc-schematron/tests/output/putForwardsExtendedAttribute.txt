@@ -1,0 +1,4 @@
+Extended attribute PutForwards used on Interface — PutForwards expected only on attributes.
+Extended attribute PutForwards used without required argument on BogusPutForwardsWithoutArgument.foo.
+Extended attribute PutForwards used on attribute BogusPutForwardsWithUnknownIdentifier.foo with argument quub does not match a known attribute in Foo interface.
+Extended attribute PutForwards used on non-readonly attribute BogusPutForwardsUsedOnNotReadOnlyAttribute.foo — PutForwards expected only on readonly attributes.
