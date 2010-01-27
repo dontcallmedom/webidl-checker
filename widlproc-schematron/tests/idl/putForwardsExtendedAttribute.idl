@@ -1,0 +1,32 @@
+/* Bogus PutForwards on Interface */
+[PutForwards=baz]
+interface BogusPutForwardsInterface {};
+
+/* ref interface for tests */
+interface Foo {
+  attribute DOMString baz;
+};
+
+/* PutForwards require an argument */
+interface BogusPutForwardsWithoutArgument {
+  [PutForwards] readonly attribute Foo foo;
+};
+
+/* PutForwards require an argument that matches an attribute of the linked interface*/
+interface BogusPutForwardsWithUnknownIdentifier {
+  [PutForwards=quub] readonly attribute Foo foo;
+};
+
+/* Valid PutForwards Usage */
+interface Bar {
+  [PutForwards=baz] readonly attribute Foo foo;
+};
+
+/* Chained PutForwards */
+interface ChainedPutForward1 {
+  [PutFowards=cycle] readonly attribute ChainedPutForward2 cycle;
+};
+
+interface ChainedPutForward2 {
+  [PutFowards=cycle] readonly attribute ChainedPutForward1 cycle;
+};
