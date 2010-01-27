@@ -30,9 +30,9 @@ interface Bar {
 
 /* Chained PutForwards */
 interface ChainedPutForward1 {
-  [PutFowards=cycle] readonly attribute ChainedPutForward2 cycle;
+  [PutForwards=cycle] readonly attribute ChainedPutForward2 cycle;
 };
 
 interface ChainedPutForward2 {
-  [PutFowards=cycle] readonly attribute ChainedPutForward1 cycle;
+  [PutForwards=cycle] readonly attribute ChainedPutForward1 cycle;
 };
