@@ -89,4 +89,16 @@
 	 <!--<assert see="http://dev.w3.org/2006/webapi/WebIDL/#PrototypeRoot" test="false">Interface <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> has multiple heritance paths to <value-of select="'@@@'"/></assert>-->
        </rule>
      </pattern>
+     <pattern>
+       <title>Extended Attribute PutForwards</title>
+       <rule context="//ExtendedAttribute[@name='PutForwards']" >
+	 <let name="validObject" value="parent::ExtendedAttributeList/parent::Attribute"/>
+	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#PutForwards"  test="$validObject">Extended attribute PutForwards used on <value-of select="local-name(parent::ExtendedAttributeList/parent::*)" /> — PutForwards expected only on attributes.</assert>
+	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#PutForwards" test="not($validObject) or parent::ExtendedAttributeList/parent::Attribute[@readonly='readonly']">Extended attribute PutForwards used on non-readonly attribute <value-of select="ancestor::Interface/@name" />.<value-of select="parent::ExtendedAttributeList/parent::Attribute/@name" /> — PutForwards expected only on readonly attributes.</assert>
+	 <assert test="@value">Extended attribute <value-of select="@name"/> used without required argument on <value-of select="ancestor::Interface/@name" />.<value-of select="parent::ExtendedAttributeList/parent::Attribute/@name" />.</assert>
+	 <let name="linkedInterface" value="parent::ExtendedAttributeList/parent::Attribute/Type/@name"/>
+	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#PutForwards" test="not(@value and $validObject) or //Interface[@name=$linkedInterface]/Attribute[@name=current()/@value]">Extended attribute PutForwards used on attribute <value-of select="ancestor::Interface/@name" />.<value-of select="parent::ExtendedAttributeList/parent::Attribute/@name" /> with argument <value-of select="@value"/> does not match a known attribute in <value-of select="$linkedInterface"/> interface.</assert>
+	 <!--<assert see="http://dev.w3.org/2006/webapi/WebIDL/#PutForwards" test="false">PutForwards on attribute <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/>.<value-of select="parent::ExtendedAttributeList/parent::Attribute/@name" /> is creating a cycle</assert>-->
+       </rule>
+     </pattern>
 </schema>
