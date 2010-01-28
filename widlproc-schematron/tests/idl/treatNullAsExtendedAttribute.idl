@@ -1,0 +1,24 @@
+/* TreatNullAs only appear on attributes or operations arguments */
+[TreatNullAs]
+interface BousTreatNullAsInterface {};
+
+/* TreatNullAs only appear on attributes or operations arguments with DOMString type */
+interface BogusTreatNullAsOnNonDOMStringType {
+  [TreatNullAs=EmptyString] attribute long counter;
+};
+
+/* TreatNullAs requires an argument */
+interface BogusTreatNullAsArgument {
+  [TreatNullAs] attribute DOMString name;
+};
+
+/* TreatNullAs requires EmptyString as argument */
+interface BogusTreatNullAsNoArgument {
+  [TreatNullAs=EmptString] attribute DOMString name;
+};
+
+/* Valid usage of TreatNullAs */
+interface ValidTreatNullAs {
+   [TreatNullAs=EmptyString] attribute DOMString bar;
+   boolean foo([TreatNullAs=EmptyString] in DOMString bar);
+};
