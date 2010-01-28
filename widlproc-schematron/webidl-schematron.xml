@@ -22,6 +22,14 @@
        <rule name="Extended attribute cannot be used on an interface that inherits from another" id="extendedAttributeNotWithInheritance" abstract="true">
 	 <assert test="not(parent::ExtendedAttributeList/parent::Interface/InterfaceInheritance)">The interface <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> has extended attribute <value-of select="@name"/> but inherits from another interface (<value-of select="parent::ExtendedAttributeList/parent::Interface/InterfaceInheritance/Name/@name"/>).</assert>
        </rule>
+       <rule name="Extended attribute can only be used on attribute" abstract="true" id="extendedAttributeAppliesToAttribute">
+	 <assert test="parent::ExtendedAttributeList/parent::Attribute">Extended attribute <value-of select="@name"/> used on <value-of select="local-name(parent::ExtendedAttributeList/parent::*)" /> — <value-of select="@name"/> expected only on attributes.</assert>
+       </rule>
+       <rule name="Extended attribute can only be used on read-only attribute" abstract="true" id="extendedAttributeAppliesToReadonlyAttribute">
+	 <assert test="parent::ExtendedAttributeList/parent::Attribute">Extended attribute <value-of select="@name"/> used on <value-of select="local-name(parent::ExtendedAttributeList/parent::*)" /> — <value-of select="@name"/> expected only on attributes.</assert>
+	 <assert test="not(parent::ExtendedAttributeList/parent::Attribute) or parent::ExtendedAttributeList/parent::Attribute[@readonly='readonly']">Extended attribute <value-of select="@name"/> used on non-readonly attribute <value-of select="ancestor::Interface/@name" />.<value-of select="parent::ExtendedAttributeList/parent::Attribute/@name" /> — <value-of select="@name"/> expected only on readonly attributes.</assert>
+       </rule>
+
      </pattern>
      <pattern>
        <title>Extended attribute Callback</title>
@@ -93,12 +101,40 @@
        <title>Extended Attribute PutForwards</title>
        <rule context="//ExtendedAttribute[@name='PutForwards']" >
 	 <let name="validObject" value="parent::ExtendedAttributeList/parent::Attribute"/>
-	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#PutForwards"  test="$validObject">Extended attribute PutForwards used on <value-of select="local-name(parent::ExtendedAttributeList/parent::*)" /> — PutForwards expected only on attributes.</assert>
-	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#PutForwards" test="not($validObject) or parent::ExtendedAttributeList/parent::Attribute[@readonly='readonly']">Extended attribute PutForwards used on non-readonly attribute <value-of select="ancestor::Interface/@name" />.<value-of select="parent::ExtendedAttributeList/parent::Attribute/@name" /> — PutForwards expected only on readonly attributes.</assert>
+	 <extends see="http://dev.w3.org/2006/webapi/WebIDL/#PutForwards" rule="extendedAttributeAppliesToReadonlyAttribute"/>
 	 <assert test="@value">Extended attribute <value-of select="@name"/> used without required argument on <value-of select="ancestor::Interface/@name" />.<value-of select="parent::ExtendedAttributeList/parent::Attribute/@name" />.</assert>
 	 <let name="linkedInterface" value="parent::ExtendedAttributeList/parent::Attribute/Type/@name"/>
 	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#PutForwards" test="not(@value and $validObject) or //Interface[@name=$linkedInterface]/Attribute[@name=current()/@value]">Extended attribute PutForwards used on attribute <value-of select="ancestor::Interface/@name" />.<value-of select="parent::ExtendedAttributeList/parent::Attribute/@name" /> with argument <value-of select="@value"/> does not match a known attribute in <value-of select="$linkedInterface"/> interface.</assert>
 	 <!--<assert see="http://dev.w3.org/2006/webapi/WebIDL/#PutForwards" test="false">PutForwards on attribute <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/>.<value-of select="parent::ExtendedAttributeList/parent::Attribute/@name" /> is creating a cycle</assert>-->
        </rule>
      </pattern>
+     <pattern>
+       <title>Extended Attribute Replaceable</title>
+       <rule context="//ExtendedAttribute[@name='Replaceable']" >
+	 <extends rule="extendedAttributeNoArg"/>
+	 <extends see="http://dev.w3.org/2006/webapi/WebIDL/#PutForwards" rule="extendedAttributeAppliesToReadonlyAttribute"/>
+       </rule>
+     </pattern>
+     <pattern>
+       <title>Extended Attribute TreatNullAs</title>
+       <rule context="//ExtendedAttribute[@name='TreatNullAs']">
+	 <let name="validObject" value="parent::ExtendedAttributeList/parent::Attribute or parent::ExtendedAttributeList/parent::Argument/parent::ArgumentList/parent::Operation or parent::ExtendedAttributeList/parent::Operation"/>
+	 <let name="objectName" value="concat(ancestor::Interface/@name,'.',concat(parent::ExtendedAttributeList/parent::Attribute/@name, parent::ExtendedAttributeList/parent::Argument/parent::ArgumentList/parent::Operation/@name, parent::ExtendedAttributeList/parent::Operation/@name))"/>
+	 <assert test="$validObject">Extended attribute <value-of select="@name"/> used on <value-of select="local-name(parent::ExtendedAttributeList/parent::*)" /> — <value-of select="@name"/> expected only on attribute, operation arguments, or operations.</assert>
+	 <assert test="not($validObject) or parent::ExtendedAttributeList/parent::*/Type[@type='DOMString']">Extended attribute TreatNullAs used on <value-of select="$objectName" /> applied to type <value-of select="concat(parent::ExtendedAttributeList/parent::*/Type/@type, parent::ExtendedAttributeList/parent::*/Type/@name)"/> — TreatNullAs expected only on attributes, operations or operations arguments with DOMString type.</assert>
+	 <assert test="not($validObject) or @value='EmptyString'">Extended attribute TreatNullAs used on <value-of select="$objectName" /> without required “EmptyString” argument.</assert>
+       </rule>
+     </pattern>
+     <pattern>
+       <title>Extended Attribute TreatUndefinedAs</title>
+       <rule context="//ExtendedAttribute[@name='TreatUndefinedAs']">
+	 <let name="validObject" value="parent::ExtendedAttributeList/parent::Attribute or parent::ExtendedAttributeList/parent::Argument/parent::ArgumentList/parent::Operation or parent::ExtendedAttributeList/parent::Operation"/>
+	 <let name="objectName" value="concat(ancestor::Interface/@name,'.',concat(parent::ExtendedAttributeList/parent::Attribute/@name, parent::ExtendedAttributeList/parent::Argument/parent::ArgumentList/parent::Operation/@name, parent::ExtendedAttributeList/parent::Operation/@name))"/>
+	 <assert test="$validObject">Extended attribute <value-of select="@name"/> used on <value-of select="local-name(parent::ExtendedAttributeList/parent::*)" /> — <value-of select="@name"/> expected only on attribute, operation arguments, or operations.</assert>
+	 <assert test="not($validObject) or parent::ExtendedAttributeList/parent::*/Type[@type='DOMString']">Extended attribute TreatUndefinedAs used on <value-of select="$objectName" /> applied to type <value-of select="concat(parent::ExtendedAttributeList/parent::*/Type/@type, parent::ExtendedAttributeList/parent::*/Type/@name)"/> — TreatUndefinedAs expected only on attributes, operations or operations arguments with DOMString or DOMString? type.</assert>
+	 <assert test="not($validObject) or (@value='EmptyString' or @value='Null')">Extended attribute TreatUndefinedAs used on <value-of select="$objectName" /> without required “EmptyString” or “Null” argument.</assert>
+	 <assert test="not($validObject and parent::ExtendedAttributeList/parent::*/Type[@type='DOMString']) or not(@value='Null') or  (@value='Null' and parent::ExtendedAttributeList/parent::*/Type[@nullable='nullable'])">Extended attribute TreatUndefinedAs used on <value-of select="$objectName" /> with required “Null” argument, but not applied to a DOMString? object.</assert>
+       </rule>
+     </pattern>
+
 </schema>
