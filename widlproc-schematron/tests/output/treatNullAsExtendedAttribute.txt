@@ -1,4 +1,4 @@
-Extended attribute TreatNullAs used on Interface — TreatNullAs expected only on attribute or operation argument.
-Extended attribute TreatNullAs used on BogusTreatNullAsOnNonDOMStringType.counter applied to type long — TreatNullAs expected only on attributes or operations with DOMString type.
+Extended attribute TreatNullAs used on Interface — TreatNullAs expected only on attribute, operation arguments, or operations.
+Extended attribute TreatNullAs used on BogusTreatNullAsOnNonDOMStringType.counter applied to type long — TreatNullAs expected only on attributes, operations or operations arguments with DOMString type.
 Extended attribute TreatNullAs used on BogusTreatNullAsArgument.name without required “EmptyString” argument.
-Extended attribute TreatNullAs used on BogusTreatNullAsNoArgument.name without required “EmptyString” argument.
+Extended attribute TreatNullAs used on BogusTreatNullAsNoArgument.bar without required “EmptyString” argument.
