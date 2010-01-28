@@ -1,0 +1,3 @@
+Extended attribute Replaceable used on Interface — Replaceable expected only on attributes.
+Extended attribute Replaceable used with arguments on Attribute foo.
+Extended attribute Replaceable used on non-readonly attribute BogusReplaceableUsedOnNotReadOnlyAttribute.foo — Replaceable expected only on readonly attributes.
