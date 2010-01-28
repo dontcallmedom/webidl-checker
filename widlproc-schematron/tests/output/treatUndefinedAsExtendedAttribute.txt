@@ -1,0 +1,5 @@
+Extended attribute TreatUndefinedAs used on Interface — TreatUndefinedAs expected only on attribute, operation arguments, or operations.
+Extended attribute TreatUndefinedAs used on BogusTreatUndefinedAsNoArgument.name without required “EmptyString” or “Null” argument.
+Extended attribute TreatUndefinedAs used on BogusTreatUndefinedAsArgument.name without required “EmptyString” or “Null” argument.
+Extended attribute TreatUndefinedAs used on BogusTreatUndefinedAsOnNonDOMStringType.counter applied to type long — TreatUndefinedAs expected only on attributes, operations or operations arguments with DOMString or DOMString? type.
+Extended attribute TreatUndefinedAs used on BogusTreatUndefinedAsNullAppliedToDOMString.name with required “Null” argument, but not applied to a DOMString? object.
