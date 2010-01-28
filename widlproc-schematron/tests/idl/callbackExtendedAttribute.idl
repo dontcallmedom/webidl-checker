@@ -65,7 +65,7 @@ interface PutForwardInterface {
 
 /* Callback used with an attribute with TreatUndefinedAs */
 [Callback] interface CallbackWithTreatUndefinedAs {
-  [TreatUndefinedAs=Null] attribute DOMString treatUndefinedAsNull;
+  [TreatUndefinedAs=Null] attribute DOMString? treatUndefinedAsNull;
   void operation();
 };
 
