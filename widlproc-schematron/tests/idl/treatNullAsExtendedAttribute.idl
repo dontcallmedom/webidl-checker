@@ -14,11 +14,12 @@ interface BogusTreatNullAsArgument {
 
 /* TreatNullAs requires EmptyString as argument */
 interface BogusTreatNullAsNoArgument {
-  [TreatNullAs=EmptString] attribute DOMString name;
+  [TreatNullAs=EmptString] DOMString bar();
 };
 
 /* Valid usage of TreatNullAs */
 interface ValidTreatNullAs {
-   [TreatNullAs=EmptyString] attribute DOMString bar;
-   boolean foo([TreatNullAs=EmptyString] in DOMString bar);
+  [TreatNullAs=EmptyString] attribute DOMString onAttribute;
+  [TreatNullAs=EmptyString] DOMString onOperation(long bar);
+  boolean onOperationArgument([TreatNullAs=EmptyString] in DOMString bar);
 };
