@@ -14,6 +14,7 @@ import os
 import urlparse
 import urllib
 import httplib
+from lxml import etree
 
 class WrongConfigurationException(Exception):
     """Exception raised when the script is not properly configured."""
@@ -128,7 +129,7 @@ def serveRequest():
                         print "Expires: %s" % (srcheaders['Expires'] )
                 elif inp:
                     idls.append(inp)
-                    xmlout,error = widlproc(inp,0,1)
+                    xmlout,error = syntax_check(inp,0,1)
                     if xmlout:
                         xmlOutput.append(xmlout)
                     if error:
@@ -236,7 +237,6 @@ def extractIdls(doc,extraRequestHeaders=[]):
                         
         # Extract WebIDLs from source document in invidual files
         # is the document already XML?
-        from lxml import etree
         try:
             parser = etree.XMLParser(resolve_entities=False)
             tree = etree.parse(doc,parser)
@@ -276,19 +276,22 @@ def extractIdls(doc,extraRequestHeaders=[]):
         idls += tree.xpath("/html/body//pre[@class='idl' or @class='webidl' or code[@class='idl-code']]")
         from tempfile import NamedTemporaryFile
         counter = 0
-        for idlXml in idls:
+        for idlHtml in idls:
             counter = counter + 1
-            idl = "".join(idlXml.xpath("descendant-or-self::text()"))
+            idl = "".join(idlHtml.xpath("descendant-or-self::text()"))
             idlOutput.append(idl)
             idlline = None
             try:
-                idlline = idlXml.sourceline
+                idlline = idlHtml.sourceline
             except AttributeError:
                 idlline = None
             # run widlproc on each of  them
-            xmlout,error = widlproc(idl,idlline,counter)
+            xmlout,error = syntax_check(idl,idlline,counter)
             if xmlout:
                 xmlOutput.append(xmlout)
+                semanticErrors = semantic_check(xmlout, idl, idlline, counter)
+                if len(semanticErrors):
+                    errors = errors + semanticErrors
             if error:
                 errors.append(error)
         return srcheaders,idlOutput,xmlOutput,errors
@@ -297,7 +300,7 @@ def extractIdls(doc,extraRequestHeaders=[]):
 
 # process an IDL fragment with widlproc
 # returns the XML representation of the fragment, and a list of errors
-def widlproc(idl,idlline,counter):
+def syntax_check(idl,idlline,counter):
     command = ['/usr/local/bin/widlproc','-no-dtd-ref','/dev/stdin']
     error = None
     xmlOutput = None
@@ -319,6 +322,18 @@ def widlproc(idl,idlline,counter):
         xmlOutput = p.stdout.read()
     return (xmlOutput,error)
 
+def semantic_check(idlXml, idl, idlline, counter):
+    errors = []
+    schematron = etree.parse("widlproc-schematron/webidl-schematron.xsl")
+    transform = etree.XSLT(schematron)
+    idlXmlTree = etree.fromstring(idlXml)
+    errorReport = transform(idlXmlTree)
+    errorsInXml = errorReport.xpath("//svrl:failed-assert/svrl:text",namespaces={'svrl': 'http://purl.oclc.org/dsdl/svrl'})
+    for err in errorsInXml:
+        errmsg = "".join(err.xpath("descendant-or-self::text()"))
+        errors.append((idl, errmsg, idlline, counter))
+    return errors
+
 def process(url,output='default'):
     import sys
     try:
@@ -327,7 +342,7 @@ def process(url,output='default'):
         sys.stderr.write( "Couldn't parse document at %s:%s" % (url,str(e)))
         sys.exit(1)
     except WrongConfigurationException,e:
-        sys.stderr.write( "Couldn't run wildproc: %s\n" % (str(e)))
+        sys.stderr.write( "Couldn't run widlproc: %s\n" % (str(e)))
         sys.stderr.write( "Install it from http://widl.webvm.net/\n")
         sys.exit(1)
         
@@ -354,7 +369,7 @@ def process(url,output='default'):
                 
                 sys.stderr.write("%s\nerror found in %s\n%s" % (error[1],idldesc,highlightedidl))
                 sys.stderr.write("-" * 30 + "\n")
-        if len(xmlOutput):
+        if not(len(errors)) and len(xmlOutput):
             print "<Definitions>"
             for x in xmlOutput:
                 # getting rid of xml declaration
