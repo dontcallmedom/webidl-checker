@@ -289,11 +289,13 @@ def extractIdls(doc,extraRequestHeaders=[]):
             xmlout,error = syntax_check(idl,idlline,counter)
             if xmlout:
                 xmlOutput.append(xmlout)
-                semanticErrors = semantic_check(xmlout, idl, idlline, counter)
-                if len(semanticErrors):
-                    errors = errors + semanticErrors
             if error:
                 errors.append(error)
+        xmlWrapper = "<Module>" + "".join(xmlOutput) + "</Module>"
+        if not len(errors):
+            semanticErrors = semantic_check(xmlWrapper, idl, idlline, counter)
+            if len(semanticErrors):
+                errors = errors + semanticErrors
         return srcheaders,idlOutput,xmlOutput,errors
     else:
         raise UnparseableDocumentException("could not load resource: ")
@@ -320,6 +322,8 @@ def syntax_check(idl,idlline,counter):
         error = (idl,errmsg,idlline,counter)
     else:
         xmlOutput = p.stdout.read()
+        # getting rid of XML declaration
+        xmlOutput = xmlOutput.split("?>",1)[1]
     return (xmlOutput,error)
 
 def semantic_check(idlXml, idl, idlline, counter):
@@ -370,11 +374,7 @@ def process(url,output='default'):
                 sys.stderr.write("%s\nerror found in %s\n%s" % (error[1],idldesc,highlightedidl))
                 sys.stderr.write("-" * 30 + "\n")
         if not(len(errors)) and len(xmlOutput):
-            print "<Definitions>"
-            for x in xmlOutput:
-                # getting rid of xml declaration
-                print x.split("?>",1)[1]
-            print "</Definitions>"
+            print "<Module>" + "".join(xmlOutput) + "</Module>"
         if len(idls)==0:
             sys.stderr.write( "No WebIDL found in %s" % (url))
             sys.exit(1)
