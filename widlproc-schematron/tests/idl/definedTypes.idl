@@ -3,7 +3,10 @@ interface UseUndefinedType {
   attribute UndefinedType att;
 };
 
+typedef UseDefinedType TypeDefType;
+
 /* uses a defined type */
 interface UseDefinedType {
   attribute UseUndefinedType att;
+  attribute TypeDefType att2;
 };
