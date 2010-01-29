@@ -3,7 +3,7 @@
      <pattern  id="definedTypes">
        <title>IDL is using defined types</title>
           <rule context="//Type[@name]">
-               <assert test="//Interface[@name=current()/@name] or $standards//Interface[@name=current()/@name] or //Typedef[name=current()/@name] or $standards//Typedef[name=current()/@name]"><value-of select="@name"/> type used in <value-of select="ancestor::Interface[1]/@name" />.<value-of select="parent::*[1]/@name" /> declaration undefined.</assert>
+               <assert test="//Interface[@name=current()/@name] or $standards//Interface[@name=current()/@name] or //Typedef[@name=current()/@name] or $standards//Typedef[@name=current()/@name]"><value-of select="@name"/> type used in <value-of select="ancestor::Interface[1]/@name" />.<value-of select="parent::*[1]/@name" /> declaration undefined.</assert>
           </rule>
      </pattern>
      <pattern>

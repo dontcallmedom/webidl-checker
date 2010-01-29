@@ -1,0 +1,4 @@
+Extended attribute OverrideBuiltins used on Exception — OverrideBuiltins expected only on interfaces.
+Extended attribute OverrideBuiltins used on interface  that does not have a name getter.
+Extended attribute OverrideBuiltins used with arguments on Interface BogusOverrideBuiltinsWithArgument.
+Extended attribute OverrideBuiltins used on interface BogusOverrideBuiltinsNoGetter that does not have a name getter.

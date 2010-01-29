@@ -1,0 +1,3 @@
+Extended attribute PrototypeRoot used on Exception — PrototypeRoot expected only on interfaces.
+Extended attribute PrototypeRoot used with arguments on Interface BogusPrototypeRootWithArg.
+The interface BogusInheritingInterface has extended attribute PrototypeRoot but inherits from another interface (Root).
