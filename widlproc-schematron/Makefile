@@ -10,14 +10,14 @@ webidl-schematron.xsl: webidl-schematron.xml
 IDLS := $(wildcard tests/idl/*.idl)
 XML_IDLS := $(patsubst tests/idl/%.idl,tests/idl/%.xml,$(wildcard tests/idl/*.idl))
 
-generate-xml-idls: $(IDLS)
+generate-xml-idls: $(XML_IDLS) $(IDLS)
 
 tests/idl/%.xml: tests/idl/%.idl
 	widlproc $< > $@
 
 TESTS_OUTPUT := $(patsubst tests/idl/%.xml,tests/output/%.txt,$(wildcard tests/idl/*.xml))
 
-generate-test-output: generate-xml-idls $(XML_IDLS) webidl-schematron.xsl
+generate-test-output: generate-xml-idls $(TESTS_OUTPUT) $(XML_IDLS) webidl-schematron.xsl
 
 tests/output/%.txt: webidl-schematron.xsl tests/idl/%.xml
 	xsltproc --novalid $^ |grep svrl:text|sed -e "s/^.*>\([^<]*\)<.*/\1/" > $@
