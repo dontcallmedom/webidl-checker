@@ -9,6 +9,12 @@ interface ConstantNameClashWithAttribute {
   attribute boolean right;
 };
 
+interface ConstantNameClashWithConstant {
+  const boolean right = false;
+  const unsigned long right = 0;
+};
+
+
 /* valid constant name */
 interface ValidConstantName {
   const boolean DEBUG = false;
