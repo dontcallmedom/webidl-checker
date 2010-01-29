@@ -1,10 +1,19 @@
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" >
+  <let name="standards" value="document('../web-platform/standards.xml')"/>
      <pattern  id="definedTypes">
        <title>IDL is using defined types</title>
           <rule context="//Type[@name]">
-               <assert test="//Interface[@name=current()/@name]"><value-of select="@name"/> type used in <value-of select="ancestor::Interface[1]/@name" />.<value-of select="parent::*[1]/@name" /> declaration undefined.</assert>
+               <assert test="//Interface[@name=current()/@name] or $standards//Interface[@name=current()/@name]"><value-of select="@name"/> type used in <value-of select="ancestor::Interface[1]/@name" />.<value-of select="parent::*[1]/@name" /> declaration undefined.</assert>
           </rule>
      </pattern>
+     <pattern>
+       <title>Constant names don't clash with other interface/exception members</title>
+       <rule context="//Const">
+	 <assert test="not(parent::*/*[local-name()='Operation' or local-name()='Attribute'][@name=current()/@name])">Constant <value-of select="@name"/> in <value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/> clashes with another interface member.</assert>
+	 <assert test="not(preceding-sibling::Const[@name=current()/@name])">Constant <value-of select="@name"/> in <value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/> clashes with another constant in that interface.</assert>
+       </rule>
+     </pattern>
+
      <pattern>
        <title>Extended attributes are well-known</title>
        <rule context="//ExtendedAttribute[@name]">
@@ -58,8 +67,15 @@
 	 <extends rule="extendedAttributeAppliesToInterface"/>
 	 <!-- @@@ The NamedConstructor clash checks should be done across all well-known IDLs -->
 	 <assert  see="http://dev.w3.org/2006/webapi/WebIDL/#NamedConstructor" test="not(parent::ExtendedAttributeList/parent::Interface/preceding::Interface/ExtendedAttributeList/ExtendedAttribute[@name='NamedConstructor' and @value=current()/@value])">Extended attribute NamedConstructor with identifier <value-of select="@value"/> in <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> interface clashes with NamedConstructor on interface <value-of select="parent::ExtendedAttributeList/parent::Interface/preceding::Interface[ExtendedAttributeList/ExtendedAttribute[@name='NamedConstructor' and @value=current()/@value]]/@name"/>.</assert> 
+	 <assert  see="http://dev.w3.org/2006/webapi/WebIDL/#NamedConstructor" test="not($standards//Interface/ExtendedAttributeList/ExtendedAttribute[@name='NamedConstructor' and @value=current()/@value])">Extended attribute NamedConstructor with identifier <value-of select="@value"/> in <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> interface clashes with NamedConstructor on externally defined interface <value-of select="$standards//Interface[ExtendedAttributeList/ExtendedAttribute[@name='NamedConstructor' and @value=current()/@value]]/@name"/>.</assert> 
+
 	 <assert  see="http://dev.w3.org/2006/webapi/WebIDL/#NamedConstructor" test="not(parent::ExtendedAttributeList/parent::Interface/preceding::Interface[not(ExtendedAttributeList/ExtendedAttribute[@name='NoInterfaceObject'])][@name=current()/@value])">Extended attribute NamedConstructor with identifier <value-of select="@value"/> in <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> interface clashes with  interface <value-of select="parent::ExtendedAttributeList/parent::Interface/preceding::Interface[not(ExtendedAttributeList/ExtendedAttribute[@name='NoInterfaceObject'])][@name=current()/@value]/@name"/>.</assert> 
+	 <assert  see="http://dev.w3.org/2006/webapi/WebIDL/#NamedConstructor" test="not($standards//Interface[not(ExtendedAttributeList/ExtendedAttribute[@name='NoInterfaceObject'])][@name=current()/@value])">Extended attribute NamedConstructor with identifier <value-of select="@value"/> in <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> interface clashes with externally defined interface <value-of select="$standards//Interface[not(ExtendedAttributeList/ExtendedAttribute[@name='NoInterfaceObject'])][@name=current()/@value]/@name"/>.</assert> 
+
+
 	 <assert  see="http://dev.w3.org/2006/webapi/WebIDL/#NamedConstructor" test="not(parent::ExtendedAttributeList/parent::Interface/preceding::Exception[not(ExtendedAttributeList/ExtendedAttribute[@name='NoInterfaceObject'])][@name=current()/@value])">Extended attribute NamedConstructor with identifier <value-of select="@value"/> in <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> interface clashes with exception interface <value-of select="parent::ExtendedAttributeList/parent::Interface/preceding::Exception[not(ExtendedAttributeList/ExtendedAttribute[@name='NoInterfaceObject'])][@name=current()/@value]/@name"/>.</assert> 
+	 <assert  see="http://dev.w3.org/2006/webapi/WebIDL/#NamedConstructor" test="not($standards//Exception[not(ExtendedAttributeList/ExtendedAttribute[@name='NoInterfaceObject'])][@name=current()/@value])">Extended attribute NamedConstructor with identifier <value-of select="@value"/> in <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> interface clashes with externally defined exception interface <value-of select="$standards//Exception[not(ExtendedAttributeList/ExtendedAttribute[@name='NoInterfaceObject'])][@name=current()/@value]/@name"/>.</assert> 
+
 
        </rule>
      </pattern>
@@ -104,7 +120,7 @@
 	 <extends see="http://dev.w3.org/2006/webapi/WebIDL/#PutForwards" rule="extendedAttributeAppliesToReadonlyAttribute"/>
 	 <assert test="@value">Extended attribute <value-of select="@name"/> used without required argument on <value-of select="ancestor::Interface/@name" />.<value-of select="parent::ExtendedAttributeList/parent::Attribute/@name" />.</assert>
 	 <let name="linkedInterface" value="parent::ExtendedAttributeList/parent::Attribute/Type/@name"/>
-	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#PutForwards" test="not(@value and $validObject) or //Interface[@name=$linkedInterface]/Attribute[@name=current()/@value]">Extended attribute PutForwards used on attribute <value-of select="ancestor::Interface/@name" />.<value-of select="parent::ExtendedAttributeList/parent::Attribute/@name" /> with argument <value-of select="@value"/> does not match a known attribute in <value-of select="$linkedInterface"/> interface.</assert>
+	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#PutForwards" test="not(@value and $validObject) or //Interface[@name=$linkedInterface]/Attribute[@name=current()/@value] or $standards//Interface[@name=$linkedInterface]/Attribute[@name=current()/@value]">Extended attribute PutForwards used on attribute <value-of select="ancestor::Interface/@name" />.<value-of select="parent::ExtendedAttributeList/parent::Attribute/@name" /> with argument <value-of select="@value"/> does not match a known attribute in <value-of select="$linkedInterface"/> interface.</assert>
 	 <!--<assert see="http://dev.w3.org/2006/webapi/WebIDL/#PutForwards" test="false">PutForwards on attribute <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/>.<value-of select="parent::ExtendedAttributeList/parent::Attribute/@name" /> is creating a cycle</assert>-->
        </rule>
      </pattern>
