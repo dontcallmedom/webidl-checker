@@ -7,10 +7,15 @@
           </rule>
      </pattern>
      <pattern>
-       <title>Constant names don't clash with other interface/exception members</title>
-       <rule context="//Const">
-	 <assert test="not(parent::*/*[local-name()='Operation' or local-name()='Attribute'][@name=current()/@name])">Constant <value-of select="@name"/> in <value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/> clashes with another interface member.</assert>
-	 <assert test="not(preceding-sibling::Const[@name=current()/@name])">Constant <value-of select="@name"/> in <value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/> clashes with another constant in that interface.</assert>
+       <title>Constant/Attribute names don't clash with other interface/exception members</title>
+       <rule context="//Const|//Attribute">
+	 <assert test="not(preceding-sibling::*[local-name()='Operation' or local-name()='Attribute' or local-name()='Const'][@name=current()/@name])"><value-of select="concat(local-name(), ' ', @name)"/> in <value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/> clashes with another interface member.</assert>
+       </rule>
+     </pattern>
+     <pattern>
+       <title>Attribute getraises/setraises list known Exceptions</title>
+       <rule context="//Attribute/GetRaises/RaiseException|//Attribute/SetRaises/RaiseException">
+	 <assert role="warning" test="//Exception[@name=current()/@name] or $standards//Exception[@name=current()/@name]"><value-of select="@name"/> Exception raised by <value-of select="ancestor::Interface[1]/@name" />.<value-of select="ancestor::Attribute[1]/@name" /> does not match a defined Exception.</assert>
        </rule>
      </pattern>
      <pattern>
