@@ -13,9 +13,17 @@
        </rule>
      </pattern>
      <pattern>
-       <title>Attribute getraises/setraises list known Exceptions</title>
-       <rule context="//Attribute/GetRaises/RaiseException|//Attribute/SetRaises/RaiseException">
-	 <assert role="warning" test="//Exception[@name=current()/@name] or $standards//Exception[@name=current()/@name]"><value-of select="@name"/> Exception raised by <value-of select="ancestor::Interface[1]/@name" />.<value-of select="ancestor::Attribute[1]/@name" /> does not match a defined Exception.</assert>
+       <title>Exceptions raised are well-known</title>
+       <rule context="//RaiseException">
+	 <assert role="warning" test="//Exception[@name=current()/@name] or $standards//Exception[@name=current()/@name]"><value-of select="@name"/> Exception raised by <value-of select="ancestor::Interface[1]/@name" />.<value-of select="parent::*/parent::**/@name" /> does not match a defined Exception.</assert>
+       </rule>
+     </pattern>
+     <pattern>
+       <title>Operations</title>
+       <rule context="//Operation">
+	 <assert test="@name or @stringifier or @getter or @setter or @creator or @deleter or @caller"><value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/> has an operation without identifier but which is not a special operation.</assert>
+	 <assert test="not(preceding-sibling::*[local-name()='Attribute' or local-name()='Const'][@name=current()/@name])"><value-of select="concat(local-name(), ' ', @name)"/> in <value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/> clashes with another interface member.</assert>
+	 <assert test="not(ArgumentList/Argument[@ellipsis]) or not(ArgumentList/Argument[@ellipsis]/following-sibling::Argument)"><value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/> defines a variadic operation (<value-of select="@name"/>) but the ... is not set on the last argument.</assert>
        </rule>
      </pattern>
      <pattern>
