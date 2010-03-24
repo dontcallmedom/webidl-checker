@@ -3,7 +3,7 @@
      <pattern  id="definedTypes">
        <title>IDL is using defined types</title>
           <rule context="//Type[@name]">
-               <assert test="//Interface[@name=current()/@name] or $standards//Interface[@name=current()/@name] or //Typedef[@name=current()/@name] or $standards//Typedef[@name=current()/@name]"><value-of select="@name"/> type used in <value-of select="ancestor::Interface[1]/@name" />.<value-of select="parent::*[1]/@name" /> declaration undefined.</assert>
+               <assert role="warning" test="//Interface[@name=current()/@name] or $standards//Interface[@name=current()/@name] or //Typedef[@name=current()/@name] or $standards//Typedef[@name=current()/@name]"><value-of select="@name"/> type used in <value-of select="ancestor::Interface[1]/@name" />.<value-of select="parent::*[1]/@name" /> declaration undefined.</assert>
           </rule>
      </pattern>
      <pattern>
@@ -13,7 +13,12 @@
 	 <assert test="not(preceding-sibling::Const[@name=current()/@name])">Constant <value-of select="@name"/> in <value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/> clashes with another constant in that interface.</assert>
        </rule>
      </pattern>
-
+     <pattern>
+       <title>Sequence are not used for attributes definition</title>
+       <rule context="//Type[not(@type) and not(@name)]">
+	 <assert role="warning" test="not(parent::Attribute)">Attribute <value-of select="parent::Attribute/@name"/> in <value-of select="concat(local-name(parent::Attribute/parent::*),' ',parent::Attribute/parent::*/@name)" /> is defined as a sequence; in general, arrays should be prefered to sequence as attributes.</assert>
+       </rule>
+     </pattern>
      <pattern>
        <title>Extended attributes are well-known</title>
        <rule context="//ExtendedAttribute[@name]">
@@ -21,7 +26,7 @@
        </rule>
      </pattern>
      <pattern>
-       <title>Extended attribute common rules</title>
+       <title>Extended attribute common abstract rules</title>
        <rule  id="extendedAttributeAppliesToInterface" abstract="true">
 	 <assert test="parent::ExtendedAttributeList/parent::Interface">Extended attribute <value-of select="@name"/> used on <value-of select="local-name(parent::ExtendedAttributeList/parent::*)" /> — <value-of select="@name"/> expected only on interfaces.</assert>	 
        </rule>
