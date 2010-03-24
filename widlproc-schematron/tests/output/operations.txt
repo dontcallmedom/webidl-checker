@@ -1,0 +1,5 @@
+UnknownException Exception raised by OperationSetRaisesUnknown.NaN does not match a defined Exception.
+Interface NonSpecialOperationWithoutIdentifier has an operation without identifier but which is not a special operation.
+Operation right in Interface OperationNameClashWithConstant clashes with another interface member.
+Operation right in Interface OperationNameClashWithAttribute clashes with another interface member.
+Interface OperationWithNonLastVariadicArgument defines a variadic operation (multiply) but the ... is not set on the last argument.
