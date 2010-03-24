@@ -1,0 +1,3 @@
+Const right in Interface ConstantNameClashWithOperation clashes with another interface member.
+Const right in Interface ConstantNameClashWithAttribute clashes with another interface member.
+Const right in Interface ConstantNameClashWithConstant clashes with another interface member.
