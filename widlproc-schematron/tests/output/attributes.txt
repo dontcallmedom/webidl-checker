@@ -1,0 +1,5 @@
+Attribute right in Interface AttributeNameClashWithConstant clashes with another interface member.
+Attribute right in Interface AttributeNameClashWithOperation clashes with another interface member.
+Attribute right in Interface AttributeNameClashWithAttribute clashes with another interface member.
+UnknownException Exception raised by AttributeGetRaisesUnknown.right does not match a defined Exception.
+UnknownException Exception raised by AttributeSetRaisesUnknown.right does not match a defined Exception.
