@@ -20,7 +20,9 @@ interface OperationWithNonLastVariadicArgument {
   float multiply(float... numbers, float factor);
 }; 
 
-
+interface OperationWithOptionalArgumentInMiddle {
+  float multiply(optional float number, float number2);
+};
 
 exception KnownException {};
 
@@ -31,4 +33,5 @@ interface ValidOperations {
   boolean right();
   boolean wrong() raises(KnownException);
   float multipy(float... numbers);
+  float factorize(float number, optional float number2, optional float number3);
 };
