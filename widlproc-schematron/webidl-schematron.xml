@@ -36,7 +36,35 @@
      <pattern>
        <title>Special Operations</title>
        <rule context="//Operation[@stringifier or @getter or @setter or @creator or @deleter or @caller]">
-	 
+	 <assert test="not(@omittable) or (@name)"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines an omittable operation that does not have an identifier.</assert>
+	 <assert test="not(@stringifier) or not(preceding-sibling::*[@stringifier])"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines more than one stringifier.</assert>
+	 <assert test="not(@getter) or not(ArgumentList/Argument[1]/Type/@type='unsigned long') or not(preceding-sibling::Operation[@getter]) or not(preceding-sibling::Operation[@getter]/ArgumentList/Argument[1]/Type/@type=current()/ArgumentList/Argument[1]/Type/@type)"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines more than one index getter.</assert>
+	 <assert test="not(@getter) or not(ArgumentList/Argument[1]/Type/@type='DOMString') or not(preceding-sibling::Operation[@getter]) or not(preceding-sibling::Operation[@getter]/ArgumentList/Argument[1]/Type/@type=current()/ArgumentList/Argument[1]/Type/@type)"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines more than one name getter.</assert>
+	 <assert test="not(@deleter) or not(ArgumentList/Argument[1]/Type/@type='unsigned long') or not(preceding-sibling::Operation[@deleter]) or not(preceding-sibling::Operation[@deleter]/ArgumentList/Argument[1]/Type/@type=current()/ArgumentList/Argument[1]/Type/@type)"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines more than one index deleter.</assert>
+	 <assert test="not(@deleter) or not(ArgumentList/Argument[1]/Type/@type='DOMString') or not(preceding-sibling::Operation[@deleter]) or not(preceding-sibling::Operation[@deleter]/ArgumentList/Argument[1]/Type/@type=current()/ArgumentList/Argument[1]/Type/@type)"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines more than one name deleter.</assert>
+	 <assert test="not(@setter) or not(ArgumentList/Argument[1]/Type/@type='unsigned long') or not(preceding-sibling::Operation[@setter]) or not(preceding-sibling::Operation[@setter]/ArgumentList/Argument[1]/Type/@type=current()/ArgumentList/Argument[1]/Type/@type)"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines more than one index setter.</assert>
+	 <assert test="not(@setter) or not(ArgumentList/Argument[1]/Type/@type='DOMString') or not(preceding-sibling::Operation[@setter]) or not(preceding-sibling::Operation[@setter]/ArgumentList/Argument[1]/Type/@type=current()/ArgumentList/Argument[1]/Type/@type)"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines more than one name setter.</assert>
+	 <assert test="not(@creator) or not(ArgumentList/Argument[1]/Type/@type='unsigned long') or not(preceding-sibling::Operation[@creator]) or not(preceding-sibling::Operation[@creator]/ArgumentList/Argument[1]/Type/@type=current()/ArgumentList/Argument[1]/Type/@type)"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines more than one index creator.</assert>
+	 <assert test="not(@creator) or not(ArgumentList/Argument[1]/Type/@type='DOMString') or not(preceding-sibling::Operation[@creator]) or not(preceding-sibling::Operation[@creator]/ArgumentList/Argument[1]/Type/@type=current()/ArgumentList/Argument[1]/Type/@type)"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines more than one name creator.</assert>
+	 <assert test="not(ArgumentList/Argument/@ellipsis)"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines a special operation that is variadic.</assert>
+	 <assert test="not(ArgumentList/Argument/@optional)"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines a special operation with optional arguments.</assert>
+	 <assert test="not(@stringifier) or not(ArgumentList/Argument)"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines a stringifier operation with arguments.</assert>
+	 <assert test="not(@stringifier) or Type/@type='DOMString'"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines a stringifier operation with a return type that is not a DOMString.</assert>
+	 <assert test="not(@getter) or count(ArgumentList/Argument)=1"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines a getter operation that doesn't take a single argument.</assert>
+	 <assert test="not(@deleter) or count(ArgumentList/Argument)=1"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines a deleter operation that doesn't take a single argument.</assert>
+	 <assert test="not(@setter) or count(ArgumentList/Argument)=2"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines a setter operation that doesn't take exactly two arguments.</assert>
+	 <assert test="not(@creator) or count(ArgumentList/Argument)=2"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines a creator operation that doesn't take exactly two arguments.</assert>
+	 <assert test="not(@getter) or ArgumentList/Argument[1]/Type/@type='DOMString' or ArgumentList/Argument[1]/Type/@type='unsigned long'"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines a getter operation with first argument different from DOMString and unsigned long.</assert>
+	 <assert test="not(@setter) or ArgumentList/Argument[1]/Type/@type='DOMString' or ArgumentList/Argument[1]/Type/@type='unsigned long'"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines a setter operation with first argument different from DOMString and unsigned long.</assert>
+	 <assert test="not(@deleter) or ArgumentList/Argument[1]/Type/@type='DOMString' or ArgumentList/Argument[1]/Type/@type='unsigned long'"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines a deleter operation with first argument different from DOMString and unsigned long.</assert>
+	 <assert test="not(@creator) or ArgumentList/Argument[1]/Type/@type='DOMString' or ArgumentList/Argument[1]/Type/@type='unsigned long'"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines a creator operation with first argument different from DOMString and unsigned long.</assert>
+       </rule>
+     </pattern>
+     <pattern>
+       <title>Stringifier attributes</title>
+       <rule context="//Attribute[@stringifier]">
+	 <assert test="Type/@type='DOMString'"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines a stringifier attribute that is not of type DOMString.</assert>
+	 <assert test="not(preceding-sibling::*[@stringifier])"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines more than one stringifier.</assert>
        </rule>
      </pattern>
      <pattern>
