@@ -1,3 +1,4 @@
+//  The "omittable" keyword MUST NOT  appear on an operation that has no identifier. 
 interface ommittableOperationWithNoIdentifier {
   omittable getter float (in DOMString propertyName);  
 };
@@ -47,15 +48,15 @@ interface StringifierAttributeOnNonString {
 
 interface IndexGetterWithMoreThanOneArgument {
   getter float getProperty(unsigned long index1, unsigned long index2);
-}
+};
 
 interface IndexDeleterWithMoreThanOneArgument {
   deleter float deleteProperty(unsigned long index1, unsigned long index2);
-}
+};
 
 interface IndexGetterWithNonUnsignedLongArgument {
   getter float getProperty(long index);
-}
+};
 
 interface IndexSetterWithMoreThanTwoArguments {
   setter void setProperty(unsigned long index, float value, unsigned long parameter);
@@ -71,11 +72,11 @@ interface IndexCreatorWithWrongFirstArgument {
 
 interface NameGetterWithMoreThanOneArgument {
   getter float getProperty(DOMString name, unsigned long index2);
-}
+};
 
 interface NameDeleterWithMoreThanOneArgument {
   deleter float deleteProperty(DOMString name, unsigned long index2);
-}
+};
 
 interface NameSetterWithMoreThanTwoArguments {
   setter void setProperty(DOMString name, float value, unsigned long parameter);
