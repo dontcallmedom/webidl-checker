@@ -20,7 +20,7 @@ interface moreThanOneNameGetter {
   getter float getProperty2(in DOMString propertyName);
 };
 
-interface moreThanOneIndexGetter {
+interface moreThanOneIndexSetter {
   setter void setProperty(unsigned long index, float value);
   setter void setProperty2(unsigned long index, float value);
 };
