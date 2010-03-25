@@ -24,12 +24,19 @@
 	 <assert test="@name or @stringifier or @getter or @setter or @creator or @deleter or @caller"><value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/> has an operation without identifier but which is not a special operation.</assert>
 	 <assert test="not(preceding-sibling::*[local-name()='Attribute' or local-name()='Const'][@name=current()/@name])"><value-of select="concat(local-name(), ' ', @name)"/> in <value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/> clashes with another interface member.</assert>
 	 <assert test="not(ArgumentList/Argument[@ellipsis]) or not(ArgumentList/Argument[@ellipsis]/following-sibling::Argument)"><value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/> defines a variadic operation (<value-of select="@name"/>) but the ... is not set on the last argument.</assert>
+	 <assert test="not(ArgumentList/Argument[@optional]) or not(ArgumentList/Argument[@optional]/following-sibling::Argument[not(@optional)])"><value-of select="concat(local-name(parent::*), ' ', parent::*/@name,'.',@name,'()')"/> has a non-optional argument after an optional one.</assert>
        </rule>
      </pattern>
      <pattern>
        <title>Sequence are not used for attributes definition</title>
        <rule context="//Type[not(@type) and not(@name)]">
 	 <assert role="warning" test="not(parent::Attribute)">Attribute <value-of select="parent::Attribute/@name"/> in <value-of select="concat(local-name(parent::Attribute/parent::*),' ',parent::Attribute/parent::*/@name)" /> is defined as a sequence; in general, arrays should be prefered to sequence as attributes.</assert>
+       </rule>
+     </pattern>
+     <pattern>
+       <title>Special Operations</title>
+       <rule context="//Operation[@stringifier or @getter or @setter or @creator or @deleter or @caller]">
+	 
        </rule>
      </pattern>
      <pattern>
