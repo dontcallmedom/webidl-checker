@@ -28,7 +28,7 @@ exception KnownException {};
 
 interface ValidOperations {
   stringifier DOMString();
-  getter DOMString();
+  getter DOMString(DOMString name);
   DOMString right(DOMString input);
   boolean right();
   boolean wrong() raises(KnownException);
