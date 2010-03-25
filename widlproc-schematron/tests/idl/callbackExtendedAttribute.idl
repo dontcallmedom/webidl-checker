@@ -44,7 +44,7 @@ interface InheritedInterface {};
 
 /* Callback used with a stringifier */
 [Callback] interface CallbackUsedWithStringifier {
-  stringifier DOMString print(any value);
+  stringifier DOMString print();
 };
 
 /* Callback used with an attribute with PutForwards */
