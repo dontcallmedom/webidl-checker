@@ -22,5 +22,5 @@ generate-test-output: generate-xml-idls $(TESTS_OUTPUT) $(XML_IDLS) webidl-schem
 tests/output/%.txt: webidl-schematron.xsl tests/idl/%.xml
 	xsltproc --novalid $^ |grep svrl:text|sed -e "s/^.*>\([^<]*\)<.*/\1/" > $@
 
-test: webidl-schematron.xsl $(XML_IDLS) $(TESTS_OUTPUT) 
+test: webidl-schematron.xsl $(XML_IDLS)
 	for i in $(XML_IDLS) ; do xsltproc --novalid webidl-schematron.xsl $$i |grep svrl:text|sed -e "s/^.*>\([^<]*\)<.*/\1/" |diff - tests/output/`basename $$i .xml`.txt ; done

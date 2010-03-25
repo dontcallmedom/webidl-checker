@@ -4,5 +4,3 @@ Operation right in Interface OperationNameClashWithConstant clashes with another
 Operation right in Interface OperationNameClashWithAttribute clashes with another interface member.
 Interface OperationWithNonLastVariadicArgument defines a variadic operation (multiply) but the ... is not set on the last argument.
 Interface OperationWithOptionalArgumentInMiddle.multiply() has a non-optional argument after an optional one.
-Interface ValidOperations defines a getter operation that doesn't take a single argument.
-Interface ValidOperations defines a getter operation with first argument different from DOMString and unsigned long.
