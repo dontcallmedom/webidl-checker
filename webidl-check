@@ -339,7 +339,9 @@ def semantic_check(idlXml, idl, idlline, counter):
     return errors
 
 def process(url,output='default'):
-    import sys
+    import codecs, sys
+    sys.stderr = codecs.getwriter('utf8')(sys.stderr)
+
     try:
         (info,idls,xmlOutput,errors)=extractIdls(url)
     except UnparseableDocumentException,e:
