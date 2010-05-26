@@ -8408,4 +8408,14 @@
     </Interface>
   </Module>
 </Definitions>
+<Definitions>
+  <Interface name="Date" id="::Date">
+    <webidl>interface Date {
+};</webidl>
+  </Interface>
+  <Interface name="Function" id="::Function">
+    <webidl>interface Function {
+};</webidl>
+  </Interface>
+</Definitions>
 </Module>
