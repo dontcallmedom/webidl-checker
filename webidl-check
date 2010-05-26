@@ -26,7 +26,8 @@ class UnparseableDocumentException(Exception):
     pass
 
 
-Page = """
+Page = """Content-Type: text/html;charset=utf-8
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
 <head><title>WebIDL checker</title>
@@ -69,8 +70,6 @@ def serveRequest():
     fields = cgi.FieldStorage()
 
     if (not fields.has_key('doc') and not fields.has_key('input')):
-        print "Content-Type: text/html;charset=utf-8"
-	print
         print Page
 	print Page2 % ("","","")
     else:
@@ -138,9 +137,7 @@ def serveRequest():
                 # sending content type header based on ouput param
                 if output=='text':
                     print "Content-Type: text/plain;charset=utf-8"
-                else:
-                    print "Content-Type: text/html;charset=utf-8"
-                print
+                    print
 
                 # payload starts here
                 if output=='text':
