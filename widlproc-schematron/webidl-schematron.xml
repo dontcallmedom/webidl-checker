@@ -15,7 +15,7 @@
      <pattern>
        <title>Exceptions raised are well-known</title>
        <rule context="//RaiseException">
-	 <assert role="warning" test="//Exception[@name=current()/@name] or $standards//Exception[@name=current()/@name]"><value-of select="@name"/> Exception raised by <value-of select="ancestor::Interface[1]/@name" />.<value-of select="parent::*/parent::**/@name" /> does not match a defined Exception.</assert>
+	 <assert role="warning" test="//Exception[@name=current()/@name] or $standards//Exception[@name=current()/@name]"><value-of select="@name"/> Exception raised by <value-of select="ancestor::Interface[1]/@name" />.<value-of select="parent::*/parent::*/@name" /> does not match a defined Exception.</assert>
        </rule>
      </pattern>
      <pattern>
@@ -24,7 +24,7 @@
 	 <assert test="@name or @stringifier or @getter or @setter or @creator or @deleter or @caller"><value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/> has an operation without identifier but which is not a special operation.</assert>
 	 <assert test="not(preceding-sibling::*[local-name()='Attribute' or local-name()='Const'][@name=current()/@name])"><value-of select="concat(local-name(), ' ', @name)"/> in <value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/> clashes with another interface member.</assert>
 	 <assert test="not(ArgumentList/Argument[@ellipsis]) or not(ArgumentList/Argument[@ellipsis]/following-sibling::Argument)"><value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/> defines a variadic operation (<value-of select="@name"/>) but the ... is not set on the last argument.</assert>
-	 <assert test="not(ArgumentList/Argument[@optional]) or not(ArgumentList/Argument[@optional]/following-sibling::Argument[not(@optional)])"><value-of select="concat(local-name(parent::*), ' ', parent::*/@name,'.',@name,'()')"/> has a non-optional argument after an optional one.</assert>
+	 <assert test="not(ArgumentList/Argument[@optional]) or not(ArgumentList/Argument[@optional]/following-sibling::Argument[not(@optional) and not(@ellipsis)])"><value-of select="concat(local-name(parent::*), ' ', parent::*/@name,'.',@name,'()')"/> has a non-optional argument after an optional one.</assert>
        </rule>
      </pattern>
      <pattern>
@@ -66,6 +66,9 @@
 	 <assert test="Type/@type='DOMString'"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines a stringifier attribute that is not of type DOMString.</assert>
 	 <assert test="not(preceding-sibling::*[@stringifier])"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines more than one stringifier.</assert>
        </rule>
+     </pattern>
+     <pattern>
+       <title>Overloading</title>
      </pattern>
      <pattern>
        <title>Extended attributes are well-known</title>
