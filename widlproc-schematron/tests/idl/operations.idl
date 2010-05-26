@@ -34,4 +34,5 @@ interface ValidOperations {
   boolean wrong() raises(KnownException);
   float multipy(float... numbers);
   float factorize(float number, optional float number2, optional float number3);
+  float factorize2(float number, optional float number2, float... numbers);
 };
