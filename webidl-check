@@ -293,7 +293,7 @@ def extractIdls(doc,extraRequestHeaders=[]):
                 errors.append(error)
         xmlWrapper = "<Module>" + "".join(xmlOutput) + "</Module>"
         if not len(errors):
-            semanticErrors = semantic_check(xmlWrapper, idl, idlline, counter)
+            semanticErrors = semantic_check(xmlWrapper, idlOutput, None, 0)
             if len(semanticErrors):
                 errors = errors + semanticErrors
         return srcheaders,idlOutput,xmlOutput,errors
