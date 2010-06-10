@@ -290,7 +290,7 @@ def extractIdls(doc,extraRequestHeaders=[]):
                 errors.append(error)
         xmlWrapper = "<Module>" + "".join(xmlOutput) + "</Module>"
         if not len(errors):
-            semanticErrors = semantic_check(xmlWrapper, idlOutput, None, 0)
+            semanticErrors = semantic_check(xmlWrapper, "\n".join(idlOutput), None, 0)
             if len(semanticErrors):
                 errors = errors + semanticErrors
         return srcheaders,idlOutput,xmlOutput,errors
@@ -332,7 +332,8 @@ def semantic_check(idlXml, idl, idlline, counter):
     errorsInXml = errorReport.xpath("//svrl:failed-assert/svrl:text",namespaces={'svrl': 'http://purl.oclc.org/dsdl/svrl'})
     for err in errorsInXml:
         errmsg = "".join(err.xpath("descendant-or-self::text()"))
-        errors.append((idl, errmsg, idlline, counter))
+        error = (idl, errmsg, idlline, counter)
+        errors.append(error)
     return errors
 
 def process(url,output='default'):
@@ -357,6 +358,7 @@ def process(url,output='default'):
                 except:
                     errorline = None
                 # highlighting said line in IDL
+                print error[0]
                 idllines = error[0].split("\n")
                 highlightedidl = error[0]
                 if errorline!=None and errorline < len(idllines)+1 and errorline > 0:
