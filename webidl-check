@@ -144,7 +144,11 @@ def serveRequest():
                     if len(errors):
                         for error in errors:
                             idl,errormsg,idlline,position=error
-                            errorline,msg = errormsg.split(':',1)
+                            try:
+                                errorline,msg = errormsg.split(':',1)
+                            except:
+                                errorline = None
+                                msg = errormsg
                             if idlline:
                                 line = int(errorline) + idlline
                                 print "%d:%s" % (line,msg)
@@ -341,7 +345,8 @@ def semantic_check(idlXml, idl, idlline, counter):
     for err in errorsInXml:
         errmsg = "".join(err.xpath("descendant-or-self::text()"))
         error = (idl, errmsg, idlline, counter)
-        errors.append(error)
+        if error:
+            errors.append(error)
     return errors
 
 def process(url,output='default'):
