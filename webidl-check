@@ -225,71 +225,77 @@ def extractIdls(doc,extraRequestHeaders=[]):
     if srcdoc:
         srcheaders = srcdoc.info()
         charset = ""
-        contentType="text/html"
+        contentType="text/html", {}
         if srcheaders.has_key('Content-Type'):
             contentType = cgi.parse_header(srcheaders["Content-Type"])
             if contentType[1].has_key('charset'):
                 from string import lower
                 charset = lower(contentType[1]['charset'])
-                        
-        # Extract WebIDLs from source document in invidual files
-        # is the document already XML?
-        try:
-            parser = etree.XMLParser(resolve_entities=False)
-            tree = etree.parse(doc,parser)
-        except (etree.XMLSyntaxError,TypeError): #TypeError is raised by old versions of lxml :(
-            try:
-                # we try the HTMLParser
-                tree = etree.parse(doc,etree.HTMLParser())
-            except Exception, e:
-                # we run tidy on the document
-                # to make it XHTML
-                import tidy
-                # option for tidy
-                htmldoc = srcdoc.read()
-                options = dict(output_xhtml=1, # we want XHTML out
-                               tidy_mark=0, # we don't want to change the markup
-                               numeric_entities=1 # but non numeric entities ess up lxml
-                               )
-                if charset == "iso-8859-1":
-                    options["char_encoding"]='latin1'
-                else:
-                    options["char_encoding"]='utf8'
-                
-                t = str(tidy.parseString(htmldoc, **options))
-                from StringIO import StringIO
-                xmldoc = StringIO(t)
-                try:
-                    tree = etree.parse(xmldoc)
-                except UnparseableDocumentException, e:
-                    print t
-                    raise UnparseableDocumentException(str(e))
         errors = []
         xmlOutput = []
         idlOutput = []
-        # and then get extracts IDLs through XPath
-        idls = tree.xpath("/html:html/html:body//html:pre[@class='idl' or @class='webidl' or html:code[@class='idl-code']]",namespaces={'html': 'http://www.w3.org/1999/xhtml'})
-        # handling the no-namespace case (source is in HTML)
-        idls += tree.xpath("/html/body//pre[@class='idl' or @class='webidl' or code[@class='idl-code']]")
-        from tempfile import NamedTemporaryFile
-        counter = 0
-        for idlHtml in idls:
-            counter = counter + 1
-            idl = "".join(idlHtml.xpath("descendant-or-self::text()"))
-            idlOutput.append(idl)
-            idlline = None
+        if contentType[0] == "text/html":   
+            # Extract WebIDLs from source document in invidual files
+            # is the document already XML?
             try:
-                idlline = idlHtml.sourceline
-            except AttributeError:
+                parser = etree.XMLParser(resolve_entities=False)
+                tree = etree.parse(doc,parser)
+            except (etree.XMLSyntaxError,TypeError): #TypeError is raised by old versions of lxml :(
+                try:
+                    # we try the HTMLParser
+                    tree = etree.parse(doc,etree.HTMLParser())
+                except Exception, e:
+                    # we run tidy on the document
+                    # to make it XHTML
+                    import tidy
+                    # option for tidy
+                    htmldoc = srcdoc.read()
+                    options = dict(output_xhtml=1, # we want XHTML out
+                               tidy_mark=0, # we don't want to change the markup
+                               numeric_entities=1 # but non numeric entities ess up lxml
+                               )
+                    if charset == "iso-8859-1":
+                        options["char_encoding"]='latin1'
+                    else:
+                        options["char_encoding"]='utf8'
+                
+                    t = str(tidy.parseString(htmldoc, **options))
+                    from StringIO import StringIO
+                    xmldoc = StringIO(t)
+                    try:
+                        tree = etree.parse(xmldoc)
+                    except UnparseableDocumentException, e:
+                        print t
+                        raise UnparseableDocumentException(str(e))
+            # and then get extracts IDLs through XPath
+            idls = tree.xpath("/html:html/html:body//html:pre[@class='idl' or @class='webidl' or html:code[@class='idl-code']]",namespaces={'html': 'http://www.w3.org/1999/xhtml'})
+            # handling the no-namespace case (source is in HTML)
+            idls += tree.xpath("/html/body//pre[@class='idl' or @class='webidl' or code[@class='idl-code']]")
+            counter = 0
+            for idlHtml in idls:
+                counter = counter + 1
+                idl = "".join(idlHtml.xpath("descendant-or-self::text()"))
+                idlOutput.append(idl)
                 idlline = None
-            # run widlproc on each of  them
-            xmlout,error = syntax_check(idl,idlline,counter)
-            if xmlout:
-                xmlOutput.append(xmlout)
-            if error:
-                errors.append(error)
-        xmlWrapper = "<Module>" + "".join(xmlOutput) + "</Module>"
+                try:
+                    idlline = idlHtml.sourceline
+                except AttributeError:
+                    idlline = None
+                # run widlproc on each of  them
+                xmlout,error = syntax_check(idl,idlline,counter)
+                if xmlout:
+                    xmlOutput.append(xmlout)
+                if error:
+                    errors.append(error)
+        elif contentType[0]=="text/plain":
+            # we assume the text doc is a Web IDL fragment
+            idl = srcdoc.read()
+            idlOutput.append(idl)
+            xmlout,error = syntax_check(idl,None,1)
+            xmlOutput.append(xmlout)
+            errors.append(error)        
         if not len(errors):
+            xmlWrapper = "<Module>" + "".join(xmlOutput) + "</Module>"
             semanticErrors = semantic_check(xmlWrapper, "\n".join(idlOutput), None, 0)
             if len(semanticErrors):
                 errors = errors + semanticErrors
