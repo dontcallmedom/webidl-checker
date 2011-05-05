@@ -292,8 +292,10 @@ def extractIdls(doc,extraRequestHeaders=[]):
             idl = srcdoc.read()
             idlOutput.append(idl)
             xmlout,error = syntax_check(idl,None,1)
-            xmlOutput.append(xmlout)
-            errors.append(error)        
+            if xmlout:
+                xmlOutput.append(xmlout)
+            if error:
+                errors.append(error)        
         if not len(errors):
             xmlWrapper = "<Module>" + "".join(xmlOutput) + "</Module>"
             semanticErrors = semantic_check(xmlWrapper, "\n".join(idlOutput), None, 0)
