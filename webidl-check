@@ -108,6 +108,7 @@ def serveRequest():
                 idls = []
                 xmlOutput = []
                 errors = []
+                title = doc
                 if doc:
                     try:
                         srcheaders,idls,xmlOutput,errors = extractIdls(doc,extraRequestHeaders)
@@ -126,6 +127,8 @@ def serveRequest():
                         print "Last-Modified: %s" % ( srcheaders["Last-Modified"] )
                     if srcheaders.has_key("Expires"):
                         print "Expires: %s" % (srcheaders['Expires'] )
+                    if srcheaders.has_key("title"):
+                        title = srcheaders["title"]
                 elif inp:
                     idls.append(inp)
                     xmlout,error = syntax_check(inp,0,1)
@@ -159,6 +162,7 @@ def serveRequest():
                     sys.exit()
                 else:
                     print Page
+                    print "<p>Results of checking <a href='%s'>%s</a>.</p>" % (cgi.escape(doc), cgi.escape(title))
                     if len(errors):
                         print "<p class='error'>The following errors were found in the extracted WebIDLs:</p><ul>"
                         counter = 0
@@ -284,6 +288,7 @@ def extractIdls(doc,extraRequestHeaders=[]):
                         print t
                         raise UnparseableDocumentException(str(e))
             # and then get extracts IDLs through XPath
+            srcheaders["title"] = tree.xpath("/html:html//html:title/text()")
             idls = tree.xpath("/html:html/html:body//html:pre[@class='idl' or @class='webidl' or html:code[@class='idl-code']]",namespaces={'html': 'http://www.w3.org/1999/xhtml'})
             # handling the no-namespace case (source is in HTML)
             idls += tree.xpath("/html/body//pre[@class='idl' or @class='webidl' or code[@class='idl-code']]")
