@@ -148,7 +148,7 @@ def serveRequest():
                                 errorline,msg = errormsg.split(':',1)
                             except:
                                 errorline = 0
-                                msg = errormsgq
+                                msg = errormsg
                             if idlline:
                                 line = int(errorline) + idlline
                                 print "%d:%s" % (line,msg)
