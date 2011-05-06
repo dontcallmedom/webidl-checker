@@ -165,10 +165,10 @@ def serveRequest():
                         for e in errors:
                             counter = counter + 1
                             try:
-                                errorline,msg = errormsg.split(':',1)
+                                errorline,msg = e[1].split(':',1)
                             except:
                                 errorline = None
-                                msg = errormsg
+                                msg = e[1]
                             print "<li><a href='#e%d'>%s</a></li>\n" % (counter,msg)
                         print "</ul>"
                         counter = 0
