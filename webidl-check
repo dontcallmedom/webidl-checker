@@ -160,8 +160,20 @@ def serveRequest():
                 else:
                     print Page
                     if len(errors):
-                        print "<p class='error'>The following errors were found in the extracted WebIDLs:</p>"
+                        print "<p class='error'>The following errors were found in the extracted WebIDLs:</p><ul>"
+                        counter = 0
                         for e in errors:
+                            counter = counter + 1
+                            try:
+                                errorline,msg = errormsg.split(':',1)
+                            except:
+                                errorline = None
+                                msg = errormsg
+                            print "<li><a href='#e%d'>%s</a></li>\n" % (counter,msg)
+                        print "</ul>"
+                        counter = 0
+                        for e in errors:
+                            counter = counter + 1
                             try:
                                 errorline = int(e[1].split(':')[0])
                             except:
@@ -174,7 +186,7 @@ def serveRequest():
                                 if errorline < len(idllines):
                                     highlightedidl = highlightedidl + "\n" + cgi.escape("\n".join(idllines[errorline:]))
                             # and printing out the report
-                            print "<div class='report'>"
+                            print "<div class='report' id='e%d'>" % (counter)
                             if e[2]:
                                 idldesc = "IDL at line %d" %(e[2])
                             else:
