@@ -288,7 +288,7 @@ def extractIdls(doc,extraRequestHeaders=[]):
                         print t
                         raise UnparseableDocumentException(str(e))
             # and then get extracts IDLs through XPath
-            srcheaders["title"] = tree.xpath("/html:html//html:title/text()",namespaces={'html': 'http://www.w3.org/1999/xhtml'})[0]
+            #srcheaders["title"] = tree.xpath("/html:html//html:title/text()",namespaces={'html': 'http://www.w3.org/1999/xhtml'})
             idls = tree.xpath("/html:html/html:body//html:pre[@class='idl' or @class='webidl' or html:code[@class='idl-code']]",namespaces={'html': 'http://www.w3.org/1999/xhtml'})
             # handling the no-namespace case (source is in HTML)
             idls += tree.xpath("/html/body//pre[@class='idl' or @class='webidl' or code[@class='idl-code']]")
