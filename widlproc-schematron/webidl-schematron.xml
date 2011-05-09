@@ -29,7 +29,7 @@
      </pattern>
      <pattern>
        <title>Sequence are not to be used for attributes definition</title>
-       <rule context="//Sequence">
+       <rule context="//Type[@type='sequence']">
 	 <assert role="warning" test="not(parent::Attribute)">Attribute <value-of select="parent::Attribute/@name"/> in <value-of select="concat(local-name(parent::Attribute/parent::*),' ',parent::Attribute/parent::*/@name)" /> is defined as a sequence; in general, arrays should be prefered to sequence as attributes.</assert>
        </rule>
      </pattern>
