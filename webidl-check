@@ -28,10 +28,10 @@ class UnparseableDocumentException(Exception):
 
 Page = """Content-Type: text/html;charset=utf-8
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
+<!DOCTYPE html>
+<html lang="en-US">
 <head><title>WebIDL checker</title>
-<link rel="stylesheet" href="http://www.w3.org/StyleSheets/base" />
+<link rel="stylesheet" href="http://www.w3.org/StyleSheets/base" >
 <style type="text/css">
 .error { color:red}
 .highlight { background-color:#fcc;}
@@ -42,22 +42,22 @@ Page = """Content-Type: text/html;charset=utf-8
 </head>
 <body>
 
-<p><a href="http://www.w3.org/"><img src="http://www.w3.org/Icons/w3c_home" alt="W3C"/></a> <a href="http://www.w3.org/2003/Editors">W3C Editors homepage</a> <a href="http://dev.w3.org/2006/webapi/WebIDL/">WebIDL spec</a></p>
+<p><a href="http://www.w3.org/"><img src="http://www.w3.org/Icons/w3c_home" alt="W3C"></a> <a href="http://www.w3.org/2003/Editors">W3C Editors homepage</a> <a href="http://dev.w3.org/2006/webapi/WebIDL/">WebIDL spec</a></p>
 
 <h1>WebIDL checker</h1>
 """
 Page2 = """
 <form method="GET">
-<p><label>Source document: <input name="doc" value="%s"/></label></p>
+<p><label>Source document: <input type="url" name="doc" value="%s"></label></p>
 <p><strong>OR</strong></p>
 <p><label>Direct input: <textarea name="input" rows="10" cols="70">%s</textarea></p>
 <p><label>Ouput format: <select name="output"><option value="html">HTML</option><option value="text" %s>Text (GNU Error format)</option></select></label></p>
-<p><input type="submit" value="Check WebIDL"/></p>
+<p><input type="submit" value="Check WebIDL"></p>
 </form>
 
 <address>
-script $Revision$ of $Date$<br />
-by <a href="http://www.w3.org/People/Dom/">Dominique Hazaël-Massieux</a><br />
+script $Revision$ of $Date$<br>
+by <a href="http://www.w3.org/People/Dom/">Dominique Hazaël-Massieux</a><br>
 the heavy work is done by <a href="http://widl.webvm.net/">widlproc</a>.
 </address>
 </body>
