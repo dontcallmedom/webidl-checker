@@ -195,7 +195,7 @@ def serveRequest():
                                 idldesc = "IDL at line %d" %(e[2])
                             else:
                                 idldesc = "IDL #%d" %(e[3])
-                            print "<pre class='error'>Line %s</pre><p>error in %s</p><pre class='idl'>%s</pre>" % (cgi.escape(e[1]),idldesc,highlightedidl,)
+                            print "<pre class='error'>Line %s</pre><p>error in %s</p><pre class='idl'>%s</pre>" % (cgi.escape(e[1]),idldesc,cgi.escape(highlightedidl))
                             print "</div>"
                         if len(xmlOutput):
                             # @@@ print name of valid interfaces?
