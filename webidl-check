@@ -48,7 +48,7 @@ Page = """Content-Type: text/html;charset=utf-8
 """
 Page2 = """
 <form method="GET">
-<p><label for="doc>Source document</label>: <input id="doc" type="url" name="doc" value="%s"> (Web IDL in HTML, or plain text Web IDL fragments)</p>
+<p><label for="doc">Source document</label>: <input id="doc" type="url" name="doc" value="%s"> (Web IDL in HTML, or plain text Web IDL fragments)</p>
 <p><strong>OR</strong></p>
 <p><label for='input'>Direct input</label>: <textarea id='input' name="input" rows="10" cols="70">%s</textarea></p>
 <p><label>Ouput format: <select name="output"><option value="html">HTML</option><option value="text" %s>Text (GNU Error format)</option></select></label></p>
