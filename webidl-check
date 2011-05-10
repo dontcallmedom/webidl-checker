@@ -52,7 +52,7 @@ Page2 = """
 <p><strong>OR</strong></p>
 <p><label for='input'>Direct input</label>: <textarea id='input' name="input" rows="10" cols="70">%s</textarea></p>
 <p><label>Ouput format: <select name="output"><option value="html">HTML</option><option value="text" %s>Text (GNU Error format)</option></select></label></p>
-<p><input type="submit" value="Check WebIDL"></p>
+<p><input type="submit" value="Check Web IDL"></p>
 </form>
 
 <address>
