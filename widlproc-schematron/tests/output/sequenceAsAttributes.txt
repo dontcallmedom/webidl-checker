@@ -1,1 +1,2 @@
 Attribute badSequenceAttribute in Interface WithSequenceAttribute is defined as a sequence; in general, arrays should be prefered to sequence as attributes.
+Attribute badDisguisedSequenceAttribute in Interface WithSequenceAttribute is defined as a sequence; in general, arrays should be prefered to sequence as attributes.
