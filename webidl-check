@@ -30,7 +30,7 @@ Page = """Content-Type: text/html;charset=utf-8
 
 <!DOCTYPE html>
 <html lang="en-US">
-<head><title>WebIDL checker</title>
+<head><title>WebIDL checker%s</title>
 <link rel="stylesheet" href="http://www.w3.org/StyleSheets/base" >
 <style type="text/css">
 .error { color:red}
@@ -44,7 +44,7 @@ Page = """Content-Type: text/html;charset=utf-8
 
 <p><a href="http://www.w3.org/"><img src="http://www.w3.org/Icons/w3c_home" alt="W3C"></a> <a href="http://www.w3.org/2003/Editors">W3C Editors homepage</a> <a href="http://dev.w3.org/2006/webapi/WebIDL/">WebIDL spec</a></p>
 
-<h1>WebIDL checker</h1>
+<h1>WebIDL checker%s</h1>
 """
 Page2 = """
 <form method="GET">
@@ -70,7 +70,7 @@ def serveRequest():
     fields = cgi.FieldStorage()
 
     if (not fields.has_key('doc') and not fields.has_key('input')):
-        print Page
+        print Page % ("", "")
 	print Page2 % ("","","")
     else:
         doc = ""
@@ -114,12 +114,12 @@ def serveRequest():
                         srcheaders,idls,xmlOutput,errors = extractIdls(doc,extraRequestHeaders)
                             
                     except UnparseableDocumentException,e:
-                        print Page
+                        print Page % ("", "")
                         print "<p class='error'>Failed to turn document into XHTML for extracting WebIDLs: <code>%s</code>.</p>" % (cgi.escape(str(e)))
                         print Page2 % (doc,"",textoutputselected)
                         sys.exit()
                     except WrongConfigurationException,e:
-                        print Page
+                        print Page % ("", "")
                         print "<p class='error'>Could not run <code><a href='http://widl.webvm.net/'>widlproc</a></code>: <code>%s</code>.</p>" % (cgi.escape(str(e)))
                         print Page2 % (doc,"",textoutputselected)
                         sys.exit()
@@ -161,8 +161,9 @@ def serveRequest():
                         print "# No WebIDL found in document at %s" % (cgi.escape(doc))
                     sys.exit()
                 else:
-                    print Page
-                    print "<p>Results of checking <a href='%s'>%s</a>.</p>" % (cgi.escape(doc), cgi.escape(title))
+                    htmltitle = "<a href='%s'>%s</a>" % (cgi.escape(doc), cgi.escape(title))
+                    print Page  % ("cgi.escape(title)", htmltitle)
+                    print "<p>Results of checking %s.</p>" % (htmltitle)
                     if len(errors):
                         print "<p class='error'>The following errors were found in the extracted WebIDLs:</p><ul>"
                         counter = 0
