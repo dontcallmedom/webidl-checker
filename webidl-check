@@ -161,8 +161,8 @@ def serveRequest():
                         print "# No WebIDL found in document at %s" % (cgi.escape(doc))
                     sys.exit()
                 else:
-                    htmltitle = "<a href='%s'>%s</a>" % (cgi.escape(doc), cgi.escape(title))
-                    print Page  % ("cgi.escape(title)", htmltitle)
+                    htmltitle = " <a href='%s'>%s</a>" % (cgi.escape(doc), cgi.escape(title))
+                    print Page  % (" " + cgi.escape(title), htmltitle)
                     print "<p>Results of checking %s.</p>" % (htmltitle)
                     if len(errors):
                         print "<p class='error'>The following errors were found in the extracted WebIDLs:</p><ul>"
