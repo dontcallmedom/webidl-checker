@@ -30,7 +30,7 @@
      <pattern>
        <title>Sequence are not to be used for attributes definition</title>
        <rule context="//Attribute">
-	 <assert role="warning" test="not(Type[@type='sequence']) and not(//Typedef[@name=current()/Type/@name]/Type[@type='sequence'])">Attribute <value-of select="@name"/> in <value-of select="concat(local-name(parent::*),' ',parent::*/@name)"/> is defined as a sequence; in general, arrays should be prefered to sequence as attributes.</assert>
+	 <assert test="not(Type[@type='sequence']) and not(//Typedef[@name=current()/Type/@name]/Type[@type='sequence'])">Attribute <value-of select="@name"/> in <value-of select="concat(local-name(parent::*),' ',parent::*/@name)"/> is defined as a sequence.</assert>
        </rule>
      </pattern>
      <pattern>
