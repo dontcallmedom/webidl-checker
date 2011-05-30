@@ -4,16 +4,16 @@ interface BogusReplaceableInterface {};
 
 /* Replaceable doesn't take an argument */
 interface BogusReplaceableWithArgument {
-  [Replaceable=value] readonly attribute Foo foo;
+  [Replaceable=value] readonly attribute Bar foo;
 };
 
 /* Replaceable can only be used on read-only attribute */
 interface BogusReplaceableUsedOnNotReadOnlyAttribute {
-  [Replaceable]  attribute Foo foo;
+  [Replaceable]  attribute Bar foo;
 };
 
 
 /* Valid Replaceable Usage */
 interface Bar {
-  [Replaceable] readonly attribute Foo foo;
+  [Replaceable] readonly attribute DOMString foo;
 };

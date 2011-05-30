@@ -59,7 +59,7 @@ interface PutForwardInterface {
 
 /* Callback used with an attribute with TreatNullAs */
 [Callback] interface CallbackWithTreatNullAs {
-  [TreatNullAs=EmptyString] attribute DOMString treatNullAsEmptyString;
+  [TreatNullAs=String] attribute DOMString treatNullAsString;
   void operation();
 };
 

@@ -1,12 +1,12 @@
 /* constant name clash */
 interface ConstantNameClashWithOperation {
-  const boolean right = false;
   void right();
+  const boolean right = false;
 };
 
 interface ConstantNameClashWithAttribute {
-  const boolean right = false;
   attribute boolean right;
+  const boolean right = false;
 };
 
 interface ConstantNameClashWithConstant {
