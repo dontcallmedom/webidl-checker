@@ -194,7 +194,7 @@
 	 <let name="objectName" value="concat(ancestor::Interface/@name,'.',concat(parent::ExtendedAttributeList/parent::Attribute/@name, parent::ExtendedAttributeList/parent::Argument/parent::ArgumentList/parent::Operation/@name, parent::ExtendedAttributeList/parent::Operation/@name))"/>
 	 <assert test="$validObject">Extended attribute <value-of select="@name"/> used on <value-of select="local-name(parent::ExtendedAttributeList/parent::*)" /> — <value-of select="@name"/> expected only on attribute, operation arguments, or operations.</assert>
 	 <assert test="not($validObject) or parent::ExtendedAttributeList/parent::*/Type[@type='DOMString']">Extended attribute TreatNullAs used on <value-of select="$objectName" /> applied to type <value-of select="concat(parent::ExtendedAttributeList/parent::*/Type/@type, parent::ExtendedAttributeList/parent::*/Type/@name)"/> — TreatNullAs expected only on attributes, operations or operations arguments with DOMString type.</assert>
-	 <assert test="not($validObject) or @value='EmptyString'">Extended attribute TreatNullAs used on <value-of select="$objectName" /> without required “EmptyString” argument.</assert>
+	 <assert test="not($validObject) or @value='String'">Extended attribute TreatNullAs used on <value-of select="$objectName" /> without required “String” argument.</assert>
        </rule>
      </pattern>
      <pattern>
