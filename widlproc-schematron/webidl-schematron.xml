@@ -228,5 +228,16 @@
 	 <assert test="not($validObject and parent::ExtendedAttributeList/parent::*/Type[@type='DOMString']) or not(@value='Null') or  (@value='Null' and parent::ExtendedAttributeList/parent::*/Type[@nullable='nullable'])">Extended attribute TreatUndefinedAs used on <value-of select="$objectName" /> with required “Null” argument, but not applied to a DOMString? object.</assert>
        </rule>
      </pattern>
+     <pattern>
+       <title>Extended Attribute Clamp</title>
+       <rule context="//ExtendedAttribute[@name='Clamp']">
+	 <let name="validObject" value="parent::ExtendedAttributeList/parent::Attribute or parent::ExtendedAttributeList/parent::Argument/parent::ArgumentList/parent::Operation or parent::ExtendedAttributeList/parent::DictionaryMember"/>
+	 <let name="objectName" value="concat(ancestor::*[local-name()='Interface' or local-name()='Dictionary'][1]/@name,'.',concat(parent::ExtendedAttributeList/parent::Attribute/@name, parent::ExtendedAttributeList/parent::Argument/parent::ArgumentList/parent::Operation/@name, parent::ExtendedAttributeList/parent::Operation/@name, parent::ExtendedAttributeList/parent::DictionaryMember/@name))"/>
+	 <extends rule="extendedAttributeNoArg"/>
+	 <assert test="$validObject">Extended attribute <value-of select="@name"/> used on <value-of select="concat(local-name(parent::ExtendedAttributeList/parent::*), ' ', parent::ExtendedAttributeList/parent::*/@name)" /> — <value-of select="@name"/> expected only on attribute, operation arguments, or dictionary members.</assert>
+	 <assert test="not($validObject and parent::ExtendedAttributeList/parent::Attribute) or (parent::ExtendedAttributeList/parent::Attribute[not(@readonly)])">Extended attribute Clamp used on non-writable attribute <value-of select="$objectName"/></assert>
+	 <assert test="not($validObject) or (parent::ExtendedAttributeList/parent::*/Type[@type='byte' or @type='octet' or @type='short' or @type='unsigned short' or @type='long' or @type='unsigned long' or @type='long long' or @type='unsigned long long'])">Extended attribute Clamp used on non-integer <value-of select="local-name(parent::ExtendedAttributeList/parent::*)"/> <value-of select="$objectName"/></assert>
 
+       </rule>
+     </pattern>
 </schema>
