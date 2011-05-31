@@ -1,0 +1,6 @@
+Extended attribute Clamp used on Interface BogusClampInterface — Clamp expected only on attribute, operation arguments, or dictionary members.
+Extended attribute Clamp used with arguments on Attribute foo.
+Extended attribute Clamp used on non-writable attribute BogusClampUsedOnReadOnlyAttribute.foo
+Extended attribute Clamp used on non-integer AttributeBogusClampUsedOnNonInteger.foo
+Extended attribute Clamp used on non-integer ArgumentBogusClampUsedOnNonInteger.setTruth
+Extended attribute Clamp used on non-integer DictionaryMemberBogusClampUsedOnBooleanDictionaryMember.foo
