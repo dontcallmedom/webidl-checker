@@ -1,0 +1,14 @@
+interface NameA {};
+// clashes
+exception NameA {};
+dictionary NameA {};
+typedef DOMString[] NameA;
+module NameA {};
+interface NameA {};
+
+// no clash
+exception NameB {};
+dictionary NameC {};
+typedef DOMString[] NameD;
+module NameE {};
+interface NameF {};
