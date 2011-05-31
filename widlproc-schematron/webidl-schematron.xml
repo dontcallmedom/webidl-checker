@@ -93,7 +93,7 @@
      <pattern>
        <title>Extended attributes are well-known</title>
        <rule context="//ExtendedAttribute[@name]">
-	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#es-extended-attributes" test="@name='Prefix' or @name='AllowAny' or @name='Callback' or @name='Constructor' or @name='NamedConstructor' or @name='NamespaceObject' or @name='NoInterfaceObject' or @name='OverrideBuiltins' or @name='PrototypeRoot' or @name='PutForwards' or @name='Replaceable' or @name='TreatNullAs' or @name='TreatUndefinedAs'">Extended attribute of <value-of select="@name"/> is unknown in WebIDL.</assert>
+	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#es-extended-attributes" test="@name='Prefix' or @name='AllowAny' or @name='Callback' or @name='Constructor' or @name='NamedConstructor' or @name='NamespaceObject' or @name='NoInterfaceObject' or @name='OverrideBuiltins' or @name='PrototypeRoot' or @name='PutForwards' or @name='Replaceable' or @name='TreatNullAs' or @name='TreatUndefinedAs' or @name='Clamp'">Extended attribute of <value-of select="@name"/> is unknown in WebIDL.</assert>
        </rule>
      </pattern>
      <pattern>
