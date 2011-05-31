@@ -1,0 +1,35 @@
+/* Bogus Clamp on Interface */
+[Clamp]
+interface BogusClampInterface {};
+
+/* Clamp doesn't take an argument */
+interface BogusClampWithArgument {
+  [Clamp=value] attribute short foo;
+};
+
+/* Camp cannot be used on readonly attribute */
+interface BogusClampUsedOnReadOnlyAttribute {
+  [Clamp] readonly attribute short foo;
+};
+
+/* Camp cannot be used on non-integer  types */
+interface BogusClampUsedOnNonInteger {
+  [Clamp] attribute DOMString foo;
+  void setTruth([Clamp] boolean bar);
+};
+
+dictionary BogusClampUsedOnBooleanDictionaryMember {
+  [Clamp] boolean foo;
+};
+
+
+/* Valid Clamp Usage */
+interface ValidClampUsageInInterface {
+  void setColorClamped([Clamp] in octet red, [Clamp] in octet green, [Clamp] in octet blue);
+  [Clamp] attribute short foo;
+};
+
+dictionary ValidClampUsageInDictionary {
+  [Clamp] unsigned long long foo = 5;
+};
+
