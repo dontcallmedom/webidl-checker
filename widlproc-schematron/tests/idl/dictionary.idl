@@ -1,0 +1,23 @@
+dictionary ClashingDictionaryMembers {
+  DOMString? fillPattern = "black";
+  unsigned short fillPattern;
+};
+
+interface InvalidDictionaryAsAttribute {
+  attribute ValidDictionary dict;
+};
+
+exception InvalidDictionaryAsExceptionField {
+  ValidDictionary field;
+};
+
+
+interface ValidDictionaryAsArgument {
+  void paintCar(ValidDictionary paint);
+};
+
+dictionary ValidDictionary {
+  DOMString? fillPattern = "black";
+  DOMString? strokePattern = null;
+  ValidDictionaryAsArgument position;
+};
