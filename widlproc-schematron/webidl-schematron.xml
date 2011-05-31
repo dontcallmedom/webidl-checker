@@ -3,13 +3,19 @@
      <pattern  id="definedTypes">
        <title>IDL is using defined types</title>
           <rule context="//Type[@name]">
-               <assert role="warning" test="//Interface[@name=current()/@name] or $standards//Interface[@name=current()/@name] or //Typedef[@name=current()/@name] or $standards//Typedef[@name=current()/@name]"><value-of select="@name"/> type used in <value-of select="ancestor::Interface[1]/@name" />.<value-of select="parent::*[1]/@name" /> declaration undefined.</assert>
+               <assert role="warning" test="//Interface[@name=current()/@name] or $standards//Interface[@name=current()/@name] or //Dictionary[@name=current()/@name] or $standards//Dictionary[@name=current()/@name] or //Typedef[@name=current()/@name] or $standards//Typedef[@name=current()/@name]"><value-of select="@name"/> type used in <value-of select="ancestor::Interface[1]/@name" />.<value-of select="parent::*[1]/@name" /> declaration undefined.</assert>
           </rule>
      </pattern>
      <pattern>
        <title>Constant/Attribute names don't clash with other interface/exception members</title>
        <rule context="//Const|//Attribute">
 	 <assert test="not(preceding-sibling::*[local-name()='Operation' or local-name()='Attribute' or local-name()='Const'][@name=current()/@name])"><value-of select="concat(local-name(), ' ', @name)"/> in <value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/> clashes with another interface member.</assert>
+       </rule>
+     </pattern>
+     <pattern>
+       <title>Dictionary member names don't clash with other dictionary members</title>
+       <rule context="//DictionaryMember">
+	 <assert test="not(preceding-sibling::DictionaryMember[@name=current()/@name])">Dictionary member <value-of select="@name"/> in <value-of select="parent::Dictionary/@name"/> clashes with another dictionary member.</assert>
        </rule>
      </pattern>
      <pattern>
@@ -33,6 +39,20 @@
 	 <assert test="not(Type[@type='sequence']) and not(//Typedef[@name=current()/Type/@name]/Type[@type='sequence'])">Attribute <value-of select="@name"/> in <value-of select="concat(local-name(parent::*),' ',parent::*/@name)"/> is defined as a sequence.</assert>
        </rule>
      </pattern>
+     <pattern>
+       <title>Dictionaries are not to be used for attributes or exception fields</title>
+       <rule context="//Attribute|//ExceptionField">
+	 <assert test="not(//Dictionary[@name=current()/Type/@name])"><value-of select="concat(local-name(),' ',@name)"/> in <value-of select="concat(local-name(parent::*),' ',parent::*/@name)"/> is defined as a dictionary.</assert>
+       </rule>
+     </pattern>
+     <!--
+     <pattern>
+       <title>Constant values need to match their types</title>
+       <rule context="//Const|//DictionaryMember[@value or @stringvalue]">
+	  
+       </rule>
+     </pattern>
+     -->
      <pattern>
        <title>Special Operations</title>
        <rule context="//Operation[@stringifier or @getter or @setter or @creator or @deleter or @caller]">
