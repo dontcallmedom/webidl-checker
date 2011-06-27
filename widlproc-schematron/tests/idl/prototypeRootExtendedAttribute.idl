@@ -1,0 +1,4 @@
+/*  prototyperoot no longer  valid */
+[PrototypeRoot]
+interface Root {
+};

@@ -108,7 +108,7 @@
      <pattern>
        <title>Extended attributes are well-known</title>
        <rule context="//ExtendedAttribute[@name]">
-	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#es-extended-attributes" test="@name='Prefix' or @name='AllowAny' or @name='Callback' or @name='Constructor' or @name='NamedConstructor' or @name='NamespaceObject' or @name='NoInterfaceObject' or @name='OverrideBuiltins' or @name='PrototypeRoot' or @name='PutForwards' or @name='Replaceable' or @name='TreatNullAs' or @name='TreatUndefinedAs' or @name='Clamp' or @name='ReplaceableNamedProperties' or @name='CopyInheritedPrototype' or @name='Unforgeable'">Extended attribute of <value-of select="@name"/> is unknown in WebIDL.</assert>
+	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#es-extended-attributes" test="@name='Prefix' or @name='AllowAny' or @name='Callback' or @name='Constructor' or @name='NamedConstructor' or @name='NamespaceObject' or @name='NoInterfaceObject' or @name='OverrideBuiltins' or @name='PutForwards' or @name='Replaceable' or @name='TreatNullAs' or @name='TreatUndefinedAs' or @name='Clamp' or @name='ReplaceableNamedProperties' or @name='CopyInheritedPrototype' or @name='Unforgeable'">Extended attribute of <value-of select="@name"/> is unknown in WebIDL.</assert>
        </rule>
      </pattern>
      <pattern>
@@ -193,15 +193,6 @@
 	 <extends rule="extendedAttributeAppliesToInterface"/>
 	 <extends rule="extendedAttributeNoArg"/>
 	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#OverrideBuiltins" test="parent::ExtendedAttributeList/parent::Interface[Operation/@getter]">Extended attribute OverrideBuiltins used on interface <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> that does not have a name getter.</assert>
-       </rule>
-     </pattern>
-     <pattern>
-       <title>Extended attribute PrototypeRoot</title>
-       <rule context="//ExtendedAttribute[@name='PrototypeRoot']">
-	 <extends see="http://dev.w3.org/2006/webapi/WebIDL/#PrototypeRoot" rule="extendedAttributeAppliesToInterface"/>
-	 <extends see="http://dev.w3.org/2006/webapi/WebIDL/#PrototypeRoot" rule="extendedAttributeNoArg"/>
-	 <extends see="http://dev.w3.org/2006/webapi/WebIDL/#PrototypeRoot" rule="extendedAttributeNotWithInheritance"/>
-	 <!--<assert see="http://dev.w3.org/2006/webapi/WebIDL/#PrototypeRoot" test="false">Interface <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> has multiple heritance paths to <value-of select="'@@@'"/></assert>-->
        </rule>
      </pattern>
      <pattern>
