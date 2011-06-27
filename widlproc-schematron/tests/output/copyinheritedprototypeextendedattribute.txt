@@ -1,0 +1,3 @@
+Extended attribute CopyInheritedPrototype used on Exception — CopyInheritedPrototype expected only on interfaces.
+Extended attribute CopyInheritedPrototype used with arguments on Interface CopyInheritedPrototypeWithArgument.
+Extended attribute CopyInheritedPrototype used on CopyInheritedPrototypeWithNoInheritance that has no inheritance

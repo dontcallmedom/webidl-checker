@@ -1,0 +1,21 @@
+// only on interface
+[CopyInheritedPrototype]
+exception CopyInheritedPrototypeOnlyOnInterface {
+};
+
+interface Foo {};
+
+// takes no argument
+[CopyInheritedPrototype=foo]
+interface CopyInheritedPrototypeWithArgument : Foo {
+};
+
+// applies only to interfaces that inherits from another
+[CopyInheritedPrototype]
+interface CopyInheritedPrototypeWithNoInheritance {
+};
+
+// valid 
+[CopyInheritedPrototype]
+interface ValidCopyInheritedPrototypeUsage : Foo {
+};
