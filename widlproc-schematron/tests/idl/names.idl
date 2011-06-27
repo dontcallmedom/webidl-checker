@@ -12,3 +12,4 @@ dictionary NameC {};
 typedef DOMString[] NameD;
 module NameE {};
 interface NameF {};
+partial interface NameF{};

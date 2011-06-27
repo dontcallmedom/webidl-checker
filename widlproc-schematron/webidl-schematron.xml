@@ -7,9 +7,12 @@
           </rule>
      </pattern>
      <pattern>
-       <title>Names of interfaces / exceptions / dictionaries / modules don't clash</title>
-       <rule context="//Interface[@id]|//Module[@id]|//Typedef[@id]|//Exception[@id]|//Dictionary[@id]">
+       <title>Names of exceptions / dictionaries / modules don't clash</title>
+       <rule context="//Module[@id]|//Typedef[@id]|//Exception[@id]|//Dictionary[@id]">
 	 <assert test="not(preceding::*[local-name()='Interface' or local-name()='Module' or local-name()='Typedef' or local-name()='Exception' or local-name()='Dictionary'][@id=current()/@id])"><value-of select="concat(local-name(.), ' ', @name)"/> clashes with previous definition of <value-of select="concat(local-name(preceding::*[local-name()='Interface' or local-name()='Module' or local-name()='Typedef' or local-name()='Exception' or local-name()='Dictionary'][@name=current()/@name][1]),' ', @name)"/></assert>
+       </rule>
+       <rule context="//Interface[@id]">
+	 <assert test="(@partial or not(preceding::Interface[@id=current()/@id])) or not(preceding::*[local-name()='Module' or local-name()='Typedef' or local-name()='Exception' or local-name()='Dictionary'][@id=current()/@id])"><value-of select="concat(local-name(.), ' ', @name)"/> clashes with previous definition of <value-of select="concat(local-name(preceding::*[local-name()='Interface' or local-name()='Module' or local-name()='Typedef' or local-name()='Exception' or local-name()='Dictionary'][@name=current()/@name][1]),' ', @name)"/></assert>
        </rule>
      </pattern>
      <pattern>
