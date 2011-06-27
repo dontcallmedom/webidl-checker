@@ -1,0 +1,4 @@
+Extended attribute ReplaceableNamedProperties used with arguments on Interface InvalidReplacedNamedPropertiesExtendedAttributeWithArgument.
+Extended attribute ReplaceableNamedProperties used on Dictionary — ReplaceableNamedProperties expected only on interfaces.
+Extended attribute ReplaceNamedProperties used on interface InvalidReplacedNamedPropertiesExtendedAttributeUsedWithASetter  that defines a name setter
+Extended attribute ReplaceNamedProperties used on interface InvalidReplacedNamedPropertiesExtendedAttributeUsedWithOverrideBuiltins that also has the OverrideBuiltins extended attribute
