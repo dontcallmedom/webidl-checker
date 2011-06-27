@@ -1,0 +1,11 @@
+// unknown interface UnknowInterface
+partial interface UnknowInterface {
+};
+
+
+// Valid partial interface definition
+interface Foo {
+};
+
+partial interface Foo {
+};

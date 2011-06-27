@@ -7,7 +7,13 @@
           </rule>
      </pattern>
      <pattern>
-       <title>Names of exceptions / dictionaries / modules don't clash</title>
+       <title>partial interface refer to existing interface</title>
+       <rule context="//Interface[@partial]">
+	 <assert role="warning" test="//Interface[@name=current()/@name and not(@partial)] or $standards//Interface[@name=current()/@name and not(@partial)]">Partial interface <value-of select="@name" /> does not have matching full interface</assert>
+       </rule>
+     </pattern>
+     <pattern>
+       <title>Names of interfaces / exceptions / dictionaries / modules don't clash</title>
        <rule context="//Module[@id]|//Typedef[@id]|//Exception[@id]|//Dictionary[@id]">
 	 <assert test="not(preceding::*[local-name()='Interface' or local-name()='Module' or local-name()='Typedef' or local-name()='Exception' or local-name()='Dictionary'][@id=current()/@id])"><value-of select="concat(local-name(.), ' ', @name)"/> clashes with previous definition of <value-of select="concat(local-name(preceding::*[local-name()='Interface' or local-name()='Module' or local-name()='Typedef' or local-name()='Exception' or local-name()='Dictionary'][@name=current()/@name][1]),' ', @name)"/></assert>
        </rule>

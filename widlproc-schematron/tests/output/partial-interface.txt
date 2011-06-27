@@ -1,0 +1,1 @@
+Partial interface UnknowInterface does not have matching full interface
