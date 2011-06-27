@@ -1,0 +1,18 @@
+[Unforgeable] 
+interface UnforgeableUsedOnANonAttribute {
+};
+
+interface UnforgeableUsedOnANonReadonlyAttribute {
+  [Unforgeable] attribute DOMString name;
+};
+
+interface UnforgeableUsedWithArgument {
+  [Unforgeable=foo] readonly attribute DOMString name;
+};
+
+
+// Valid usage
+interface System {
+  [Unforgeable] readonly attribute DOMString username;
+  readonly attribute Date loginTime; 
+};

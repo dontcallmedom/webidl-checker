@@ -1,0 +1,3 @@
+Extended attribute Unforgeable used on Interface — Unforgeable expected only on attributes.
+Extended attribute Unforgeable used on non-readonly attribute UnforgeableUsedOnANonReadonlyAttribute.name
+Extended attribute Unforgeable used with arguments on Attribute name.
