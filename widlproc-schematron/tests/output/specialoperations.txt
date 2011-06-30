@@ -16,4 +16,6 @@ Interface NameGetterWithMoreThanOneArgument defines a getter operation that does
 Interface NameDeleterWithMoreThanOneArgument defines a deleter operation that doesn't take a single argument.
 Interface NameSetterWithMoreThanTwoArguments defines a setter operation that doesn't take exactly two arguments.
 Interface NameCreatorWithOnlyOneArgument defines a creator operation that doesn't take exactly two arguments.
+Interface ValidSpecialOperations is defined as a caller operation, but caller should be reserved to specify legacy APIs
+Interface ValidSpecialOperations is defined as a caller operation, but caller should be reserved to specify legacy APIs
 Interface StringifierAttributeOnNonString defines a stringifier attribute that is not of type DOMString.
