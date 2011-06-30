@@ -1,0 +1,19 @@
+interface Base {
+  readonly attribute DOMString name;
+};
+
+interface InheritsGetterOnNonReadOnlyAttribute : Base {
+  attribute DOMString name inherits getter;
+};
+
+interface InheritsGetterOnInterfaceWithoutInheritance  {
+  readonly attribute DOMString name inherits getter;
+};
+
+interface InheritsGetterWithIncompatibleType : Base  {
+  readonly attribute float name inherits getter;
+};
+
+interface ValidInheritsGetter : Base {
+  readonly attribute DOMString name inherits getter;
+};

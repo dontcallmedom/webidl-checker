@@ -97,6 +97,15 @@
        </rule>
      </pattern>
      <pattern>
+       <title>Attribute with inherits getter</title>
+       <rule context="//Attribute[@inherits='getter']">
+	 <assert test="@readonly='readonly'">Attribute <value-of select="concat(ancestor::Interface/@name, '.', @name)"/> inherits a getter but is not readonly.</assert>
+	 <assert test="ancestor::Interface[InterfaceInheritance]">Attribute <value-of select="concat(ancestor::Interface/@name, '.', @name)"/> inherits a getter but does not belong to an interface with inheritance.</assert>
+	 <assert test="not(ancestor::Interface[InterfaceInheritance] and //Interface[@name=current()/ancestor::Interface/InterfaceInheritance/Name/@name] and //Interface[@name=current()/ancestor::Interface/InterfaceInheritance/Name/@name]/Attribute[@name=current()/@name])
+		       or //Interface[@name=current()/ancestor::Interface/InterfaceInheritance/Name/@name]/Attribute[@name=current()/@name]/Type[concat(@type,@name)=concat(current()/Type/@type,current()/Type/@name)]">Attribute <value-of select="concat(ancestor::Interface/@name, '.', @name)"/> inherits a getter but does not have the same type (<value-of select="concat(Type/@name,Type/@type)"/>) as the attribute <value-of select="concat(//Interface[@name=current()/ancestor::Interface/InterfaceInheritance/Name/@name]/@name, '.', //Interface[@name=current()/ancestor::Interface/InterfaceInheritance/Name/@name]/Attribute/@name)"/> (<value-of select="concat(//Interface[@name=current()/ancestor::Interface/InterfaceInheritance/Name/@name]/Attribute[@name=current()/@name]/Type/@type, //Interface[@name=current()/ancestor::Interface/InterfaceInheritance/Name/@name]/Attribute[@name=current()/@name]/Type/@name)"/>) it inherits from.</assert>
+       </rule>       
+     </pattern>
+     <pattern>
        <title>Stringifier attributes</title>
        <rule context="//Attribute[@stringifier]">
 	 <assert test="Type/@type='DOMString'"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines a stringifier attribute that is not of type DOMString.</assert>
