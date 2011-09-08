@@ -118,7 +118,7 @@
      <pattern>
        <title>Extended attributes are well-known</title>
        <rule context="//ExtendedAttribute[@name]">
-	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#es-extended-attributes" test="@name='Prefix' or @name='AllowAny' or @name='Callback' or @name='Constructor' or @name='NamedConstructor' or @name='NamespaceObject' or @name='NoInterfaceObject' or @name='OverrideBuiltins' or @name='PutForwards' or @name='Replaceable' or @name='TreatNullAs' or @name='TreatUndefinedAs' or @name='Clamp' or @name='ReplaceableNamedProperties' or @name='CopyInheritedPrototype' or @name='Unforgeable'">Extended attribute of <value-of select="@name"/> is unknown in WebIDL.</assert>
+	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#es-extended-attributes" test="@name='Prefix' or @name='AllowAny' or @name='Callback' or @name='Constructor' or @name='NamedConstructor' or @name='NamespaceObject' or @name='NoInterfaceObject' or @name='OverrideBuiltins' or @name='PutForwards' or @name='Replaceable' or @name='TreatNullAs' or @name='TreatUndefinedAs' or @name='Clamp' or @name='ReplaceableNamedProperties' or @name='Unforgeable'">Extended attribute of <value-of select="@name"/> is unknown in WebIDL.</assert>
        </rule>
      </pattern>
      <pattern>
@@ -265,16 +265,6 @@
 	 <assert test="not($validObject) or parent::ExtendedAttributeList/parent::Interface[Operation/@getter]">Extended attribute ReplaceNamedProperties used on interface <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/>  that does not define a name getter</assert>
 	 <assert test="not($validObject) or not(parent::ExtendedAttributeList/parent::Interface/Operation/@setter)">Extended attribute ReplaceNamedProperties used on interface <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/>  that defines a name setter</assert>
 	 <assert test="not($validObject) or not(parent::ExtendedAttributeList/ExtendedAttribute/@name='OverrideBuiltins')">Extended attribute ReplaceNamedProperties used on interface <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> that also has the OverrideBuiltins extended attribute</assert>
-       </rule>
-     </pattern>
-     <pattern>
-       <title>Extended attribute CopyInheritedPrototype</title>
-       <rule context="//ExtendedAttribute[@name='CopyInheritedPrototype']">
-	 <let name="validObject" value="parent::ExtendedAttributeList/parent::Interface"/>
-	 <extends rule="extendedAttributeAppliesToInterface"/>
-	 <extends rule="extendedAttributeNoArg"/>
-	 <assert test="not($validObject) or parent::ExtendedAttributeList/parent::Interface/InterfaceInheritance">Extended attribute CopyInheritedPrototype used on <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> that has no inheritance</assert>
-	 <!-- @@@ TODO: inheritance chain checks: It MUST NOT appear on an interface that is defined to inherit from another interface which itself has an interface with the [CopyInheritedPrototype] extended attribute in its inheritance chain. The extended attribute also MUST NOT appear on an interface if any of its interface members have the same identifier as an interface member on the inherited interface. --> 
        </rule>
      </pattern>
      <pattern>
