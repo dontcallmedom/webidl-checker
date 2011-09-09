@@ -1,2 +1,1 @@
-Attribute badSequenceAttribute in Interface WithSequenceAttribute is defined as a sequence.
 Attribute badDisguisedSequenceAttribute in Interface WithSequenceAttribute is defined as a sequence.

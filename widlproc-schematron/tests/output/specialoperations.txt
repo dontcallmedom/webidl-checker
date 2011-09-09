@@ -1,4 +1,3 @@
-Interface ommittableOperationWithNoIdentifier defines an omittable operation that does not have an identifier.
 Interface moreThanOneStringifier defines more than one stringifier.
 Interface moreThanOneNameGetter defines more than one name getter.
 Interface moreThanOneIndexSetter defines more than one index setter.
