@@ -1,4 +1,3 @@
-UnknownException Exception raised by OperationSetRaisesUnknown.right does not match a defined Exception.
 Interface NonSpecialOperationWithoutIdentifier has an operation without identifier but which is not a special operation.
 Operation right in Interface OperationNameClashWithConstant clashes with another interface member.
 Operation right in Interface OperationNameClashWithAttribute clashes with another interface member.
