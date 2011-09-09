@@ -25,7 +25,7 @@ dictionary BogusClampUsedOnBooleanDictionaryMember {
 
 /* Valid Clamp Usage */
 interface ValidClampUsageInInterface {
-  void setColorClamped([Clamp] in octet red, [Clamp] in octet green, [Clamp] in octet blue);
+  void setColorClamped([Clamp] octet red, [Clamp] octet green, [Clamp] octet blue);
   [Clamp] attribute short foo;
 };
 
