@@ -1,13 +1,13 @@
 interface NameA {};
 // clashes
-exception NameA {};
+exception NameA { DOMString foo;};
 dictionary NameA {};
 typedef DOMString[] NameA;
 module NameA {};
 interface NameA {};
 
 // no clash
-exception NameB {};
+exception NameB {DOMString foo;};
 dictionary NameC {};
 typedef DOMString[] NameD;
 module NameE {};
