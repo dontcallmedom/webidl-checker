@@ -27,5 +27,5 @@ interface BogusNullableDOMStringType {
 interface ValidTreatNullAs {
   [TreatNullAs=String] attribute DOMString onAttribute;
   [TreatNullAs=String] DOMString onOperation(long bar);
-  boolean onOperationArgument([TreatNullAs=String] in DOMString bar);
+  boolean onOperationArgument([TreatNullAs=String] DOMString bar);
 };

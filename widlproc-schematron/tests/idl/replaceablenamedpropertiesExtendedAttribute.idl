@@ -1,7 +1,7 @@
 // Invalid usage
 [ReplaceableNamedProperties=foo]
 interface InvalidReplacedNamedPropertiesExtendedAttributeWithArgument {
-  getter any (in DOMString name);
+  getter any (DOMString name);
 };
 
 [ReplaceableNamedProperties]
@@ -10,18 +10,18 @@ dictionary InvalidReplacedNamedPropertiesExtendedAttributeUsedOnDictionary {
 
 [ReplaceableNamedProperties]
 interface InvalidReplacedNamedPropertiesExtendedAttributeUsedWithASetter {
-  getter any (in DOMString name);
-  setter void (in DOMString propertyName, in float propertyValue);
+  getter any (DOMString name);
+  setter void (DOMString propertyName, float propertyValue);
 };
 
 [ReplaceableNamedProperties, OverrideBuiltins]
 interface InvalidReplacedNamedPropertiesExtendedAttributeUsedWithOverrideBuiltins {
-  getter any (in DOMString name);
+  getter any (DOMString name);
 };
 
 
 // Valid usage
 [ReplaceableNamedProperties]
 interface Window {
-  getter any (in DOMString name);
+  getter any (DOMString name);
 };
