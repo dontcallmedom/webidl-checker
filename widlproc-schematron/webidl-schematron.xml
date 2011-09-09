@@ -118,7 +118,7 @@
      <pattern>
        <title>Extended attributes are well-known</title>
        <rule context="//ExtendedAttribute[@name]">
-	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#es-extended-attributes" test="@name='Prefix' or @name='AllowAny' or @name='ArrayClass' or @name='Callback' or @name='Constructor' or @name='NamedConstructor' or @name='NamespaceObject' or @name='NoInterfaceObject' or @name='OverrideBuiltins' or @name='PutForwards' or @name='Replaceable' or @name='TreatNullAs' or @name='TreatUndefinedAs' or @name='TreatNonCallableAsNull' or @name='TreatNonCallableAsNull' or @name='Clamp' or @name='ReplaceableNamedProperties' or @name='Unforgeable' or @name='EnforceRange'">Extended attribute of <value-of select="@name"/> is unknown in WebIDL.</assert>
+	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#es-extended-attributes" test="@name='Prefix' or @name='AllowAny' or @name='ArrayClass' or @name='Callback' or @name='Constructor' or @name='NamedConstructor' or @name='NamespaceObject' or @name='NoInterfaceObject' or @name='OverrideBuiltins' or @name='PutForwards' or @name='Replaceable' or @name='TreatNullAs' or @name='TreatUndefinedAs' or @name='TreatNonCallableAsNull' or @name='TreatNonCallableAsNull' or @name='Clamp' or @name='ReplaceableNamedProperties' or @name='Unforgeable' or @name='EnforceRange' or @name='ImplicitThis'">Extended attribute of <value-of select="@name"/> is unknown in WebIDL.</assert>
        </rule>
      </pattern>
      <pattern>
@@ -308,6 +308,13 @@
 	 <assert test="not($validObject and parent::ExtendedAttributeList/parent::Attribute) or (parent::ExtendedAttributeList/parent::Attribute[not(@readonly)])">Extended attribute EnforceRange used on non-writable attribute <value-of select="$objectName"/></assert>
 	 <assert test="not($validObject) or (parent::ExtendedAttributeList/parent::*/Type[@type='byte' or @type='octet' or @type='short' or @type='unsigned short' or @type='long' or @type='unsigned long' or @type='long long' or @type='unsigned long long'])">Extended attribute EnforceRange used on non-integer <value-of select="local-name(parent::ExtendedAttributeList/parent::*)"/> <value-of select="$objectName"/></assert>
 	 <assert test="not($validObject) or not(parent::ExtendedAttributeList/ExtendedAttribute[@name='Clamp'])">Extended attribute EnforceRange used in conjunction with Clamp on <value-of select="local-name(parent::ExtendedAttributeList/parent::*)"/> <value-of select="$objectName"/></assert>
+       </rule>
+     </pattern>
+     <pattern>
+       <title>Extended attribute ImplicitThis</title>
+       <rule context="//ExtendedAttribute[@name='ImplicitThis']">
+	 <extends rule="extendedAttributeNoArg"/>
+	 <extends rule="extendedAttributeAppliesToInterface"/>
        </rule>
      </pattern>
 </schema>
