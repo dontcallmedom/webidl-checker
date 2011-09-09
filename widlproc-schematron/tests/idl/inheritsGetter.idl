@@ -3,17 +3,17 @@ interface Base {
 };
 
 interface InheritsGetterOnNonReadOnlyAttribute : Base {
-  attribute DOMString name inherits getter;
+  inherit attribute DOMString name;
 };
 
 interface InheritsGetterOnInterfaceWithoutInheritance  {
-  readonly attribute DOMString name inherits getter;
+  inherit readonly attribute DOMString name;
 };
 
 interface InheritsGetterWithIncompatibleType : Base  {
-  readonly attribute float name inherits getter;
+  inherit readonly attribute float name;
 };
 
 interface ValidInheritsGetter : Base {
-  readonly attribute DOMString name inherits getter;
+  inherit readonly attribute DOMString name;
 };
