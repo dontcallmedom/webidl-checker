@@ -34,9 +34,9 @@
        </rule>
      </pattern>
      <pattern>
-       <title>Exceptions raised are well-known</title>
-       <rule context="//RaiseException">
-	 <assert role="warning" test="//Exception[@name=current()/@name] or $standards//Exception[@name=current()/@name]"><value-of select="@name"/> Exception raised by <value-of select="ancestor::Interface[1]/@name" />.<value-of select="parent::*/parent::*/@name" /> does not match a defined Exception.</assert>
+       <title>Prefer DOMException</title>
+       <rule context="//Exception">
+	 <assert role="warning" test="ExceptionField[@name!='code' and @name!='name']">New exception (<value-of select="@name"/>) defined; minting new exceptions should only be done if additional fields are needed on top of DOMException.</assert>
        </rule>
      </pattern>
      <pattern>

@@ -1,0 +1,16 @@
+// New exceptions should be avoided, except if additional fields are needed
+exception RedundantException {
+  DOMString name;
+  unsigned short code;
+};
+
+exception AnotherRedundantException {
+  DOMString name;
+};
+
+exception AnotherAnotherRedundantException {
+};
+
+exception ANonRedundantException {
+  DOMString foo;
+};
