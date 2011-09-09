@@ -198,6 +198,7 @@
 	 <!-- @@@ shouldn't this also apply to NamedConstructor? -->
 	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#NoInterfaceObject" test="not(parent::ExtendedAttributeList/ExtendedAttribute[@name='Constructor'])">Extended attribute NoInterfaceObject used in combination with extended attribute Constructor on interface <value-of select="parent::ExtendedAttributeList/parent::*/@name"/>.</assert>
 	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#NoInterfaceObject" test="not(ancestor::Interface/Operation[@static='static'])">Extended attribute NoInterfaceObject used on interface <value-of select="parent::ExtendedAttributeList/parent::*/@name"/>, but that interface that has a static operation .</assert>
+	 <!-- TODO: The [NoInterfaceObject] extended attribute SHOULD NOT be used on interfaces that are not solely used as supplemental or callback interfaces, unless there are clear Web compatibility reasons for doing so.  -->
        </rule>
      </pattern>
      <pattern>
@@ -296,4 +297,5 @@
 	 <extends rule="extendedAttributeNotWithInheritance"/>
        </rule>
      </pattern>
+     <!-- TODO: The [NoInterfaceObject] extended attribute SHOULD NOT be used on interfaces that are not solely used as supplemental or callback interfaces, unless there are clear Web compatibility reasons for doing so.  -->
 </schema>
