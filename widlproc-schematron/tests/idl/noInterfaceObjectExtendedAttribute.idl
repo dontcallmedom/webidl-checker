@@ -13,6 +13,12 @@ interface InvalidNoInterFaceObjectUsageOnInterfaceWithArg {
 interface InvalidNoInterFaceObjectUsageOnInterfaceWithConstructor {
 };
 
+/* bogus usage with static operation */
+[NoInterfaceObject]
+interface InvalidNoInterFaceObjectUsageOnInterfaceWithStaticOperation {
+  static void increment();
+};
+
 
 /* Valid usage */
 [NoInterfaceObject]

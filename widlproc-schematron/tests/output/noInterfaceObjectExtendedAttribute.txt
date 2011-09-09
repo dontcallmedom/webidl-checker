@@ -1,3 +1,4 @@
 Extended attribute NoInterfaceObject used on Module — NoInterfaceObject expected only on interfaces and exceptions.
 Extended attribute NoInterfaceObject used with arguments on Interface InvalidNoInterFaceObjectUsageOnInterfaceWithArg.
 Extended attribute NoInterfaceObject used in combination with extended attribute Constructor on interface InvalidNoInterFaceObjectUsageOnInterfaceWithConstructor.
+Extended attribute NoInterfaceObject used on interface InvalidNoInterFaceObjectUsageOnInterfaceWithStaticOperation, but that interface that has a static operation .
