@@ -1,0 +1,36 @@
+[TreatNonCallableAsNull]
+interface BogusTreatNonCallableAsNullUsedOnInterface {
+};
+
+interface BogusEventHandler {
+  void eventOccurred(DOMString details);
+};
+
+[Callback=PropertyOnly]
+interface BogusEventHandler2 {
+  void eventOccurred(DOMString details);
+};
+
+
+interface BogusTreatNonCallableAsNullUsedOnAttributeWhoseTYpeIsNotCallback {
+  [TreatNonCallableAsNull] attribute BogusEventHandler? handler2;
+  void handler([TreatNonCallableAsNull] BogusEventHandler2 handler);
+};
+
+
+[Callback=FunctionOnly]
+interface EventHandler {
+  void eventOccurred(DOMString details);
+};
+
+[Callback]
+interface EventHandler2 {
+  void eventOccurred(DOMString details);
+};
+
+
+interface Manager {
+  attribute EventHandler? handler1;
+  [TreatNonCallableAsNull] attribute EventHandler? handler2;
+  void handler([TreatNonCallableAsNull] EventHandler2 handler);
+};

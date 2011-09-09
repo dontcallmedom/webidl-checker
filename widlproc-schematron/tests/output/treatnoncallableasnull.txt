@@ -1,0 +1,8 @@
+Extended attribute TreatNonCallableAsNull used on Interface BogusTreatNonCallableAsNullUsedOnInterface ; specifications SHOULD NOT use [TreatNonCallableAsNull] unless required to specify the behavior of legacy APIs.
+Extended attribute TreatNonCallableAsNull used on Interface BogusTreatNonCallableAsNullUsedOnInterface can only be used on attributes or operation arguments
+Extended attribute TreatNonCallableAsNull used on Attribute handler2 ; specifications SHOULD NOT use [TreatNonCallableAsNull] unless required to specify the behavior of legacy APIs.
+Extended attribute TreatNonCallableAsNull used on Attribute BogusTreatNonCallableAsNullUsedOnAttributeWhoseTYpeIsNotCallback.handler2 can only be used on an attribute or operation argument whose type is an interface that is annotated with [Callback] or [Callback=FunctionOnly]
+Extended attribute TreatNonCallableAsNull used on Argument handler ; specifications SHOULD NOT use [TreatNonCallableAsNull] unless required to specify the behavior of legacy APIs.
+Extended attribute TreatNonCallableAsNull used on Argument BogusTreatNonCallableAsNullUsedOnAttributeWhoseTYpeIsNotCallback.handler can only be used on an attribute or operation argument whose type is an interface that is annotated with [Callback] or [Callback=FunctionOnly]
+Extended attribute TreatNonCallableAsNull used on Attribute handler2 ; specifications SHOULD NOT use [TreatNonCallableAsNull] unless required to specify the behavior of legacy APIs.
+Extended attribute TreatNonCallableAsNull used on Argument handler ; specifications SHOULD NOT use [TreatNonCallableAsNull] unless required to specify the behavior of legacy APIs.
