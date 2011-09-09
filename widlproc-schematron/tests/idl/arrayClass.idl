@@ -1,0 +1,17 @@
+// [ArrayClass] used on dictionary
+[ArrayClass] dictionary BogusArrayClassOnDictionary {
+};
+
+
+// [ArrayClass] used on interface with inheritance
+interface Foo {};
+[ArrayClass]
+interface BogusArrayClassOnInterfaceWithInheritance : Foo {
+};
+
+// Valid usage
+[ArrayClass]
+interface ImmutableItemList {
+  readonly attribute unsigned long length;
+  getter object getItem(unsigned long index);
+};

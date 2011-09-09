@@ -1,0 +1,2 @@
+Extended attribute ArrayClass used on Dictionary — ArrayClass expected only on interfaces.
+The interface BogusArrayClassOnInterfaceWithInheritance has extended attribute ArrayClass but inherits from another interface (Foo).

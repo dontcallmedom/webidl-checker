@@ -118,7 +118,7 @@
      <pattern>
        <title>Extended attributes are well-known</title>
        <rule context="//ExtendedAttribute[@name]">
-	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#es-extended-attributes" test="@name='Prefix' or @name='AllowAny' or @name='Callback' or @name='Constructor' or @name='NamedConstructor' or @name='NamespaceObject' or @name='NoInterfaceObject' or @name='OverrideBuiltins' or @name='PutForwards' or @name='Replaceable' or @name='TreatNullAs' or @name='TreatUndefinedAs' or @name='TreatNonCallableAsNull' or @name='TreatNonCallableAsNull' or @name='Clamp' or @name='ReplaceableNamedProperties' or @name='Unforgeable'">Extended attribute of <value-of select="@name"/> is unknown in WebIDL.</assert>
+	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#es-extended-attributes" test="@name='Prefix' or @name='AllowAny' or @name='ArrayClass' or @name='Callback' or @name='Constructor' or @name='NamedConstructor' or @name='NamespaceObject' or @name='NoInterfaceObject' or @name='OverrideBuiltins' or @name='PutForwards' or @name='Replaceable' or @name='TreatNullAs' or @name='TreatUndefinedAs' or @name='TreatNonCallableAsNull' or @name='TreatNonCallableAsNull' or @name='Clamp' or @name='ReplaceableNamedProperties' or @name='Unforgeable'">Extended attribute of <value-of select="@name"/> is unknown in WebIDL.</assert>
        </rule>
      </pattern>
      <pattern>
@@ -286,6 +286,14 @@
 	 <assert role="warning" test="false">Extended attribute TreatNonCallableAsNull used on <value-of select="concat(local-name(parent::ExtendedAttributeList/parent::*), ' ', parent::ExtendedAttributeList/parent::*/@name)"/> ; specifications SHOULD NOT use [TreatNonCallableAsNull] unless required to specify the behavior of legacy APIs.</assert>
 	 <assert test="parent::ExtendedAttributeList/parent::Attribute or parent::ExtendedAttributeList/parent::Argument">Extended attribute TreatNonCallableAsNull used on <value-of select="concat(local-name(parent::ExtendedAttributeList/parent::*), ' ', parent::ExtendedAttributeList/parent::*/@name)"/> can only be used on attributes or operation arguments</assert>
 	 <assert test="not(parent::ExtendedAttributeList/parent::Attribute or parent::ExtendedAttributeList/parent::Argument) or //Interface[@name = current()/parent::ExtendedAttributeList/parent::*/Type/@name]/ExtendedAttributeList/ExtendedAttribute[@name='Callback' and (not(@value) or @value='FunctionOnly')]">Extended attribute TreatNonCallableAsNull used on <value-of select="concat(local-name(parent::ExtendedAttributeList/parent::*), ' ', parent::ExtendedAttributeList/ancestor::Interface/@name, '.', parent::ExtendedAttributeList/ancestor::*[local-name()='Attribute' or local-name()='Operation']/@name)"/> can only be used on an attribute or operation argument whose type is an interface that is annotated with [Callback] or [Callback=FunctionOnly]</assert>
+       </rule>
+     </pattern>
+     <pattern>
+       <title>Extended attribute ArrayClass</title>
+       <rule context="//ExtendedAttribute[@name='ArrayClass']">
+	 <extends rule="extendedAttributeNoArg"/>
+	 <extends rule="extendedAttributeAppliesToInterface"/>
+	 <extends rule="extendedAttributeNotWithInheritance"/>
        </rule>
      </pattern>
 </schema>
