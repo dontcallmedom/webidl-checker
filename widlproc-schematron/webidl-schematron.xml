@@ -42,7 +42,7 @@
      <pattern>
        <title>Operations</title>
        <rule context="//Operation">
-	 <assert test="@name or @stringifier or @getter or @setter or @creator or @deleter or @caller"><value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/> has an operation without identifier but which is not a special operation.</assert>
+	 <assert test="@name or @stringifier or @getter or @setter or @creator or @deleter or @legacycaller"><value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/> has an operation without identifier but which is not a special operation.</assert>
 	 <assert test="not(preceding-sibling::*[local-name()='Attribute' or local-name()='Const'][@name=current()/@name])"><value-of select="concat(local-name(), ' ', @name)"/> in <value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/> clashes with another interface member.</assert>
 	 <assert test="not(ArgumentList/Argument[@ellipsis]) or not(ArgumentList/Argument[@ellipsis]/following-sibling::Argument)"><value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/> defines a variadic operation (<value-of select="@name"/>) but the ... is not set on the last argument.</assert>
 	 <assert test="not(ArgumentList/Argument[@optional]) or not(ArgumentList/Argument[@optional]/following-sibling::Argument[not(@optional) and not(@ellipsis)])"><value-of select="concat(local-name(parent::*), ' ', parent::*/@name,'.',@name,'()')"/> has a non-optional argument after an optional one.</assert>
@@ -70,8 +70,7 @@
      -->
      <pattern>
        <title>Special Operations</title>
-       <rule context="//Operation[@stringifier or @getter or @setter or @creator or @deleter or @caller]">
-	 <assert test="not(@omittable) or (@name)"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines an omittable operation that does not have an identifier.</assert>
+       <rule context="//Operation[@stringifier or @getter or @setter or @creator or @deleter or @legacycaller]">
 	 <assert test="not(@stringifier) or not(preceding-sibling::*[@stringifier])"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines more than one stringifier.</assert>
 	 <assert test="not(@getter) or not(ArgumentList/Argument[1]/Type/@type='unsigned long') or not(preceding-sibling::Operation[@getter]) or not(preceding-sibling::Operation[@getter]/ArgumentList/Argument[1]/Type/@type=current()/ArgumentList/Argument[1]/Type/@type)"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines more than one index getter.</assert>
 	 <assert test="not(@getter) or not(ArgumentList/Argument[1]/Type/@type='DOMString') or not(preceding-sibling::Operation[@getter]) or not(preceding-sibling::Operation[@getter]/ArgumentList/Argument[1]/Type/@type=current()/ArgumentList/Argument[1]/Type/@type)"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines more than one name getter.</assert>
@@ -93,12 +92,12 @@
 	 <assert test="not(@setter) or ArgumentList/Argument[1]/Type/@type='DOMString' or ArgumentList/Argument[1]/Type/@type='unsigned long'"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines a setter operation with first argument different from DOMString and unsigned long.</assert>
 	 <assert test="not(@deleter) or ArgumentList/Argument[1]/Type/@type='DOMString' or ArgumentList/Argument[1]/Type/@type='unsigned long'"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines a deleter operation with first argument different from DOMString and unsigned long.</assert>
 	 <assert test="not(@creator) or ArgumentList/Argument[1]/Type/@type='DOMString' or ArgumentList/Argument[1]/Type/@type='unsigned long'"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines a creator operation with first argument different from DOMString and unsigned long.</assert>
-	 <assert role="warning" test="not(@caller)"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines a caller operation, but caller should be reserved to specify legacy APIs</assert>
+	 <assert role="warning" test="not(@legacycaller)"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines a caller operation, but caller should be reserved to specify legacy APIs</assert>
        </rule>
      </pattern>
      <pattern>
        <title>Attribute with inherits getter</title>
-       <rule context="//Attribute[@inherits='getter']">
+       <rule context="//Attribute[@inherit='inherit']">
 	 <assert test="@readonly='readonly'">Attribute <value-of select="concat(ancestor::Interface/@name, '.', @name)"/> inherits a getter but is not readonly.</assert>
 	 <assert test="ancestor::Interface[InterfaceInheritance]">Attribute <value-of select="concat(ancestor::Interface/@name, '.', @name)"/> inherits a getter but does not belong to an interface with inheritance.</assert>
 	 <assert test="not(ancestor::Interface[InterfaceInheritance] and //Interface[@name=current()/ancestor::Interface/InterfaceInheritance/Name/@name] and //Interface[@name=current()/ancestor::Interface/InterfaceInheritance/Name/@name]/Attribute[@name=current()/@name])
@@ -148,7 +147,7 @@
 	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#Callback" test="not(@value) or @value='FunctionOnly' or @value='PropertyOnly'">Extended attribute Callback used on <value-of select="parent::ExtendedAttributeList/parent::Interface/@name" /> uses an unknown argument <value-of select="@value"/>.</assert>
 	 <extends see="http://dev.w3.org/2006/webapi/WebIDL/#native-objects" rule="extendedAttributeNotWithInheritance"/>
 	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#native-objects" test="not(parent::ExtendedAttributeList/ExtendedAttribute[@name='Constructor' or @name='NamedConstructor'])">The interface <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> has both extended attributes Callback and <value-of select="parent::ExtendedAttributeList/ExtendedAttribute[@name='Constructor' or @name='NamedConstructor']/@name"/>).</assert>
-	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#native-objects" test="not(parent::ExtendedAttributeList/parent::Interface/Operation[@getter or @setter or @creator or @deleter or @caller or @stringifier])">The interface <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> has a Callback extended attribute, but offers a either  getters, setters, creators, deleters, caller or stringifier.</assert>
+	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#native-objects" test="not(parent::ExtendedAttributeList/parent::Interface/Operation[@getter or @setter or @creator or @deleter or @legacycaller or @stringifier])">The interface <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> has a Callback extended attribute, but offers a either  getters, setters, creators, deleters, caller or stringifier.</assert>
 	 <!-- @@@ widlproc doesn't show extended attributes on attributes ? -->
 	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#native-objects" test="not(parent::ExtendedAttributeList/parent::Interface/Attribute[ExtendedAttributeList/ExtendedAttribute[@name='PutForwards' or @name='TreatNullAs' or @name='TreatUndefinedAs']])">The interface <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> has a Callback extended attribute, but exposes an attribute with a <value-of select="parent::ExtendedAttributeList/parent::Interface/Attribute/ExtendedAttributeList/ExtendedAttribute[@name='PutForwards' or @name='TreatNullAs' or @name='TreatUndefinedAs']/@name"/> extended attribute.</assert>
 	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#Callback" test="not(@value and parent::ExtendedAttributeList/parent::Interface/Attribute)">The interface <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> uses a Callback extended attribute with an argument, but exposes at least one attribute.</assert>
