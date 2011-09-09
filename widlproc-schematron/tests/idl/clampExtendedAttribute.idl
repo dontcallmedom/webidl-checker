@@ -7,12 +7,12 @@ interface BogusClampWithArgument {
   [Clamp=value] attribute short foo;
 };
 
-/* Camp cannot be used on readonly attribute */
+/* Clamp cannot be used on readonly attribute */
 interface BogusClampUsedOnReadOnlyAttribute {
   [Clamp] readonly attribute short foo;
 };
 
-/* Camp cannot be used on non-integer  types */
+/* Clamp cannot be used on non-integer  types */
 interface BogusClampUsedOnNonInteger {
   [Clamp] attribute DOMString foo;
   void setTruth([Clamp] boolean bar);
