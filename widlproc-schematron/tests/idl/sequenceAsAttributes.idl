@@ -1,7 +1,6 @@
 typedef sequence<float> SequenceInDisguise;
 
 interface WithSequenceAttribute {
-  attribute sequence<float> badSequenceAttribute; // in most cases, one should not use sequence for attributes definitions
   attribute SequenceInDisguise badDisguisedSequenceAttribute; 
   void methodWithSequenceParam(sequence<float> ok);
 };
