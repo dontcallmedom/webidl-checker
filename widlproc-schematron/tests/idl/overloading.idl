@@ -49,8 +49,8 @@ interface TwoOperationsWithUndistinguishableVariadicParam {
 };
 
 interface TwoCallersWithUndistinguishableParam {
-  caller boolean foo(float arg);
-  caller boolean bar(boolean arg);
+  legacycaller boolean foo(float arg);
+  legacycaller boolean bar(boolean arg);
 };
 
 [NamedConstructor=Right(float arg),
