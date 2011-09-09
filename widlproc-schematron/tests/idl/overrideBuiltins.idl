@@ -1,0 +1,19 @@
+/* bogus usage on an exception */
+[OverrideBuiltins] exception BogusOverrideBuiltinsOnException {
+  DOMString foo;
+};
+
+/* bogus argument on OverrideBuiltins */
+[OverrideBuiltins=foo] interface BogusOverrideBuiltinsWithArgument {
+  getter DOMString lookup(DOMString key);
+};
+
+/*  bogus OverrideBuiltins on interface without getter */
+[OverrideBuiltins] interface BogusOverrideBuiltinsNoGetter {
+};
+
+
+/* Valid OverrideBuiltins Usage */
+[OverrideBuiltins] interface ValidOverrideBuiltins {
+  getter DOMString lookup(DOMString key);
+};

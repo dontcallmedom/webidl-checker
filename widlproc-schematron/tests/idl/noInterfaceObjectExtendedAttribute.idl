@@ -21,4 +21,5 @@ interface ValidNoInterFaceObjectUsageOnInterface {
 
 [NoInterfaceObject]
 exception ValidNoInterFaceObjectUsageOnException {
+  DOMString foo;
 };
