@@ -1,8 +1,3 @@
-//  The "omittable" keyword MUST NOT  appear on an operation that has no identifier. 
-interface ommittableOperationWithNoIdentifier {
-  omittable getter float (DOMString propertyName);  
-};
-
 // commented out for now - bug in widlproc
 //interface doubleSpecialKeywordOperation {
 //  getter setter getter float (DOMString propertyName);
