@@ -6,7 +6,7 @@ interface BogusNamedConstructorEAOnAttribute {
 
 /* valid NamedConstructor */
 [NamedConstructor=Foo,
- NamedConstructor=Foo(in DOMString bar)]
+ NamedConstructor=Foo(DOMString bar)]
 interface FooBar {
 };
 
@@ -22,6 +22,7 @@ interface FooBar3 {
 
 /* clash with existing exception interface identifier */
 exception Bar {
+  DOMString foo;
 };
 
 [NamedConstructor=Bar] 
