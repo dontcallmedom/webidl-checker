@@ -1,0 +1,34 @@
+/* Bogus EnforceRange on Interface */
+[EnforceRange]
+interface BogusEnforceRangeInterface {};
+
+/* EnforceRange doesn't take an argument */
+interface BogusEnforceRangeWithArgument {
+  [EnforceRange=value] attribute short foo;
+};
+
+/* EnforceRange cannot be used on readonly attribute */
+interface BogusEnforceRangeUsedOnReadOnlyAttribute {
+  [EnforceRange] readonly attribute short foo;
+};
+
+/* EnforceRange cannot be used on non-integer  types */
+interface BogusEnforceRangeUsedOnNonInteger {
+  [EnforceRange] attribute DOMString foo;
+  void setTruth([EnforceRange] boolean bar);
+};
+
+dictionary BogusEnforceRangeUsedOnBooleanDictionaryMember {
+  [EnforceRange] boolean foo;
+};
+
+// Cannot be used in conjunction with Clamp
+interface BogusEnforceRangeWithClamp {
+  void setColorEnforcedRange([EnforceRange, Clamp] octet red, [EnforceRange] octet green, [EnforceRange] octet blue);
+};
+
+// Valid usage
+interface GraphicsContext {
+  void setColor(octet red, octet green, octet blue);
+  void setColorEnforcedRange([EnforceRange] octet red, [EnforceRange] octet green, [EnforceRange] octet blue);
+};

@@ -1,0 +1,7 @@
+Extended attribute EnforceRange used on Interface BogusEnforceRangeInterface — EnforceRange expected only on attribute, operation arguments, or dictionary members.
+Extended attribute EnforceRange used with arguments on Attribute foo.
+Extended attribute EnforceRange used on non-writable attribute BogusEnforceRangeUsedOnReadOnlyAttribute.foo
+Extended attribute EnforceRange used on non-integer AttributeBogusEnforceRangeUsedOnNonInteger.foo
+Extended attribute EnforceRange used on non-integer ArgumentBogusEnforceRangeUsedOnNonInteger.setTruth
+Extended attribute EnforceRange used on non-integer DictionaryMemberBogusEnforceRangeUsedOnBooleanDictionaryMember.foo
+Extended attribute EnforceRange used in conjunction with Clamp on ArgumentBogusEnforceRangeWithClamp.setColorEnforcedRange
