@@ -22,6 +22,14 @@ interface InheritedInterface {};
   void operation();
 };
 
+/* Looks like something that ought to be a dictionary */
+[Callback,NoInterfaceObject]
+interface ShouldBeADictionary {
+  attribute DOMString? option1;
+  attribute DOMString? option2;
+  attribute long? option3;
+};
+
 /* Callback used with a getter */
 [Callback] interface CallbackUsedWithGetter {
   getter DOMString lookup(DOMString key);

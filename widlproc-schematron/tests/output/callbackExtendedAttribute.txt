@@ -3,6 +3,7 @@ Extended attribute Callback used on UnknownCallbackExtendedAttribute uses an unk
 The interface CallbackUsedOnInheritingInterface has extended attribute Callback but inherits from another interface (InheritedInterface).
 The interface CallbackUsedWithConstructor has both extended attributes Callback and Constructor).
 The interface CallbackUsedWithNamedConstructor has both extended attributes Callback and NamedConstructor).
+Interface ShouldBeADictionary with no operation declared with NoInterfaceObject and Callback: specification authors wanting to APIs that take ECMAScript objects as “property bag” like function arguments are suggested to use dictionary types rather than interfaces annotated with [Callback,NoInterfaceObject].
 The interface CallbackUsedWithGetter has a Callback extended attribute, but offers a either  getters, setters, creators, deleters, caller or stringifier.
 The interface CallbackUsedWithSetter has a Callback extended attribute, but offers a either  getters, setters, creators, deleters, caller or stringifier.
 The interface CallbackUsedWithCreator has a Callback extended attribute, but offers a either  getters, setters, creators, deleters, caller or stringifier.
