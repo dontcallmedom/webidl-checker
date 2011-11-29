@@ -4,7 +4,7 @@ interface BogusTreatNullAsInterface {};
 
 /* TreatNullAs only appear on attributes or operations arguments with DOMString type */
 interface BogusTreatNullAsOnNonDOMStringType {
-  [TreatNullAs=String] attribute long counter;
+  [TreatNullAs=EmptyString] attribute long counter;
 };
 
 /* TreatNullAs requires an argument */
@@ -12,20 +12,20 @@ interface BogusTreatNullAsArgument {
   [TreatNullAs] attribute DOMString name;
 };
 
-/* TreatNullAs requires String as argument */
+/* TreatNullAs requires EmptyString as argument */
 interface BogusTreatNullAsNoArgument {
-  [TreatNullAs=EmptyString] DOMString bar();
+  [TreatNullAs=String] DOMString bar();
 };
 
 /* TreatNullAs only applies to non-nullable DOMString */
 interface BogusNullableDOMStringType {
-  [TreatNullAs=String] attribute DOMString? onAttribute;
+  [TreatNullAs=EmptyString] attribute DOMString? onAttribute;
 };
 
 
 /* Valid usage of TreatNullAs */
 interface ValidTreatNullAs {
-  [TreatNullAs=String] attribute DOMString onAttribute;
-  [TreatNullAs=String] DOMString onOperation(long bar);
-  boolean onOperationArgument([TreatNullAs=String] DOMString bar);
+  [TreatNullAs=EmptyString] attribute DOMString onAttribute;
+  [TreatNullAs=EmptyString] DOMString onOperation(long bar);
+  boolean onOperationArgument([TreatNullAs=EmptyString] DOMString bar);
 };
