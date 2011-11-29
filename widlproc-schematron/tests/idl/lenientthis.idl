@@ -1,0 +1,12 @@
+interface InvalidLenientThisOnOperation {
+  [LenientThis] DOMString foo();
+};
+
+
+interface InvalidLenientThisWithArgument {
+  [LenientThis=foo] attribute DOMString x;
+};
+
+interface ValidLenientThis {
+  [LenientThis] attribute DOMString x;
+};

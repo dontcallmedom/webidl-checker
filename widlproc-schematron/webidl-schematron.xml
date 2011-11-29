@@ -117,7 +117,7 @@
      <pattern>
        <title>Extended attributes are well-known</title>
        <rule context="//ExtendedAttribute[@name]">
-	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#es-extended-attributes" test="@name='Prefix' or @name='AllowAny' or @name='ArrayClass' or @name='Callback' or @name='Constructor' or @name='NamedConstructor' or @name='NamespaceObject' or @name='NoInterfaceObject' or @name='OverrideBuiltins' or @name='PutForwards' or @name='Replaceable' or @name='TreatNullAs' or @name='TreatUndefinedAs' or @name='TreatNonCallableAsNull' or @name='TreatNonCallableAsNull' or @name='Clamp' or @name='ReplaceableNamedProperties' or @name='Unforgeable' or @name='EnforceRange' or @name='ImplicitThis'">Extended attribute of <value-of select="@name"/> is unknown in WebIDL.</assert>
+	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#es-extended-attributes" test="@name='Prefix' or @name='AllowAny' or @name='ArrayClass' or @name='Callback' or @name='Constructor' or @name='NamedConstructor' or @name='NamespaceObject' or @name='NoInterfaceObject' or @name='OverrideBuiltins' or @name='PutForwards' or @name='Replaceable' or @name='TreatNullAs' or @name='TreatUndefinedAs' or @name='TreatNonCallableAsNull' or @name='TreatNonCallableAsNull' or @name='Clamp' or @name='ReplaceableNamedProperties' or @name='Unforgeable' or @name='EnforceRange' or @name='ImplicitThis' or @name='LenientThis'">Extended attribute of <value-of select="@name"/> is unknown in WebIDL.</assert>
        </rule>
      </pattern>
      <pattern>
@@ -316,4 +316,13 @@
 	 <extends rule="extendedAttributeAppliesToInterface"/>
        </rule>
      </pattern>
+     <pattern>
+       <title>Extended attribute LenientThis</title>
+       <rule context="//ExtendedAttribute[@name='LenientThis']">
+	 <extends rule="extendedAttributeNoArg"/>
+	 <extends rule="extendedAttributeAppliesToAttribute"/>
+	 <assert role="warning" test="false">Extended attribute LenientThis used on <value-of select="concat(local-name(parent::ExtendedAttributeList/parent::*), ' ', parent::ExtendedAttributeList/parent::*/@name)"/> ; specifications SHOULD NOT use [LenientThis] unless required for compatibility reasons.</assert>
+       </rule>
+     </pattern>
+
 </schema>

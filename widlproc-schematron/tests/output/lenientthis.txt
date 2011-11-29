@@ -1,0 +1,5 @@
+Extended attribute LenientThis used on Operation — LenientThis expected only on attributes.
+Extended attribute LenientThis used on Operation foo ; specifications SHOULD NOT use [LenientThis] unless required for compatibility reasons.
+Extended attribute LenientThis used with arguments on Attribute x.
+Extended attribute LenientThis used on Attribute x ; specifications SHOULD NOT use [LenientThis] unless required for compatibility reasons.
+Extended attribute LenientThis used on Attribute x ; specifications SHOULD NOT use [LenientThis] unless required for compatibility reasons.
