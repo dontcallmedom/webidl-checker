@@ -11,6 +11,10 @@ exception AnotherRedundantException {
 exception AnotherAnotherRedundantException {
 };
 
+// Clash with ECMAScript
+exception URIError {
+};
+
 exception ANonRedundantException {
   DOMString foo;
 };

@@ -37,7 +37,9 @@
        <title>Prefer DOMException</title>
        <rule context="//Exception">
 	 <assert role="warning" test="ExceptionField[@name!='code' and @name!='name']">New exception (<value-of select="@name"/>) defined; minting new exceptions should only be done if additional fields are needed on top of DOMException.</assert>
+	 <assert test="not(@name = 'Error' or @name = 'EvalError' or @name = 'RangeError' or @name = 'ReferenceError' or @name = 'SyntaxError' or @name = 'TypeError' or @name = 'URIError')">Exception <value-of select="@name"/> clashes with predefined ECMAScript error objects.</assert>
        </rule>
+
      </pattern>
      <pattern>
        <title>Operations</title>

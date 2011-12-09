@@ -32,5 +32,6 @@ interface EventHandler2 {
 interface Manager {
   attribute EventHandler? handler1;
   [TreatNonCallableAsNull] attribute EventHandler? handler2;
+  [TreatNonCallableAsNull] attribute Function? handler3;
   void handler([TreatNonCallableAsNull] EventHandler2 handler);
 };
