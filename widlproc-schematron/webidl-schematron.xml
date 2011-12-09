@@ -285,7 +285,7 @@
        <rule context="//ExtendedAttribute[@name='TreatNonCallableAsNull']">
 	 <assert role="warning" test="false">Extended attribute TreatNonCallableAsNull used on <value-of select="concat(local-name(parent::ExtendedAttributeList/parent::*), ' ', parent::ExtendedAttributeList/parent::*/@name)"/> ; specifications SHOULD NOT use [TreatNonCallableAsNull] unless required to specify the behavior of legacy APIs.</assert>
 	 <assert test="parent::ExtendedAttributeList/parent::Attribute or parent::ExtendedAttributeList/parent::Argument">Extended attribute TreatNonCallableAsNull used on <value-of select="concat(local-name(parent::ExtendedAttributeList/parent::*), ' ', parent::ExtendedAttributeList/parent::*/@name)"/> can only be used on attributes or operation arguments</assert>
-	 <assert test="not(parent::ExtendedAttributeList/parent::Attribute or parent::ExtendedAttributeList/parent::Argument) or //Interface[@name = current()/parent::ExtendedAttributeList/parent::*/Type/@name]/ExtendedAttributeList/ExtendedAttribute[@name='Callback' and (not(@value) or @value='FunctionOnly')]">Extended attribute TreatNonCallableAsNull used on <value-of select="concat(local-name(parent::ExtendedAttributeList/parent::*), ' ', parent::ExtendedAttributeList/ancestor::Interface/@name, '.', parent::ExtendedAttributeList/ancestor::*[local-name()='Attribute' or local-name()='Operation']/@name)"/> can only be used on an attribute or operation argument whose type is an interface that is annotated with [Callback] or [Callback=FunctionOnly]</assert>
+	 <assert test="not(parent::ExtendedAttributeList/parent::Attribute or parent::ExtendedAttributeList/parent::Argument) or (not(parent::ExtendedAttributeList/parent::*/Type/@name = 'Function') and //Interface[@name = current()/parent::ExtendedAttributeList/parent::*/Type/@name]/ExtendedAttributeList/ExtendedAttribute[@name='Callback' and (not(@value) or @value='FunctionOnly')])">Extended attribute TreatNonCallableAsNull used on <value-of select="concat(local-name(parent::ExtendedAttributeList/parent::*), ' ', parent::ExtendedAttributeList/ancestor::Interface/@name, '.', parent::ExtendedAttributeList/ancestor::*[local-name()='Attribute' or local-name()='Operation']/@name)"/> can only be used on an attribute or operation argument whose type is an interface that is annotated with [Callback] or [Callback=FunctionOnly]</assert>
        </rule>
      </pattern>
      <pattern>
@@ -324,5 +324,10 @@
 	 <assert role="warning" test="false">Extended attribute LenientThis used on <value-of select="concat(local-name(parent::ExtendedAttributeList/parent::*), ' ', parent::ExtendedAttributeList/parent::*/@name)"/> ; specifications SHOULD NOT use [LenientThis] unless required for compatibility reasons.</assert>
        </rule>
      </pattern>
-
+     <pattern>
+       <title>Constants</title>
+       <rule context="//Const">
+	 <assert role="warning" test="Type[@type='unsigned short']">Numeric constant used <value-of select="@name"/> in <value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/>; the Web platform is moving away from using named integer codes in the style of an enumeration, in favor of the use of strings.</assert>
+       </rule>
+     </pattern>
 </schema>

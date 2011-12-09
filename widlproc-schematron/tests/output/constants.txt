@@ -1,3 +1,11 @@
 Const right in Interface ConstantNameClashWithOperation clashes with another interface member.
 Const right in Interface ConstantNameClashWithAttribute clashes with another interface member.
 Const right in Interface ConstantNameClashWithConstant clashes with another interface member.
+Numeric constant used right in Interface ConstantNameClashWithOperation; the Web platform is moving away from using named integer codes in the style of an enumeration, in favor of the use of strings.
+Numeric constant used right in Interface ConstantNameClashWithAttribute; the Web platform is moving away from using named integer codes in the style of an enumeration, in favor of the use of strings.
+Numeric constant used right in Interface ConstantNameClashWithConstant; the Web platform is moving away from using named integer codes in the style of an enumeration, in favor of the use of strings.
+Numeric constant used right in Interface ConstantNameClashWithConstant; the Web platform is moving away from using named integer codes in the style of an enumeration, in favor of the use of strings.
+Numeric constant used DEBUG in Interface ValidConstantName; the Web platform is moving away from using named integer codes in the style of an enumeration, in favor of the use of strings.
+Numeric constant used LF in Interface ValidConstantName; the Web platform is moving away from using named integer codes in the style of an enumeration, in favor of the use of strings.
+Numeric constant used BIT_MASK in Interface ValidConstantName; the Web platform is moving away from using named integer codes in the style of an enumeration, in favor of the use of strings.
+Numeric constant used AVOGADRO in Interface ValidConstantName; the Web platform is moving away from using named integer codes in the style of an enumeration, in favor of the use of strings.

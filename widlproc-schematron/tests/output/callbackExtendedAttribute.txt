@@ -15,3 +15,4 @@ The interface CallbackWithTreatUndefinedAs has a Callback extended attribute, bu
 The interface FunctionOnlyCallbackWithAttribute uses a Callback extended attribute with an argument, but exposes at least one attribute.
 The interface FunctionOnlyCallbackWithoutOperation uses a Callback extended attribute with an argument, but exposes zero or multiple operations with different identifiers.
 The interface PropertyOnlyCallbackWithDifferentOperations uses a Callback extended attribute with an argument, but exposes zero or multiple operations with different identifiers.
+Extended attribute TreatNullAs used on CallbackWithTreatNullAs.treatNullAsString without required “EmptyString” argument.
