@@ -13,12 +13,12 @@
        </rule>
      </pattern>
      <pattern>
-       <title>Names of interfaces / exceptions / dictionaries / modules don't clash</title>
-       <rule context="//Module[@id]|//Typedef[@id]|//Exception[@id]|//Dictionary[@id]">
-	 <assert test="not(preceding::*[local-name()='Interface' or local-name()='Module' or local-name()='Typedef' or local-name()='Exception' or local-name()='Dictionary'][@id=current()/@id])"><value-of select="concat(local-name(.), ' ', @name)"/> clashes with previous definition of <value-of select="concat(local-name(preceding::*[local-name()='Interface' or local-name()='Module' or local-name()='Typedef' or local-name()='Exception' or local-name()='Dictionary'][@name=current()/@name][1]),' ', @name)"/></assert>
+       <title>Names of interfaces / exceptions / dictionaries don't clash</title>
+       <rule context="//Typedef[@id]|//Exception[@id]|//Dictionary[@id]">
+	 <assert test="not(preceding::*[local-name()='Interface' or local-name()='Typedef' or local-name()='Exception' or local-name()='Dictionary'][@id=current()/@id])"><value-of select="concat(local-name(.), ' ', @name)"/> clashes with previous definition of <value-of select="concat(local-name(preceding::*[local-name()='Interface'  or local-name()='Typedef' or local-name()='Exception' or local-name()='Dictionary'][@name=current()/@name][1]),' ', @name)"/></assert>
        </rule>
        <rule context="//Interface[@id]">
-	 <assert test="(@partial or not(preceding::Interface[@id=current()/@id])) or not(preceding::*[local-name()='Module' or local-name()='Typedef' or local-name()='Exception' or local-name()='Dictionary'][@id=current()/@id])"><value-of select="concat(local-name(.), ' ', @name)"/> clashes with previous definition of <value-of select="concat(local-name(preceding::*[local-name()='Interface' or local-name()='Module' or local-name()='Typedef' or local-name()='Exception' or local-name()='Dictionary'][@name=current()/@name][1]),' ', @name)"/></assert>
+	 <assert test="(@partial or not(preceding::Interface[@id=current()/@id])) or not(preceding::*[local-name()='Typedef' or local-name()='Exception' or local-name()='Dictionary'][@id=current()/@id])"><value-of select="concat(local-name(.), ' ', @name)"/> clashes with previous definition of <value-of select="concat(local-name(preceding::*[local-name()='Interface' or local-name()='Typedef' or local-name()='Exception' or local-name()='Dictionary'][@name=current()/@name][1]),' ', @name)"/></assert>
        </rule>
      </pattern>
      <pattern>
@@ -119,7 +119,7 @@
      <pattern>
        <title>Extended attributes are well-known</title>
        <rule context="//ExtendedAttribute[@name]">
-	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#es-extended-attributes" test="@name='Prefix' or @name='AllowAny' or @name='ArrayClass' or @name='Callback' or @name='Constructor' or @name='NamedConstructor' or @name='NamespaceObject' or @name='NoInterfaceObject' or @name='OverrideBuiltins' or @name='PutForwards' or @name='Replaceable' or @name='TreatNullAs' or @name='TreatUndefinedAs' or @name='TreatNonCallableAsNull' or @name='TreatNonCallableAsNull' or @name='Clamp' or @name='ReplaceableNamedProperties' or @name='Unforgeable' or @name='EnforceRange' or @name='ImplicitThis' or @name='LenientThis'">Extended attribute of <value-of select="@name"/> is unknown in WebIDL.</assert>
+	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#es-extended-attributes" test="@name='AllowAny' or @name='ArrayClass' or @name='Callback' or @name='Constructor' or @name='NamedConstructor' or @name='NoInterfaceObject' or @name='OverrideBuiltins' or @name='PutForwards' or @name='Replaceable' or @name='TreatNullAs' or @name='TreatUndefinedAs' or @name='TreatNonCallableAsNull' or @name='TreatNonCallableAsNull' or @name='Clamp' or @name='ReplaceableNamedProperties' or @name='Unforgeable' or @name='EnforceRange' or @name='ImplicitThis' or @name='LenientThis'">Extended attribute of <value-of select="@name"/> is unknown in WebIDL.</assert>
        </rule>
      </pattern>
      <pattern>
@@ -181,14 +181,6 @@
 	 <assert  see="http://dev.w3.org/2006/webapi/WebIDL/#NamedConstructor" test="not($standards//Exception[not(ExtendedAttributeList/ExtendedAttribute[@name='NoInterfaceObject'])][@name=current()/@value])">Extended attribute NamedConstructor with identifier <value-of select="@value"/> in <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> interface clashes with externally defined exception interface <value-of select="$standards//Exception[not(ExtendedAttributeList/ExtendedAttribute[@name='NoInterfaceObject'])][@name=current()/@value]/@name"/>.</assert> 
 
 
-       </rule>
-     </pattern>
-     <pattern>
-       <title>Extended attribute NamespaceObject</title>
-       <rule context="//ExtendedAttribute[@name='NamespaceObject']">
-	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#NamespaceObject" test="parent::ExtendedAttributeList/parent::Module">Extended attribute NamespaceObject used on <value-of select="local-name(parent::ExtendedAttributeList/parent::*)" /> — NamespaceObject expected only on modules.</assert>
-	 <extends rule="extendedAttributeNoArg"/>
-	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#NamespaceObject" test="not(parent::ExtendedAttributeList/parent::Module/ancestor::Module[ExtendedAttributeList/ExtendedAttribute[@name='NamespaceObject']])">Extended attribute NamespaceObject used on module <value-of select="parent::ExtendedAttributeList/parent::Module/@name" /> that is included in module <value-of select="parent::ExtendedAttributeList/parent::Module/ancestor::Module[ExtendedAttributeList/ExtendedAttribute[@name='NamespaceObject']]/@name"/> that also has a NamespaceOjbect extended attribute.</assert>
        </rule>
      </pattern>
      <pattern>

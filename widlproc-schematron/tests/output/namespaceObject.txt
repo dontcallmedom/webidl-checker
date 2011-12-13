@@ -1,3 +1,0 @@
-Extended attribute NamespaceObject used on Interface — NamespaceObject expected only on modules.
-Extended attribute NamespaceObject used with arguments on Module bogus_module.
-Extended attribute NamespaceObject used on module bogus_inner_module that is included in module outer_module that also has a NamespaceOjbect extended attribute.

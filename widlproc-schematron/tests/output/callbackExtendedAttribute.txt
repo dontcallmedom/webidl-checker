@@ -1,4 +1,4 @@
-Extended attribute Callback used on Module — Callback expected only on interfaces.
+Extended attribute Callback used on Dictionary — Callback expected only on interfaces.
 Extended attribute Callback used on UnknownCallbackExtendedAttribute uses an unknown argument Unknown.
 The interface CallbackUsedOnInheritingInterface has extended attribute Callback but inherits from another interface (InheritedInterface).
 The interface CallbackUsedWithConstructor has both extended attributes Callback and Constructor).

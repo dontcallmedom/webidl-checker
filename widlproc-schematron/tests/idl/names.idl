@@ -3,13 +3,11 @@ interface NameA {};
 exception NameA { DOMString foo;};
 dictionary NameA {};
 typedef DOMString[] NameA;
-module NameA {};
 interface NameA {};
 
 // no clash
 exception NameB {DOMString foo;};
 dictionary NameC {};
 typedef DOMString[] NameD;
-module NameE {};
 interface NameF {};
 partial interface NameF{};

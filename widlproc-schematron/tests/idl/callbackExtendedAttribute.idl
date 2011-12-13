@@ -1,5 +1,5 @@
 /* Callback only applies to interfaces */
-[Callback] module CallbackUsedOnModule {
+[Callback] dictionary CallbackUsedOnDictionary {
 };
 
 /* Callback can only takes two possible values */

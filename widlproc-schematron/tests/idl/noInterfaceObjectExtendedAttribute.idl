@@ -1,6 +1,6 @@
-/* bogus usage on module */
+/* bogus usage on dictionary */
 [NoInterfaceObject]
-module NoInterfaceObjectUsedOnAModule {
+dictionary NoInterfaceObjectUsedOnADictionary {
 };
 
 /* bogus usage with argument */
