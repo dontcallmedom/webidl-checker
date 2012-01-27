@@ -6,32 +6,20 @@ interface BogusEventHandler {
   void eventOccurred(DOMString details);
 };
 
-[Callback=PropertyOnly]
-interface BogusEventHandler2 {
-  void eventOccurred(DOMString details);
-};
 
-
-interface BogusTreatNonCallableAsNullUsedOnAttributeWhoseTYpeIsNotCallback {
+interface BogusTreatNonCallableAsNullUsedOnAttributeWhoseTypeIsNotCallback {
+  [TreatNonCallableAsNull] attribute EventHandler handler;
   [TreatNonCallableAsNull] attribute BogusEventHandler? handler2;
-  void handler([TreatNonCallableAsNull] BogusEventHandler2 handler);
 };
 
 
-[Callback=FunctionOnly]
-interface EventHandler {
+callback interface EventHandler {
   void eventOccurred(DOMString details);
 };
-
-[Callback]
-interface EventHandler2 {
-  void eventOccurred(DOMString details);
-};
-
 
 interface Manager {
   attribute EventHandler? handler1;
   [TreatNonCallableAsNull] attribute EventHandler? handler2;
   [TreatNonCallableAsNull] attribute Function? handler3;
-  void handler([TreatNonCallableAsNull] EventHandler2 handler);
+  void handler([TreatNonCallableAsNull] EventHandler? handler);
 };
