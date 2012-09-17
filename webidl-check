@@ -75,7 +75,7 @@ def serveRequest():
 
     if (not fields.has_key('doc') and not fields.has_key('input')):
         print Page % ("", "")
-	print Page2 % ("","","")
+	print Page2 % ("","","", "")
     else:
         doc = ""
         inp = ""
@@ -120,12 +120,12 @@ def serveRequest():
                     except UnparseableDocumentException,e:
                         print Page % ("", "")
                         print "<p class='error'>Failed to turn document into XHTML for extracting WebIDLs: <code>%s</code>.</p>" % (cgi.escape(str(e)))
-                        print Page2 % (doc,"",textoutputselected)
+                        print Page2 % (doc, textoutputselected, "", "")
                         sys.exit()
                     except WrongConfigurationException,e:
                         print Page % ("", "")
                         print "<p class='error'>Could not run <code><a href='http://widl.webvm.net/'>widlproc</a></code>: <code>%s</code>.</p>" % (cgi.escape(str(e)))
-                        print Page2 % (doc,"",textoutputselected)
+                        print Page2 % (doc,textoutputselected, "", "")
                         sys.exit()
                     if srcheaders.has_key('Last-Modified'):
                         print "Last-Modified: %s" % ( srcheaders["Last-Modified"] )
@@ -219,7 +219,7 @@ def serveRequest():
                             print "</div>"
                     else:
                         print "<p class='error'>No WebIDL found in the document at <a href='%s'>%s</a>.</p>" % (doc,doc)
-                    print Page2 % (doc,inp,textoutputselected)
+                    print Page2 % (doc,textoutputselected,inp,textoutputselected)
 
 def extractIdls(doc,extraRequestHeaders=[]):
     # the function below is used to replace
