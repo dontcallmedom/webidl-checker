@@ -265,10 +265,12 @@ def extractIdls(doc,extraRequestHeaders=[]):
             try:
                 parser = etree.XMLParser(resolve_entities=False)
                 tree = etree.parse(srcdoc,parser)
+                srcdoc.seek(0)
             except (etree.XMLSyntaxError,TypeError): #TypeError is raised by old versions of lxml :(
                 try:
                     # we try the HTMLParser
                     tree = etree.parse(srcdoc,etree.HTMLParser())
+                    srcdoc.seek(0)
                 except Exception, e:
                     # we run tidy on the document
                     # to make it XHTML
