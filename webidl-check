@@ -15,6 +15,7 @@ import urlparse
 import urllib
 import httplib
 from lxml import etree
+from StringIO import StringIO
 
 class WrongConfigurationException(Exception):
     """Exception raised when the script is not properly configured."""
@@ -211,7 +212,6 @@ def serveRequest():
                         xslt_doc = etree.parse("/afs/w3.org/pub/WWW/2009/07/widlprocxmltohtmlfragment.xsl")
                         transform = etree.XSLT(xslt_doc)
                         for x in xmlOutput:
-                            from StringIO import StringIO
                             f = StringIO(x)
                             xmldoc = etree.parse(f)
                             print "<div class='report'>"
@@ -260,34 +260,52 @@ def extractIdls(doc,extraRequestHeaders=[]):
         xmlOutput = []
         idlOutput = []
         if contentType[0] == "text/html":   
+            htmldoc = srcdoc.read()
+            htmldocio = StringIO(htmldoc)
             # Extract WebIDLs from source document in invidual files
             # is the document already XML?
             try:
                 parser = etree.XMLParser(resolve_entities=False)
-                tree = etree.parse(srcdoc,parser)
-                srcdoc.seek(0)
+                tree = etree.parse(htmldocio,parser)
             except (etree.XMLSyntaxError,TypeError): #TypeError is raised by old versions of lxml :(
+                htmldocio.seek(0)
                 try:
                     # we try the HTMLParser
-                    tree = etree.parse(srcdoc,etree.HTMLParser())
-                    srcdoc.seek(0)
+                    tree = etree.parse(htmldocio,etree.HTMLParser())
                 except Exception, e:
                     # we run tidy on the document
                     # to make it XHTML
                     import tidy
+                    import re
                     # option for tidy
-                    htmldoc = srcdoc.read()
                     options = dict(output_xhtml=1, # we want XHTML out
                                tidy_mark=0, # we don't want to change the markup
                                numeric_entities=1 # but non numeric entities ess up lxml
                                )
+                    html5doctype = re.compile("<!doctype\s+html\s*>", re.IGNORECASE)
+                    html5 = html5doctype.search(htmldoc)
+                    if html5:
+                        html5_tidy_options = {"add_xml_space": "no",
+                                              "output_xhtml": "yes",
+                                              "tidy_mark": "no",
+                                              "new_blocklevel_tags": '"article,aside,canvas,dialog,details,figcaption,figure,footer,header,hgroup,menu,nav,section,summary"',
+                                              "new_inline_tags": '"video,audio,canvas,ruby,rt,rp,time,meter,progress,track,source"',
+                                              "break_before_br": "no",
+                                              "vertical_space": "no",
+                                              "enclose_text": "no",
+                                              "numeric_entities": "yes",
+                                              "wrap": "1000",
+                                              "wrap_attributes": "no",
+                                              "drop_empty_paras": "no"
+                                              }
+                        options = dict(options.items() + html5_tidy_options.items())
+
                     if charset == "iso-8859-1":
                         options["char_encoding"]='latin1'
                     else:
                         options["char_encoding"]='utf8'
                 
                     t = str(tidy.parseString(htmldoc, **options))
-                    from StringIO import StringIO
                     xmldoc = StringIO(t)
                     try:
                         tree = etree.parse(xmldoc)
