@@ -1,322 +1,417 @@
 <Definitions>
+  <webidl>    interface FileList {
+      getter <ref>File</ref>? item(unsigned long index);
+      readonly attribute unsigned long length;
+    };
+    
 
-<Definitions>
-  <Typedef name="FileList" id="::FileList">
-    <webidl>    typedef sequence&lt;<ref>File</ref>> FileList;</webidl>
-    <Type>
-      <Type name="File"/>
-    </Type>
-  </Typedef>
-</Definitions>
-
-
-<Definitions>
-  <Interface name="Blob" id="::Blob">
-    <webidl>    interface Blob {
+    [Constructor, 
+     Constructor(sequence&lt;(<ref>ArrayBuffer</ref> or <ref>ArrayBufferView</ref> or <ref>Blob</ref> or DOMString)> blobParts, optional <ref>BlobPropertyBag</ref> options)] 
+    interface Blob {
       
       readonly attribute unsigned long long size;
+      readonly attribute DOMString type;
       
       
-      <ref>Blob</ref> slice(in long long start,
-                 in long long length); 
+      <ref>Blob</ref> slice(optional long long start,
+                 optional long long end,
+                 optional DOMString contentType);
+      void close(); 
+    
+    };
+
+    dictionary BlobPropertyBag {
+                
+      DOMString type = &quot;&quot;;
+        
+    };
+    
+
+interface File : <ref>Blob</ref> {
+
+  readonly attribute DOMString name;
+  readonly attribute Date lastModifiedDate;
+
+};
+          
+
+
+        [Constructor]
+        interface FileReader: <ref>EventTarget</ref> {
+
+          void readAsArrayBuffer(<ref>Blob</ref> blob);
+          void readAsText(<ref>Blob</ref> blob, optional DOMString label);
+          void readAsDataURL(<ref>Blob</ref> blob);
+
+          void abort();
+
+          const unsigned short EMPTY = 0;
+          const unsigned short LOADING = 1;
+          const unsigned short DONE = 2;
+
+
+          readonly attribute unsigned short readyState;
+
+          readonly attribute (DOMString or <ref>ArrayBuffer</ref>)? result;
+
+          readonly attribute <ref>DOMError</ref>? error;
+
+          attribute <ref>EventHandler</ref> onloadstart;
+          attribute <ref>EventHandler</ref> onprogress;
+          attribute <ref>EventHandler</ref> onload;
+          attribute <ref>EventHandler</ref> onabort;
+          attribute <ref>EventHandler</ref> onerror;
+          attribute <ref>EventHandler</ref> onloadend;
+
+        };
+          
+
+
+        [Constructor]
+        interface FileReaderSync {
+
+
+          <ref>ArrayBuffer</ref> readAsArrayBuffer(<ref>Blob</ref> blob); 
+          DOMString readAsText(<ref>Blob</ref> blob, optional DOMString label);
+          DOMString readAsDataURL(<ref>Blob</ref> blob);
+        };
+        
+
+        partial interface URL {
+
+            static DOMString? createObjectURL(<ref>Blob</ref> blob, optional <ref>objectURLOptions</ref> options);
+            static void revokeObjectURL(DOMString url);
+        };
+        
+        dictionary objectURLOptions
+        {
+                boolean autoRevoke = true;
+
+        };</webidl>
+  <Interface name="FileList" id="::FileList">
+    <webidl>    interface FileList {
+      getter <ref>File</ref>? item(unsigned long index);
+      readonly attribute unsigned long length;
+    };</webidl>
+    <Operation getter="getter" name="item" id="::FileList::item">
+      <webidl>      getter <ref>File</ref>? item(unsigned long index);</webidl>
+      <Type name="File" nullable="nullable"/>
+      <ArgumentList>
+        <Argument name="index">
+          <Type type="unsigned long"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Attribute readonly="readonly" name="length" id="::FileList::length">
+      <webidl>      readonly attribute unsigned long length;</webidl>
+      <Type type="unsigned long"/>
+    </Attribute>
+  </Interface>
+  <Interface name="Blob" id="::Blob">
+    <webidl>    [Constructor, 
+     Constructor(sequence&lt;(<ref>ArrayBuffer</ref> or <ref>ArrayBufferView</ref> or <ref>Blob</ref> or DOMString)> blobParts, optional <ref>BlobPropertyBag</ref> options)] 
+    interface Blob {
+      
+      readonly attribute unsigned long long size;
+      readonly attribute DOMString type;
+      
+      
+      <ref>Blob</ref> slice(optional long long start,
+                 optional long long end,
+                 optional DOMString contentType);
+      void close(); 
     
     };</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="Constructor">
+        <webidl>Constructor</webidl>
+      </ExtendedAttribute>
+      <ExtendedAttribute name="Constructor">
+        <webidl>     Constructor(sequence&lt;(<ref>ArrayBuffer</ref> or <ref>ArrayBufferView</ref> or <ref>Blob</ref> or DOMString)> blobParts, optional <ref>BlobPropertyBag</ref> options)</webidl>
+        <ArgumentList>
+          <Argument name="blobParts">
+            <Type type="sequence">
+              <Type type="union">
+                <Type name="ArrayBuffer"/>
+                <Type name="ArrayBufferView"/>
+                <Type name="Blob"/>
+                <Type type="DOMString"/>
+              </Type>
+            </Type>
+          </Argument>
+          <Argument optional="optional" name="options">
+            <Type name="BlobPropertyBag"/>
+          </Argument>
+        </ArgumentList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
     <Attribute readonly="readonly" name="size" id="::Blob::size">
       <webidl>      readonly attribute unsigned long long size;</webidl>
       <Type type="unsigned long long"/>
     </Attribute>
+    <Attribute readonly="readonly" name="type" id="::Blob::type">
+      <webidl>      readonly attribute DOMString type;</webidl>
+      <Type type="DOMString"/>
+    </Attribute>
     <Operation name="slice" id="::Blob::slice">
-      <webidl>      <ref>Blob</ref> slice(in long long start,
-                 in long long length);</webidl>
+      <webidl>      <ref>Blob</ref> slice(optional long long start,
+                 optional long long end,
+                 optional DOMString contentType);</webidl>
       <Type name="Blob"/>
       <ArgumentList>
-        <Argument in="in" name="start">
+        <Argument optional="optional" name="start">
           <Type type="long long"/>
         </Argument>
-        <Argument in="in" name="length">
+        <Argument optional="optional" name="end">
           <Type type="long long"/>
+        </Argument>
+        <Argument optional="optional" name="contentType">
+          <Type type="DOMString"/>
         </Argument>
       </ArgumentList>
     </Operation>
+    <Operation name="close" id="::Blob::close">
+      <webidl>      void close();</webidl>
+      <Type type="void"/>
+      <ArgumentList/>
+    </Operation>
   </Interface>
-</Definitions>
-
-
-<Definitions>
+  <Dictionary name="BlobPropertyBag" id="::BlobPropertyBag">
+    <webidl>    dictionary BlobPropertyBag {
+                
+      DOMString type = &quot;&quot;;
+        
+    };</webidl>
+    <DictionaryMember name="type" stringvalue="" id="::BlobPropertyBag::type">
+      <webidl>      DOMString type = &quot;&quot;;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+  </Dictionary>
   <Interface name="File" id="::File">
-    <webidl>  interface File : <ref>Blob</ref> {
+    <webidl>interface File : <ref>Blob</ref> {
 
-      readonly attribute DOMString name;
-      readonly attribute DOMString type;
-      readonly attribute DOMString urn;
+  readonly attribute DOMString name;
+  readonly attribute Date lastModifiedDate;
+
 };</webidl>
     <InterfaceInheritance>
       <Name name="Blob"/>
     </InterfaceInheritance>
     <Attribute readonly="readonly" name="name" id="::File::name">
-      <webidl>      readonly attribute DOMString name;</webidl>
+      <webidl>  readonly attribute DOMString name;</webidl>
       <Type type="DOMString"/>
     </Attribute>
-    <Attribute readonly="readonly" name="type" id="::File::type">
-      <webidl>      readonly attribute DOMString type;</webidl>
-      <Type type="DOMString"/>
-    </Attribute>
-    <Attribute readonly="readonly" name="urn" id="::File::urn">
-      <webidl>      readonly attribute DOMString urn;</webidl>
-      <Type type="DOMString"/>
+    <Attribute readonly="readonly" name="lastModifiedDate" id="::File::lastModifiedDate">
+      <webidl>  readonly attribute Date lastModifiedDate;</webidl>
+      <Type type="Date"/>
     </Attribute>
   </Interface>
-</Definitions>
-
-
-<Definitions>
   <Interface name="FileReader" id="::FileReader">
-    <webidl>[Constructor]
-interface FileReader {
+    <webidl>        [Constructor]
+        interface FileReader: <ref>EventTarget</ref> {
 
-  void readAsBinaryString(in <ref>Blob</ref> fileBlob);
-  void readAsText(in <ref>Blob</ref> fileBlob, [Optional] in DOMString encoding);
-  void readAsDataURL(in <ref>File</ref> file);
+          void readAsArrayBuffer(<ref>Blob</ref> blob);
+          void readAsText(<ref>Blob</ref> blob, optional DOMString label);
+          void readAsDataURL(<ref>Blob</ref> blob);
 
-  void abort();
+          void abort();
 
-  const unsigned short EMPTY = 0;
-  const unsigned short LOADING = 1;
-  const unsigned short DONE = 2;
-  
-  
-  readonly attribute unsigned short readyState;
+          const unsigned short EMPTY = 0;
+          const unsigned short LOADING = 1;
+          const unsigned short DONE = 2;
 
-  readonly attribute DOMString result;
-  
-  readonly attribute <ref>FileError</ref> error;
 
-  attribute <ref>Function</ref> onloadstart;
-  attribute <ref>Function</ref> onprogress;
-  attribute <ref>Function</ref> onload;
-  attribute <ref>Function</ref> onabort;
-  attribute <ref>Function</ref> onerror;
-  attribute <ref>Function</ref> onloadend;
+          readonly attribute unsigned short readyState;
 
-};</webidl>
+          readonly attribute (DOMString or <ref>ArrayBuffer</ref>)? result;
+
+          readonly attribute <ref>DOMError</ref>? error;
+
+          attribute <ref>EventHandler</ref> onloadstart;
+          attribute <ref>EventHandler</ref> onprogress;
+          attribute <ref>EventHandler</ref> onload;
+          attribute <ref>EventHandler</ref> onabort;
+          attribute <ref>EventHandler</ref> onerror;
+          attribute <ref>EventHandler</ref> onloadend;
+
+        };</webidl>
     <ExtendedAttributeList>
-      <ExtendedAttribute name="Constructor"/>
+      <ExtendedAttribute name="Constructor">
+        <webidl>Constructor</webidl>
+      </ExtendedAttribute>
     </ExtendedAttributeList>
-    <Operation name="readAsBinaryString" id="::FileReader::readAsBinaryString">
-      <webidl>  void readAsBinaryString(in <ref>Blob</ref> fileBlob);</webidl>
+    <InterfaceInheritance>
+      <Name name="EventTarget"/>
+    </InterfaceInheritance>
+    <Operation name="readAsArrayBuffer" id="::FileReader::readAsArrayBuffer">
+      <webidl>          void readAsArrayBuffer(<ref>Blob</ref> blob);</webidl>
       <Type type="void"/>
       <ArgumentList>
-        <Argument in="in" name="fileBlob">
+        <Argument name="blob">
           <Type name="Blob"/>
         </Argument>
       </ArgumentList>
     </Operation>
     <Operation name="readAsText" id="::FileReader::readAsText">
-      <webidl>  void readAsText(in <ref>Blob</ref> fileBlob, [Optional] in DOMString encoding);</webidl>
+      <webidl>          void readAsText(<ref>Blob</ref> blob, optional DOMString label);</webidl>
       <Type type="void"/>
       <ArgumentList>
-        <Argument in="in" name="fileBlob">
+        <Argument name="blob">
           <Type name="Blob"/>
         </Argument>
-        <Argument in="in" name="encoding">
-          <ExtendedAttributeList>
-            <ExtendedAttribute name="Optional"/>
-          </ExtendedAttributeList>
+        <Argument optional="optional" name="label">
           <Type type="DOMString"/>
         </Argument>
       </ArgumentList>
     </Operation>
     <Operation name="readAsDataURL" id="::FileReader::readAsDataURL">
-      <webidl>  void readAsDataURL(in <ref>File</ref> file);</webidl>
+      <webidl>          void readAsDataURL(<ref>Blob</ref> blob);</webidl>
       <Type type="void"/>
       <ArgumentList>
-        <Argument in="in" name="file">
-          <Type name="File"/>
+        <Argument name="blob">
+          <Type name="Blob"/>
         </Argument>
       </ArgumentList>
     </Operation>
     <Operation name="abort" id="::FileReader::abort">
-      <webidl>  void abort();</webidl>
+      <webidl>          void abort();</webidl>
       <Type type="void"/>
       <ArgumentList/>
     </Operation>
     <Const name="EMPTY" value="0" id="::FileReader::EMPTY">
-      <webidl>  const unsigned short EMPTY = 0;</webidl>
+      <webidl>          const unsigned short EMPTY = 0;</webidl>
       <Type type="unsigned short"/>
     </Const>
     <Const name="LOADING" value="1" id="::FileReader::LOADING">
-      <webidl>  const unsigned short LOADING = 1;</webidl>
+      <webidl>          const unsigned short LOADING = 1;</webidl>
       <Type type="unsigned short"/>
     </Const>
     <Const name="DONE" value="2" id="::FileReader::DONE">
-      <webidl>  const unsigned short DONE = 2;</webidl>
+      <webidl>          const unsigned short DONE = 2;</webidl>
       <Type type="unsigned short"/>
     </Const>
     <Attribute readonly="readonly" name="readyState" id="::FileReader::readyState">
-      <webidl>  readonly attribute unsigned short readyState;</webidl>
+      <webidl>          readonly attribute unsigned short readyState;</webidl>
       <Type type="unsigned short"/>
     </Attribute>
     <Attribute readonly="readonly" name="result" id="::FileReader::result">
-      <webidl>  readonly attribute DOMString result;</webidl>
-      <Type type="DOMString"/>
+      <webidl>          readonly attribute (DOMString or <ref>ArrayBuffer</ref>)? result;</webidl>
+      <Type type="union" nullable="nullable">
+        <Type type="DOMString"/>
+        <Type name="ArrayBuffer"/>
+      </Type>
     </Attribute>
     <Attribute readonly="readonly" name="error" id="::FileReader::error">
-      <webidl>  readonly attribute <ref>FileError</ref> error;</webidl>
-      <Type name="FileError"/>
+      <webidl>          readonly attribute <ref>DOMError</ref>? error;</webidl>
+      <Type name="DOMError" nullable="nullable"/>
     </Attribute>
     <Attribute name="onloadstart" id="::FileReader::onloadstart">
-      <webidl>  attribute <ref>Function</ref> onloadstart;</webidl>
-      <Type name="Function"/>
+      <webidl>          attribute <ref>EventHandler</ref> onloadstart;</webidl>
+      <Type name="EventHandler"/>
     </Attribute>
     <Attribute name="onprogress" id="::FileReader::onprogress">
-      <webidl>  attribute <ref>Function</ref> onprogress;</webidl>
-      <Type name="Function"/>
+      <webidl>          attribute <ref>EventHandler</ref> onprogress;</webidl>
+      <Type name="EventHandler"/>
     </Attribute>
     <Attribute name="onload" id="::FileReader::onload">
-      <webidl>  attribute <ref>Function</ref> onload;</webidl>
-      <Type name="Function"/>
+      <webidl>          attribute <ref>EventHandler</ref> onload;</webidl>
+      <Type name="EventHandler"/>
     </Attribute>
     <Attribute name="onabort" id="::FileReader::onabort">
-      <webidl>  attribute <ref>Function</ref> onabort;</webidl>
-      <Type name="Function"/>
+      <webidl>          attribute <ref>EventHandler</ref> onabort;</webidl>
+      <Type name="EventHandler"/>
     </Attribute>
     <Attribute name="onerror" id="::FileReader::onerror">
-      <webidl>  attribute <ref>Function</ref> onerror;</webidl>
-      <Type name="Function"/>
+      <webidl>          attribute <ref>EventHandler</ref> onerror;</webidl>
+      <Type name="EventHandler"/>
     </Attribute>
     <Attribute name="onloadend" id="::FileReader::onloadend">
-      <webidl>  attribute <ref>Function</ref> onloadend;</webidl>
-      <Type name="Function"/>
+      <webidl>          attribute <ref>EventHandler</ref> onloadend;</webidl>
+      <Type name="EventHandler"/>
     </Attribute>
   </Interface>
-  <Implements name1="FileReader" name2="EventTarget">
-    <webidl><ref>FileReader</ref> implements <ref>EventTarget</ref>;</webidl>
-  </Implements>
-</Definitions>
-
-
-<Definitions>
   <Interface name="FileReaderSync" id="::FileReaderSync">
-    <webidl>[Constructor]
-interface FileReaderSync {
+    <webidl>        [Constructor]
+        interface FileReaderSync {
 
-  
-  DOMString readAsBinaryString(in <ref>Blob</ref> fileBlob); 
-  DOMString readAsText(in <ref>Blob</ref> fileBlob, [Optional] in DOMString encoding);                                                       
-  DOMString readAsDataURL(in <ref>File</ref> file); 
-};</webidl>
+
+          <ref>ArrayBuffer</ref> readAsArrayBuffer(<ref>Blob</ref> blob); 
+          DOMString readAsText(<ref>Blob</ref> blob, optional DOMString label);
+          DOMString readAsDataURL(<ref>Blob</ref> blob);
+        };</webidl>
     <ExtendedAttributeList>
-      <ExtendedAttribute name="Constructor"/>
+      <ExtendedAttribute name="Constructor">
+        <webidl>Constructor</webidl>
+      </ExtendedAttribute>
     </ExtendedAttributeList>
-    <Operation name="readAsBinaryString" id="::FileReaderSync::readAsBinaryString">
-      <webidl>  DOMString readAsBinaryString(in <ref>Blob</ref> fileBlob);</webidl>
-      <Type type="DOMString"/>
+    <Operation name="readAsArrayBuffer" id="::FileReaderSync::readAsArrayBuffer">
+      <webidl>          <ref>ArrayBuffer</ref> readAsArrayBuffer(<ref>Blob</ref> blob);</webidl>
+      <Type name="ArrayBuffer"/>
       <ArgumentList>
-        <Argument in="in" name="fileBlob">
+        <Argument name="blob">
           <Type name="Blob"/>
         </Argument>
       </ArgumentList>
     </Operation>
     <Operation name="readAsText" id="::FileReaderSync::readAsText">
-      <webidl>  DOMString readAsText(in <ref>Blob</ref> fileBlob, [Optional] in DOMString encoding);</webidl>
+      <webidl>          DOMString readAsText(<ref>Blob</ref> blob, optional DOMString label);</webidl>
       <Type type="DOMString"/>
       <ArgumentList>
-        <Argument in="in" name="fileBlob">
+        <Argument name="blob">
           <Type name="Blob"/>
         </Argument>
-        <Argument in="in" name="encoding">
-          <ExtendedAttributeList>
-            <ExtendedAttribute name="Optional"/>
-          </ExtendedAttributeList>
+        <Argument optional="optional" name="label">
           <Type type="DOMString"/>
         </Argument>
       </ArgumentList>
     </Operation>
     <Operation name="readAsDataURL" id="::FileReaderSync::readAsDataURL">
-      <webidl>  DOMString readAsDataURL(in <ref>File</ref> file);</webidl>
+      <webidl>          DOMString readAsDataURL(<ref>Blob</ref> blob);</webidl>
       <Type type="DOMString"/>
       <ArgumentList>
-        <Argument in="in" name="file">
-          <Type name="File"/>
+        <Argument name="blob">
+          <Type name="Blob"/>
         </Argument>
       </ArgumentList>
     </Operation>
   </Interface>
-</Definitions>
+  <Interface name="URL" partial="partial" id="::URL">
+    <webidl>        partial interface URL {
 
-
-<Definitions>
-  <Interface name="FileError" id="::FileError">
-    <webidl> interface FileError {
-   const unsigned short NOT_FOUND_ERR = 8;
-   const unsigned short SECURITY_ERR = 18;
-   const unsigned short ABORT_ERR = 20;
-   
-   const unsigned short NOT_READABLE_ERR = 24;
-   const unsigned short ENCODING_ERR = 26;
- 
-   readonly attribute unsigned short code;
-};</webidl>
-    <Const name="NOT_FOUND_ERR" value="8" id="::FileError::NOT_FOUND_ERR">
-      <webidl>   const unsigned short NOT_FOUND_ERR = 8;</webidl>
-      <Type type="unsigned short"/>
-    </Const>
-    <Const name="SECURITY_ERR" value="18" id="::FileError::SECURITY_ERR">
-      <webidl>   const unsigned short SECURITY_ERR = 18;</webidl>
-      <Type type="unsigned short"/>
-    </Const>
-    <Const name="ABORT_ERR" value="20" id="::FileError::ABORT_ERR">
-      <webidl>   const unsigned short ABORT_ERR = 20;</webidl>
-      <Type type="unsigned short"/>
-    </Const>
-    <Const name="NOT_READABLE_ERR" value="24" id="::FileError::NOT_READABLE_ERR">
-      <webidl>   const unsigned short NOT_READABLE_ERR = 24;</webidl>
-      <Type type="unsigned short"/>
-    </Const>
-    <Const name="ENCODING_ERR" value="26" id="::FileError::ENCODING_ERR">
-      <webidl>   const unsigned short ENCODING_ERR = 26;</webidl>
-      <Type type="unsigned short"/>
-    </Const>
-    <Attribute readonly="readonly" name="code" id="::FileError::code">
-      <webidl>   readonly attribute unsigned short code;</webidl>
-      <Type type="unsigned short"/>
-    </Attribute>
+            static DOMString? createObjectURL(<ref>Blob</ref> blob, optional <ref>objectURLOptions</ref> options);
+            static void revokeObjectURL(DOMString url);
+        };</webidl>
+    <Operation static="static" name="createObjectURL" id="::URL::createObjectURL">
+      <webidl>            static DOMString? createObjectURL(<ref>Blob</ref> blob, optional <ref>objectURLOptions</ref> options);</webidl>
+      <Type type="DOMString" nullable="nullable"/>
+      <ArgumentList>
+        <Argument name="blob">
+          <Type name="Blob"/>
+        </Argument>
+        <Argument optional="optional" name="options">
+          <Type name="objectURLOptions"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Operation static="static" name="revokeObjectURL" id="::URL::revokeObjectURL">
+      <webidl>            static void revokeObjectURL(DOMString url);</webidl>
+      <Type type="void"/>
+      <ArgumentList>
+        <Argument name="url">
+          <Type type="DOMString"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
   </Interface>
-</Definitions>
+  <Dictionary name="objectURLOptions" id="::objectURLOptions">
+    <webidl>        dictionary objectURLOptions
+        {
+                boolean autoRevoke = true;
 
-
-<Definitions>
-  <Exception name="FileException" id="::FileException">
-    <webidl> exception FileException {
-  
-  const unsigned short NOT_FOUND_ERR = 8;
-  const unsigned short SECURITY_ERR = 18;
-  const unsigned short ABORT_ERR = 20;
-  
-  const unsigned short NOT_READABLE_ERR = 24;
-  const unsigned short ENCODING_ERR = 26;
- 
-  unsigned short code;
-};</webidl>
-    <Const name="NOT_FOUND_ERR" value="8" id="::FileException::NOT_FOUND_ERR">
-      <Type type="unsigned short"/>
-    </Const>
-    <Const name="SECURITY_ERR" value="18" id="::FileException::SECURITY_ERR">
-      <Type type="unsigned short"/>
-    </Const>
-    <Const name="ABORT_ERR" value="20" id="::FileException::ABORT_ERR">
-      <Type type="unsigned short"/>
-    </Const>
-    <Const name="NOT_READABLE_ERR" value="24" id="::FileException::NOT_READABLE_ERR">
-      <Type type="unsigned short"/>
-    </Const>
-    <Const name="ENCODING_ERR" value="26" id="::FileException::ENCODING_ERR">
-      <Type type="unsigned short"/>
-    </Const>
-    <ExceptionField name="code" id="::FileException::code">
-      <Type type="unsigned short"/>
-    </ExceptionField>
-  </Exception>
-</Definitions>
-
+        };</webidl>
+    <DictionaryMember name="autoRevoke" value="true" id="::objectURLOptions::autoRevoke">
+      <webidl>                boolean autoRevoke = true;</webidl>
+      <Type type="boolean"/>
+    </DictionaryMember>
+  </Dictionary>
 </Definitions>
