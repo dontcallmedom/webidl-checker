@@ -1,5 +1,5 @@
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" >
-  <let name="standards" value="document('../web-platform/standards.xml')"/>
+  <let name="standards" value="document('../web-platform/all.xml')"/>
      <pattern  id="definedTypes">
        <title>IDL is using defined types</title>
           <rule context="//Type[@name]">
