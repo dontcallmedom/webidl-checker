@@ -1,0 +1,29 @@
+/* The [NewObject] extended attribute MUST take no arguments. */
+interface InvalidNewObjectEAWithArgument {
+  [NewObject=always] Element createElement(DOMString localName);
+};
+
+/* The [NewObject] extended attribute MUST NOT be used on anything other than a regular or static operation whose return type is an interface type.  */
+interface InvalidNewObjectEAOnNonRegularOperation {
+  [NewObject] getter Node (DOMString propertyName);
+};
+
+interface InvalidNewObjectEAOnNonRegularOperation {
+  [NewObject] stringifier;
+};
+
+interface InvalidNewObjectEAOnOperationWithNonInterfaceTypeReturn {
+  [NewObject] boolean getNewBoolean();
+};
+
+
+/* Valid usage of NewObject */
+interface Node {};
+
+interface Document : Node {
+  [NewObject] Element createElement(DOMString localName);
+};
+
+interface ValidNewObjectStatic {
+  [NewObject] static Node getDocument();
+};
