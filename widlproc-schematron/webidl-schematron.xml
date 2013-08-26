@@ -119,7 +119,7 @@
      <pattern>
        <title>Extended attributes are well-known</title>
        <rule context="//ExtendedAttribute[@name]">
-	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#es-extended-attributes" test="@name='AllowAny' or @name='ArrayClass' or @name='Callback' or @name='Constructor' or @name='NamedConstructor' or @name='NoInterfaceObject' or @name='OverrideBuiltins' or @name='PutForwards' or @name='Replaceable' or @name='TreatNullAs' or @name='TreatUndefinedAs' or @name='TreatNonCallableAsNull' or @name='TreatNonCallableAsNull' or @name='Clamp' or @name='ReplaceableNamedProperties' or @name='Unforgeable' or @name='EnforceRange' or @name='ImplicitThis' or @name='LenientThis' or @name='SameObject' or @name='NewObject'">Extended attribute of <value-of select="@name"/> is unknown in WebIDL.</assert>
+	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#es-extended-attributes" test="@name='ArrayClass' or @name='Constructor' or @name='NamedConstructor' or @name='NoInterfaceObject' or @name='OverrideBuiltins' or @name='PutForwards' or @name='Replaceable' or @name='TreatNullAs' or @name='TreatUndefinedAs' or @name='TreatNonCallableAsNull' or @name='TreatNonCallableAsNull' or @name='Clamp' or @name='Unforgeable' or @name='EnforceRange' or @name='ImplicitThis' or @name='LenientThis' or @name='SameObject' or @name='NewObject'">Extended attribute of <value-of select="@name"/> is unknown in WebIDL.</assert>
        </rule>
      </pattern>
      <pattern>
@@ -141,23 +141,6 @@
 	 <assert test="not(parent::ExtendedAttributeList/parent::Attribute) or parent::ExtendedAttributeList/parent::Attribute[@readonly='readonly']">Extended attribute <value-of select="@name"/> used on non-readonly attribute <value-of select="ancestor::Interface/@name" />.<value-of select="parent::ExtendedAttributeList/parent::Attribute/@name" /> — <value-of select="@name"/> expected only on readonly attributes.</assert>
        </rule>
 
-     </pattern>
-     <pattern>
-       <title>Extended attribute Callback</title>
-       <rule context="//ExtendedAttribute[@name='Callback']">
-	 <extends rule="extendedAttributeAppliesToInterface"/>
-	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#Callback" test="not(@value) or @value='FunctionOnly' or @value='PropertyOnly'">Extended attribute Callback used on <value-of select="parent::ExtendedAttributeList/parent::Interface/@name" /> uses an unknown argument <value-of select="@value"/>.</assert>
-	 <extends see="http://dev.w3.org/2006/webapi/WebIDL/#native-objects" rule="extendedAttributeNotWithInheritance"/>
-	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#native-objects" test="not(parent::ExtendedAttributeList/ExtendedAttribute[@name='Constructor' or @name='NamedConstructor'])">The interface <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> has both extended attributes Callback and <value-of select="parent::ExtendedAttributeList/ExtendedAttribute[@name='Constructor' or @name='NamedConstructor']/@name"/>).</assert>
-	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#native-objects" test="not(parent::ExtendedAttributeList/parent::Interface/Operation[@getter or @setter or @creator or @deleter or @legacycaller or @stringifier])">The interface <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> has a Callback extended attribute, but offers a either  getters, setters, creators, deleters, caller or stringifier.</assert>
-	 <!-- @@@ widlproc doesn't show extended attributes on attributes ? -->
-	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#native-objects" test="not(parent::ExtendedAttributeList/parent::Interface/Attribute[ExtendedAttributeList/ExtendedAttribute[@name='PutForwards' or @name='TreatNullAs' or @name='TreatUndefinedAs']])">The interface <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> has a Callback extended attribute, but exposes an attribute with a <value-of select="parent::ExtendedAttributeList/parent::Interface/Attribute/ExtendedAttributeList/ExtendedAttribute[@name='PutForwards' or @name='TreatNullAs' or @name='TreatUndefinedAs']/@name"/> extended attribute.</assert>
-	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#Callback" test="not(@value and parent::ExtendedAttributeList/parent::Interface/Attribute)">The interface <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> uses a Callback extended attribute with an argument, but exposes at least one attribute.</assert>
-	 <let name="firstOperationName" value="parent::ExtendedAttributeList/parent::Interface/Operation[1]/@name"/>
-	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#Callback" test="not(@value) or (count(parent::ExtendedAttributeList/parent::Interface/Operation[@name!=$firstOperationName])=0 and $firstOperationName)">The interface <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> uses a Callback extended attribute with an argument, but exposes zero or multiple operations with different identifiers.</assert>
-       <!-- ECMAScript objetcs as property bags -->
-       <assert role="warning" see="http://dev.w3.org/2006/webapi/WebIDL/#Callback" test="not(parent::ExtendedAttributeList/ExtendedAttribute[@name='NoInterfaceObject']) or ancestor::Interface/Operation">Interface <value-of select="ancestor::Interface/@name" /> with no operation declared with NoInterfaceObject and Callback: specification authors wanting to APIs that take ECMAScript objects as “property bag” like function arguments are suggested to use dictionary types rather than interfaces annotated with [Callback,NoInterfaceObject].</assert>
-       </rule>
      </pattern>
      <pattern>
        <title>Extended attribute Constructor</title>
@@ -269,17 +252,6 @@
 	 <assert test="not($validObject and parent::ExtendedAttributeList/parent::Attribute) or (parent::ExtendedAttributeList/parent::Attribute[not(@readonly)])">Extended attribute Clamp used on non-writable attribute <value-of select="$objectName"/></assert>
 	 <assert test="not($validObject) or (parent::ExtendedAttributeList/parent::*/Type[@type='byte' or @type='octet' or @type='short' or @type='unsigned short' or @type='long' or @type='unsigned long' or @type='long long' or @type='unsigned long long'])">Extended attribute Clamp used on non-integer <value-of select="local-name(parent::ExtendedAttributeList/parent::*)"/> <value-of select="$objectName"/></assert>
 
-       </rule>
-     </pattern>
-     <pattern>
-       <title>Extended attribute ReplaceableNamedProperties</title>
-       <rule context="//ExtendedAttribute[@name='ReplaceableNamedProperties']">
-	 <let name="validObject" value="parent::ExtendedAttributeList/parent::Interface"/>
-	 <extends rule="extendedAttributeAppliesToInterface"/>
-	 <extends rule="extendedAttributeNoArg"/>
-	 <assert test="not($validObject) or parent::ExtendedAttributeList/parent::Interface[Operation/@getter]">Extended attribute ReplaceNamedProperties used on interface <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/>  that does not define a name getter</assert>
-	 <assert test="not($validObject) or not(parent::ExtendedAttributeList/parent::Interface/Operation/@setter)">Extended attribute ReplaceNamedProperties used on interface <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/>  that defines a name setter</assert>
-	 <assert test="not($validObject) or not(parent::ExtendedAttributeList/ExtendedAttribute/@name='OverrideBuiltins')">Extended attribute ReplaceNamedProperties used on interface <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> that also has the OverrideBuiltins extended attribute</assert>
        </rule>
      </pattern>
      <pattern>
