@@ -24,7 +24,7 @@ interface TwoOperationsWithUndistinguishableSingleParam3 {
 
 interface TwoOperationsWithUndistinguishableSingleParam4 {
   boolean right(float arg);
-  boolean right([AllowAny] DOMString arg);
+  boolean right(DOMString arg);
 };
 
 interface TwoOperationsWithUndistinguishableSingleParam5 {
@@ -65,7 +65,7 @@ interface ConstructorWithUndistinguishableParam {
 
 interface ValidOverloading {
   /* f1 */ void f(DOMString a);
-  /* f2 */ void f([AllowAny] DOMString a, DOMString b, float... c);
+  /* f2 */ void f(DOMString a, DOMString b, float... c);
   /* f3 */ void f();
   /* f4 */ void f(long a, DOMString b, optional DOMString c, float... d);
   void f(object a, DOMString b);
