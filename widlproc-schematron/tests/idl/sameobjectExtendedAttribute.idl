@@ -1,0 +1,26 @@
+interface DOMImplementation {};
+interface Node {};
+
+/* SameObject used on a non-attribute */
+[SameObject] interface InvalidSameObjectEAUsedOnInterface {
+};
+
+/* SameObject used on a non-interface type  attribute */
+interface InvalidSameObjectEAUsedOnNonInterfaceTypeAttribute {
+  [SameObject] readonly attribute boolean conforming;
+};
+
+/* SameObject used on non-read only attribute */
+interface InvalidSameObjectEAUsedOnNonReadOnlyTypeAttribute {
+  [SameObject] attribute DOMImplementation implementation;
+};
+
+/* SameObject used with an argument */
+interface InvalidSameObjectEAUsedWithAnArgument {
+  [SameObject=real] readonly attribute DOMImplementation implementation;
+};
+
+/* Valid SameObject usage */
+interface Document : Node {
+  [SameObject] readonly attribute DOMImplementation implementation;
+};

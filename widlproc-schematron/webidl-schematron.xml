@@ -119,7 +119,7 @@
      <pattern>
        <title>Extended attributes are well-known</title>
        <rule context="//ExtendedAttribute[@name]">
-	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#es-extended-attributes" test="@name='AllowAny' or @name='ArrayClass' or @name='Callback' or @name='Constructor' or @name='NamedConstructor' or @name='NoInterfaceObject' or @name='OverrideBuiltins' or @name='PutForwards' or @name='Replaceable' or @name='TreatNullAs' or @name='TreatUndefinedAs' or @name='TreatNonCallableAsNull' or @name='TreatNonCallableAsNull' or @name='Clamp' or @name='ReplaceableNamedProperties' or @name='Unforgeable' or @name='EnforceRange' or @name='ImplicitThis' or @name='LenientThis'">Extended attribute of <value-of select="@name"/> is unknown in WebIDL.</assert>
+	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#es-extended-attributes" test="@name='AllowAny' or @name='ArrayClass' or @name='Callback' or @name='Constructor' or @name='NamedConstructor' or @name='NoInterfaceObject' or @name='OverrideBuiltins' or @name='PutForwards' or @name='Replaceable' or @name='TreatNullAs' or @name='TreatUndefinedAs' or @name='TreatNonCallableAsNull' or @name='TreatNonCallableAsNull' or @name='Clamp' or @name='ReplaceableNamedProperties' or @name='Unforgeable' or @name='EnforceRange' or @name='ImplicitThis' or @name='LenientThis' or @name='SameObject'">Extended attribute of <value-of select="@name"/> is unknown in WebIDL.</assert>
        </rule>
      </pattern>
      <pattern>
@@ -200,6 +200,14 @@
 	 <extends rule="extendedAttributeAppliesToInterface"/>
 	 <extends rule="extendedAttributeNoArg"/>
 	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#OverrideBuiltins" test="parent::ExtendedAttributeList/parent::Interface[Operation/@getter]">Extended attribute OverrideBuiltins used on interface <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> that does not have a name getter.</assert>
+       </rule>
+     </pattern>
+     <pattern>
+       <title>Extended Attribute SameObject</title>
+       <rule context="//ExtendedAttribute[@name='SameObject']" >
+	 <extends see="http://dev.w3.org/2006/webapi/WebIDL/#SameObject" rule="extendedAttributeAppliesToReadonlyAttribute"/>
+	 <extends rule="extendedAttributeNoArg"/>
+	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#SameObject" test="not(parent::ExtendedAttributeList/parent::Attribute/Type) or parent::ExtendedAttributeList/parent::Attribute/Type/@name">Extended attribute SameObject used on an attribute whose type (<value-of select='parent::ExtendedAttributeList/parent::Attribute/Type/@type'/>) is not an interface type interface.</assert>
        </rule>
      </pattern>
      <pattern>
