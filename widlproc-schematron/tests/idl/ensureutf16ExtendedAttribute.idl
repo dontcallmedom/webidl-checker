@@ -1,0 +1,24 @@
+/* the [EnsureUTF16] extended attribute appears on an operation argument or writable attribute whose type is DOMString */
+[EnsureUTF16] interface InvalidEnsureUTF16EAOnInterface {
+};
+
+interface InvalidEnsureUTF16EAOnReadOnlyAttribute {
+  [EnsureUTF16] readonly attribute DOMString s;
+};
+
+interface InvalidEnsureUTF16EAOnNonDOMString {
+  [EnsureUTF16] attribute float number;
+  DOMString numerize([EnsureUTF16] octet o);
+};
+
+
+/* The [EnsureUTF16] extended attribute MUST take no arguments. */
+interface InvalidEnsureUTF16EWithArgument {
+  static DOMString sanitize([EnsureUTF16=unicorn] DOMString s);
+};
+
+/* Valid usage of EnsureUTF16 */
+interface StringSanitizer {
+  static DOMString sanitize([EnsureUTF16] DOMString s);
+  [EnsureUTF16] attribute DOMString s;
+};

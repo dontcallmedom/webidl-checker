@@ -119,7 +119,7 @@
      <pattern>
        <title>Extended attributes are well-known</title>
        <rule context="//ExtendedAttribute[@name]">
-	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#es-extended-attributes" test="@name='ArrayClass' or @name='Constructor' or @name='NamedConstructor' or @name='NoInterfaceObject' or @name='OverrideBuiltins' or @name='PutForwards' or @name='Replaceable' or @name='TreatNullAs' or @name='TreatUndefinedAs' or @name='TreatNonCallableAsNull' or @name='TreatNonCallableAsNull' or @name='Clamp' or @name='Unforgeable' or @name='EnforceRange' or @name='ImplicitThis' or @name='LenientThis' or @name='SameObject' or @name='NewObject'">Extended attribute of <value-of select="@name"/> is unknown in WebIDL.</assert>
+	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#es-extended-attributes" test="@name='ArrayClass' or @name='Constructor' or @name='NamedConstructor' or @name='NoInterfaceObject' or @name='OverrideBuiltins' or @name='PutForwards' or @name='Replaceable' or @name='TreatNullAs' or @name='TreatUndefinedAs' or @name='TreatNonCallableAsNull' or @name='TreatNonCallableAsNull' or @name='Clamp' or @name='Unforgeable' or @name='EnforceRange' or @name='ImplicitThis' or @name='LenientThis' or @name='SameObject' or @name='NewObject' or @name='EnsureUTF16'">Extended attribute of <value-of select="@name"/> is unknown in WebIDL.</assert>
        </rule>
      </pattern>
      <pattern>
@@ -192,6 +192,15 @@
 	 <assert test="parent::ExtendedAttributeList/parent::Operation">Extended attribute NewObject used on <value-of select="local-name(parent::ExtendedAttributeList/parent::*)" /> — NewObject expected only on operations.</assert>
 	 <assert test="not(parent::ExtendedAttributeList/parent::Operation) or parent::ExtendedAttributeList/parent::Operation/@name">Extended attribute NewObject used on an operation without identifier in <value-of select="ancestor::Interface/@name" /> — NewObject expected only on regular or static operations.</assert>
 	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#NewObject" test="not(parent::ExtendedAttributeList/parent::Operation/Type) or parent::ExtendedAttributeList/parent::Operation/Type/@name">Extended attribute NewObject used on an operation whose return type (<value-of select='parent::ExtendedAttributeList/parent::Operation/Type/@type'/>) is not an interface type interface.</assert>
+       </rule>
+     </pattern>
+     <pattern>
+       <title>Extended attribute EnsureUTF16</title>
+       <rule context="//ExtendedAttribute[@name='EnsureUTF16']">
+	 <extends rule="extendedAttributeNoArg"/>
+	 <assert test="parent::ExtendedAttributeList/parent::Attribute or parent::ExtendedAttributeList/parent::Argument">Extended attribute EnsureUTF16 used on <value-of select="concat(local-name(parent::ExtendedAttributeList/parent::*), ' ', parent::ExtendedAttributeList/parent::*/@name)"/> — EnsureUTF16 can only be used on attributes or operation arguments.</assert>
+	 <assert test="not(parent::ExtendedAttributeList/parent::Attribute or parent::ExtendedAttributeList/parent::Argument) or parent::ExtendedAttributeList/parent::*/Type/@type = 'DOMString'">Extended attribute EnsureUTF16 used on <value-of select="concat(local-name(parent::ExtendedAttributeList/parent::*), ' ', parent::ExtendedAttributeList/parent::*/@name)"/> of type <value-of select="concat(parent::ExtendedAttributeList/parent::*/Type/@type,parent::ExtendedAttributeList/parent::*/Type/@name)"/> — EnsureUTF16 can only be used on attributes or operation arguments of type DOMString.</assert>
+	 <assert test="not(parent::ExtendedAttributeList/parent::Attribute) or not(parent::ExtendedAttributeList/parent::Attribute/@readonly)">Extended attribute EnsureUTF16 used on readonly attribute <value-of select="parent::ExtendedAttributeList/parent::Attribute/@name"/> — EnsureUTF16 can only be used on attributes that are writable.</assert>
        </rule>
      </pattern>
 

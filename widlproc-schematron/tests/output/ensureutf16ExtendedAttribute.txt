@@ -1,0 +1,5 @@
+Extended attribute EnsureUTF16 used on Interface InvalidEnsureUTF16EAOnInterface — EnsureUTF16 can only be used on attributes or operation arguments.
+Extended attribute EnsureUTF16 used on readonly attribute s — EnsureUTF16 can only be used on attributes that are writable.
+Extended attribute EnsureUTF16 used on Attribute number of type float — EnsureUTF16 can only be used on attributes or operation arguments of type DOMString.
+Extended attribute EnsureUTF16 used on Argument o of type octet — EnsureUTF16 can only be used on attributes or operation arguments of type DOMString.
+Extended attribute EnsureUTF16 used with arguments on Argument s.
