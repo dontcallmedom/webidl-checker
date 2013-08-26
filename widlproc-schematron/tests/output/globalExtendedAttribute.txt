@@ -1,0 +1,7 @@
+Extended attribute Global used on Attribute — Global expected only on interfaces.
+Extended attribute Global used with arguments on Interface InvalidGlobalEAWithArgument.
+Extended attribute Global used on interface InvalidGlobalEAWithNamedSetter that defines a named property setter, creator or deleter.
+Extended attribute Global used on interface InvalidGlobalEAWithNamedCreator that defines a named property setter, creator or deleter.
+Extended attribute Global used on interface InvalidGlobalEAWithOverrideBuiltinsEA that is also declared with OverrideBuilins.
+Extended attribute Global used on interface InvalidGlobalEAUsedOnInterfaceThatInheritsFromOverrideBuiltinsInterface that inherits from another interface with the OverrideBuiltins extended attribute.
+Interface InvalidInterfaceInheritingFromGlobal inherits from interface ValidGlobalEAWithIndexedSetter that is declared with the Global extended attribute.

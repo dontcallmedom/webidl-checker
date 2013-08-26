@@ -1,0 +1,53 @@
+/* the [Global] extended attribute appears on an interface */
+interface InvalidGlobalEAUsedOnAttribute {
+  [Global] attribute DOMString foo;
+};
+
+/*  The [Global] extended attribute MUST take no arguments.  */ 
+[Global=thistime]
+interface InvalidGlobalEAWithArgument {
+};
+
+/* The interface MUST NOT define a named property setter, creator or deleter. */
+[Global]
+interface InvalidGlobalEAWithNamedSetter {
+  setter void (DOMString name, float value);
+};
+
+[Global]
+interface InvalidGlobalEAWithNamedCreator {
+  creator float (DOMString name, float value);
+};
+
+/* The interface MUST NOT also be declared with the [OverrideBuiltins] extended attribute. */
+[Global, OverrideBuiltins]
+interface InvalidGlobalEAWithOverrideBuiltinsEA {
+ getter any (DOMString name);
+};
+
+/* The interface MUST NOT inherit from another interface with the [OverrideBuiltins] extended attribute. */
+[OverrideBuiltins]
+interface OverrideBuiltinsInterface {
+  getter any (DOMString name);
+};
+
+[Global]
+interface InvalidGlobalEAUsedOnInterfaceThatInheritsFromOverrideBuiltinsInterface : OverrideBuiltinsInterface {
+};
+
+/* Any other interface MUST NOT inherit from it. */
+interface InvalidInterfaceInheritingFromGlobal : ValidGlobalEAWithIndexedSetter {
+};
+
+/* Valid usage of Global */
+
+[Global]
+interface Window {
+  getter any (DOMString name);
+  attribute DOMString name; 
+};
+
+[Global]
+interface ValidGlobalEAWithIndexedSetter {
+  setter void (unsigned long index, float value);
+};
