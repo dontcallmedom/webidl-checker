@@ -1,1 +1,1 @@
-Extended attribute Constructor used on Attribute — Constructor expected only on interfaces.
+Extended attribute Constructor used on Attribute — Constructor expected only on interfaces and dictionaries.

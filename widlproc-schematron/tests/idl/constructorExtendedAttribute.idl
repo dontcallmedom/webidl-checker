@@ -12,3 +12,7 @@ interface Circle {
   attribute float cy;
   readonly attribute float circumference;
 };
+
+[Constructor]
+dictionary Bundle {
+};

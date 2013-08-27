@@ -145,7 +145,7 @@
      <pattern>
        <title>Extended attribute Constructor</title>
        <rule context="//ExtendedAttribute[@name='Constructor']">
-	 <extends rule="extendedAttributeAppliesToInterface"/>
+	 <assert test="parent::ExtendedAttributeList/parent::Interface or parent::ExtendedAttributeList/parent::Dictionary">Extended attribute <value-of select="@name"/> used on <value-of select="local-name(parent::ExtendedAttributeList/parent::*)" /> — <value-of select="@name"/> expected only on interfaces and dictionaries.</assert>	 
        </rule>
      </pattern>
      <pattern>
