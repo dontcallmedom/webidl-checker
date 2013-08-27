@@ -13,11 +13,11 @@ interface OperationNameClashWithAttribute {
 };
 
 interface OperationWithNonLastVariadicArgument {
-  float multiply(float... numbers, float factor);
+  double multiply(double... numbers, double factor);
 }; 
 
 interface OperationWithOptionalArgumentInMiddle {
-  float multiply(optional float number, float number2);
+  double multiply(optional double number, double number2);
 };
 
 interface ValidOperations {
@@ -25,7 +25,7 @@ interface ValidOperations {
   getter DOMString(DOMString name);
   DOMString right(DOMString input);
   boolean right();
-  float multipy(float... numbers);
-  float factorize(float number, optional float number2, optional float number3);
-  float factorize2(float number, optional float number2, float... numbers);
+  double multipy(double... numbers);
+  double factorize(double number, optional double number2, optional double number3);
+  double factorize2(double number, optional double number2, double... numbers);
 };

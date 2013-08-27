@@ -11,14 +11,14 @@ interface InvalidGlobalEAWithArgument {
 /* The interface MUST NOT define a named property setter, creator or deleter. */
 [Global]
 interface InvalidGlobalEAWithNamedSetter {
-  setter void (DOMString name, float value);
-  getter float (DOMString name);
+  setter void (DOMString name, double value);
+  getter double (DOMString name);
 };
 
 [Global]
 interface InvalidGlobalEAWithNamedCreator {
-  creator float (DOMString name, float value);
-  getter float (DOMString name);
+  creator double (DOMString name, double value);
+  getter double (DOMString name);
 };
 
 /* The interface MUST NOT also be declared with the [OverrideBuiltins] extended attribute. */
@@ -51,6 +51,6 @@ interface Window {
 
 [Global]
 interface ValidGlobalEAWithIndexedSetter {
-  setter void (unsigned long index, float value);
-  getter float (unsigned long index);
+  setter void (unsigned long index, double value);
+  getter double (unsigned long index);
 };

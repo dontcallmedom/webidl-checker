@@ -7,7 +7,7 @@ interface InvalidEnsureUTF16EAOnReadOnlyAttribute {
 };
 
 interface InvalidEnsureUTF16EAOnNonDOMString {
-  [EnsureUTF16] attribute float number;
+  [EnsureUTF16] attribute double number;
   DOMString numerize([EnsureUTF16] octet o);
 };
 

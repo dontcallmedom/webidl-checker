@@ -24,8 +24,8 @@ interface InvalidInterfaceInheritingFromMapClassInterface : MyMap {
 [MapClass(DOMString, object)] interface InvalidMapClassEAInterfaceMembers {
   boolean clear(DOMString s);
   void delete();
-  float get(DOMString k);
-  boolean has(float k);
+  double get(DOMString k);
+  boolean has(double k);
   boolean forEach();
   DOMString set(DOMString k, object v);
   unsigned long size();
@@ -38,7 +38,7 @@ interface InvalidInterfaceInheritingFromMapClassInterface : MyMap {
   attribute DOMString clear;
   const boolean delete = true;
   object get(DOMString k);
-  object get(float k);
+  object get(double k);
   void forEach(InvalidCallback cb, optional any thisArg);
 };
 

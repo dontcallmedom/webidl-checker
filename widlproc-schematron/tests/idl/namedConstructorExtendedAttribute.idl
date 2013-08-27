@@ -1,6 +1,6 @@
 /* bogus usage of NamedConstructor on an attribute */
 interface BogusNamedConstructorEAOnAttribute {
-  [NamedConstructor=foo] attribute float r;
+  [NamedConstructor=foo] attribute double r;
 }; 
 
 

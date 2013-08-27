@@ -11,7 +11,7 @@ interface InheritsGetterOnInterfaceWithoutInheritance  {
 };
 
 interface InheritsGetterWithIncompatibleType : Base  {
-  inherit readonly attribute float name;
+  inherit readonly attribute double name;
 };
 
 interface ValidInheritsGetter : Base {

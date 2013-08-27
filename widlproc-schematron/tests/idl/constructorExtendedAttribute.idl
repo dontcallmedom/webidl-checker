@@ -1,16 +1,16 @@
 /* bogus usage of Constructor on an attribute */
 interface BogusConstructorEAOnAttribute {
-  [Constructor] attribute float r;
+  [Constructor] attribute double r;
 }; 
 
 /* Valid usage of constructor */
 [Constructor,
- Constructor(float radius)]
+ Constructor(double radius)]
 interface Circle {
-  attribute float r;
-  attribute float cx;
-  attribute float cy;
-  readonly attribute float circumference;
+  attribute double r;
+  attribute double cx;
+  attribute double cy;
+  readonly attribute double circumference;
 };
 
 [Constructor]

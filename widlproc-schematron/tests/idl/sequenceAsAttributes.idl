@@ -1,11 +1,11 @@
-typedef sequence<float> SequenceInDisguise;
+typedef sequence<double> SequenceInDisguise;
 
 interface WithSequenceAttribute {
   attribute SequenceInDisguise badDisguisedSequenceAttribute; 
-  void methodWithSequenceParam(sequence<float> ok);
+  void methodWithSequenceParam(sequence<double> ok);
 };
 
 
 interface WithoutSequenceAttribute {
-  attribute float normalAttribute;
+  attribute double normalAttribute;
 };

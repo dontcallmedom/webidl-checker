@@ -15,6 +15,6 @@ interface AttributeNameClashWithAttribute {
 
 interface ValidAttribute {
   attribute boolean right;
-  readonly attribute float size;
+  readonly attribute double size;
   stringifier attribute DOMString displayName;
 };

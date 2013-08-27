@@ -400,4 +400,10 @@
 	 <assert role="warning" test="Type[@type='unsigned short']">Numeric constant used <value-of select="@name"/> in <value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/>; the Web platform is moving away from using named integer codes in the style of an enumeration, in favor of the use of strings.</assert>
        </rule>
      </pattern>
+     <pattern>
+       <title>Warn against use of float instead of double</title>
+       <rule context="//Type[@type='float']">
+	 <assert role="warning" test="true"><value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/> uses type "float"; unless there are specific reasons to use a 32 bit floating point type, specifications SHOULD use double rather than float.</assert>
+       </rule>
+     </pattern>
 </schema>

@@ -1,6 +1,6 @@
 // commented out for now - bug in widlproc
 //interface doubleSpecialKeywordOperation {
-//  getter setter getter float (DOMString propertyName);
+//  getter setter getter double (DOMString propertyName);
 //};
 
 // there MUST exist at most one stringifier
@@ -11,32 +11,32 @@ interface moreThanOneStringifier {
 
 // there MUST exist at most one of each variety of getter, setter, creator and deleter
 interface moreThanOneNameGetter {
-  getter float getProperty(DOMString propertyName);
-  getter float getProperty2(DOMString propertyName);
+  getter double getProperty(DOMString propertyName);
+  getter double getProperty2(DOMString propertyName);
 };
 
 interface moreThanOneIndexSetter {
-  getter float getProperty(unsigned long index);
-  setter void setProperty(unsigned long index, float value);
-  setter void setProperty2(unsigned long index, float value);
+  getter double getProperty(unsigned long index);
+  setter void setProperty(unsigned long index, double value);
+  setter void setProperty2(unsigned long index, double value);
 };
 
 // Special operations declared using operations MUST NOT  be variadic nor have any optional arguments.
 interface specialVariadicOperation {
-  getter float getProperty(DOMString... propertyName);
+  getter double getProperty(DOMString... propertyName);
 };
 
 interface specialOperationWithOptionalArgument {
-  creator void setProperty(unsigned long index, optional float value);
-  getter float getProperty(unsigned long index);
+  creator void setProperty(unsigned long index, optional double value);
+  getter double getProperty(unsigned long index);
 };
 
 interface StringifierWithArguments {
-  stringifier DOMString toString(float value);
+  stringifier DOMString toString(double value);
 }; 
 
 interface StringifierWrongType {
-  stringifier float toString();
+  stringifier double toString();
 }; 
 
 interface StringifierAttributeOnNonString {
@@ -44,73 +44,73 @@ interface StringifierAttributeOnNonString {
 }; 
 
 interface IndexGetterWithMoreThanOneArgument {
-  getter float getProperty(unsigned long index1, unsigned long index2);
+  getter double getProperty(unsigned long index1, unsigned long index2);
 };
 
 interface IndexDeleterWithMoreThanOneArgument {
-  getter float getProperty(unsigned long index);
-  deleter float deleteProperty(unsigned long index1, unsigned long index2);
+  getter double getProperty(unsigned long index);
+  deleter double deleteProperty(unsigned long index1, unsigned long index2);
 };
 
 interface IndexGetterWithNonUnsignedLongArgument {
-  getter float getProperty(long index);
+  getter double getProperty(long index);
 };
 
 interface IndexSetterWithMoreThanTwoArguments {
-  getter float getProperty(unsigned long index);
-  setter void setProperty(unsigned long index, float value, unsigned long parameter);
+  getter double getProperty(unsigned long index);
+  setter void setProperty(unsigned long index, double value, unsigned long parameter);
 };
 
 interface IndexCreatorWithOnlyOneArgument {
-  getter float getProperty(unsigned long index);
+  getter double getProperty(unsigned long index);
   creator void setProperty(unsigned long index);
 };
 
 interface IndexCreatorWithWrongFirstArgument {
-  getter float getProperty(unsigned long index);
-  creator void setProperty(float index, float value);
+  getter double getProperty(unsigned long index);
+  creator void setProperty(double index, double value);
 };
 
 interface NameGetterWithMoreThanOneArgument {
-  getter float getProperty(DOMString name, unsigned long index2);
+  getter double getProperty(DOMString name, unsigned long index2);
 };
 
 interface NameDeleterWithMoreThanOneArgument {
-  getter float getProperty(DOMString name);
-  deleter float deleteProperty(DOMString name, unsigned long index2);
+  getter double getProperty(DOMString name);
+  deleter double deleteProperty(DOMString name, unsigned long index2);
 };
 
 interface NameSetterWithMoreThanTwoArguments {
-  getter float getProperty(DOMString name);
-  setter void setProperty(DOMString name, float value, unsigned long parameter);
+  getter double getProperty(DOMString name);
+  setter void setProperty(DOMString name, double value, unsigned long parameter);
 };
 
 interface NameCreatorWithOnlyOneArgument {
-  getter float getProperty(DOMString name);
+  getter double getProperty(DOMString name);
   creator void setProperty(DOMString name);
 };
 
 interface SetterWithoutGetter {
-  setter void setProperty(DOMString name, float value);
+  setter void setProperty(DOMString name, double value);
 };
 
 interface NamedSetterWithoutNamedGetter {
-  setter void setProperty(DOMString name, float value);
-  getter float getProperty(unsigned long index);
+  setter void setProperty(DOMString name, double value);
+  getter double getProperty(unsigned long index);
 };
 
 interface IndexedCreatorWithoutIndexedGetter {
-  creator void setProperty(unsigned long index, float value);
-  getter float getProperty(DOMString name);
+  creator void setProperty(unsigned long index, double value);
+  getter double getProperty(DOMString name);
 };
 
 interface ValidSpecialOperations {
   readonly attribute unsigned long propertyCount;
-  getter float getPropertyByIndex(unsigned long index);
-  getter float getProperty2(DOMString propertyName);
-  legacycaller float compute(float x);
-  legacycaller float computeFaster(float x, float speed);
+  getter double getPropertyByIndex(unsigned long index);
+  getter double getProperty2(DOMString propertyName);
+  legacycaller double compute(double x);
+  legacycaller double computeFaster(double x, double speed);
   stringifier;
-  setter creator float setProperty(DOMString name, float value);
-  setter creator float setProperty(unsigned long index, float value);
+  setter creator double setProperty(DOMString name, double value);
+  setter creator double setProperty(unsigned long index, double value);
 };
