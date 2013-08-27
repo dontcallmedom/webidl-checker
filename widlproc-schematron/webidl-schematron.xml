@@ -95,6 +95,9 @@
 	 <assert test="not(@deleter) or ArgumentList/Argument[1]/Type/@type='DOMString' or ArgumentList/Argument[1]/Type/@type='unsigned long'"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines a deleter operation with first argument different from DOMString and unsigned long.</assert>
 	 <assert test="not(@creator) or ArgumentList/Argument[1]/Type/@type='DOMString' or ArgumentList/Argument[1]/Type/@type='unsigned long'"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines a creator operation with first argument different from DOMString and unsigned long.</assert>
 	 <assert role="warning" test="not(@legacycaller)"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines a caller operation, but caller should be reserved to specify legacy APIs</assert>
+	 <assert test="not(@setter) or (ancestor::Interface/Operation[@getter and ArgumentList/Argument[1]/Type/@type=current()/ArgumentList/Argument[1]/Type/@type])"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines a setter but does not define a getter of the same variety.</assert>
+	 <assert test="not(@creator) or (ancestor::Interface/Operation[@getter and ArgumentList/Argument[1]/Type/@type=current()/ArgumentList/Argument[1]/Type/@type])"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines a creator but does not define a getter of the same variety.</assert>
+	 <assert test="not(@deleter) or (ancestor::Interface/Operation[@getter and ArgumentList/Argument[1]/Type/@type=current()/ArgumentList/Argument[1]/Type/@type])"><value-of select="concat(local-name(parent::*),' ',parent::*/@name)" /> defines a deleter but does not define a getter of the same variety.</assert>
        </rule>
      </pattern>
      <pattern>
