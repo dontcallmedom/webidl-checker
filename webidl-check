@@ -63,7 +63,7 @@ Page2 = """
 <address>
 script $Revision$ of $Date$<br>
 by <a href="http://www.w3.org/People/Dom/">Dominique Hazaël-Massieux</a><br>
-the heavy work is done by <a href="http://widl.webvm.net/">widlproc</a>.
+powered by <a href="https://github.com/dontcallmedom/webidl-checker/">webidl-checker</a> based on <a href="https://github.com/dontcallmedom/widlproc">widlproc</a>. Please <a href="https://github.com/dontcallmedom/webidl-checker/issues">report bugs on github</a>.
 </address>
 </body>
 </html>
