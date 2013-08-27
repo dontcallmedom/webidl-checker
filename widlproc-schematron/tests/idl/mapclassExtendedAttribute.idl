@@ -1,0 +1,57 @@
+/* the [MapClass] extended attribute appears on an interface */
+interface InvalidMapClassEAOnAttribute {
+  [MapClass(DOMString, object)] attribute object map;
+};
+
+/* The [MapClass] extended attribute MUST take a type pair. */
+/* widlproc can’t parse this, so commenting it out
+ [MapClass] interface InvalidMapClassEAWithoutTypePair {
+ }; */
+
+/*The [MapClass] extended attribute MUST NOT be used on an interface that has any inherited interfaces */
+interface InvalidInterfaceInheritingFromMapClassInterface : MyMap {
+};
+
+/*or which is declared with the [ArrayClass] or [Global] extended attribute. */
+[Global,MapClass(DOMString,object)] interface InvalidMapClassEAClashingWithGlobal {
+};
+
+[ArrayClass,MapClass(DOMString,object)] interface InvalidMapClassEAClashingWithArrayClass {
+};
+
+/*  If an interface member with the identifier “clear”, “delete”, “forEach”, “get”, “has” or “set” is declared on the interface or any of its consequential interfaces, then it MUST be defined as in the IDL fragment [in the spec] */
+/*An interface that is declared with the [MapClass] extended attribute MUST NOT have any interface member declared on it or any of its consequential interfaces with the identifier “size”, “entries”, “keys” or “values”.  */
+[MapClass(DOMString, object)] interface InvalidMapClassEAInterfaceMembers {
+  boolean clear(DOMString s);
+  void delete();
+  float get(DOMString k);
+  boolean has(float k);
+  boolean forEach();
+  DOMString set(DOMString k, object v);
+  unsigned long size();
+  attribute object entries;
+  attribute DOMString[] keys;
+  attribute object[] values;
+};
+
+[MapClass(DOMString, object)] interface InvalidMapClassEAInterfaceMembers2 {
+  attribute DOMString clear;
+  const boolean delete = true;
+  object get(DOMString k);
+  object get(float k);
+  void forEach(InvalidCallback cb, optional any thisArg);
+};
+
+callback InvalidCallback = void(DOMString k, object v, InvalidMapClassEAInterfaceMembers2 o);
+
+/* Valid usage of MapClass */
+[MapClass(DOMString, object)] interface MyMap {
+  void clear();
+  boolean delete(DOMString k);
+  void forEach(ValidCallbackForMapClassForEach callbackFn, optional any thisArg);
+  object get(DOMString k);
+  boolean has(DOMString k);
+  MyMap set(DOMString k, object v);
+};
+
+callback ValidCallbackForMapClassForEach = void(object v, DOMString k, MyMap o);

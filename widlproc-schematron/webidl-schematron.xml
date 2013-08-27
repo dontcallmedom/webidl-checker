@@ -119,7 +119,7 @@
      <pattern>
        <title>Extended attributes are well-known</title>
        <rule context="//ExtendedAttribute[@name]">
-	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#es-extended-attributes" test="@name='ArrayClass' or @name='Constructor' or @name='NamedConstructor' or @name='NoInterfaceObject' or @name='OverrideBuiltins' or @name='PutForwards' or @name='Replaceable' or @name='TreatNullAs' or @name='TreatUndefinedAs' or @name='TreatNonCallableAsNull' or @name='TreatNonCallableAsNull' or @name='Clamp' or @name='Unforgeable' or @name='EnforceRange' or @name='ImplicitThis' or @name='LenientThis' or @name='SameObject' or @name='NewObject' or @name='EnsureUTF16' or @name='Global'">Extended attribute of <value-of select="@name"/> is unknown in WebIDL.</assert>
+	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#es-extended-attributes" test="@name='ArrayClass' or @name='Constructor' or @name='NamedConstructor' or @name='NoInterfaceObject' or @name='OverrideBuiltins' or @name='PutForwards' or @name='Replaceable' or @name='TreatNullAs' or @name='TreatUndefinedAs' or @name='TreatNonCallableAsNull' or @name='TreatNonCallableAsNull' or @name='Clamp' or @name='Unforgeable' or @name='EnforceRange' or @name='ImplicitThis' or @name='LenientThis' or @name='SameObject' or @name='NewObject' or @name='EnsureUTF16' or @name='Global' or @name='MapClass'">Extended attribute of <value-of select="@name"/> is unknown in WebIDL.</assert>
        </rule>
      </pattern>
      <pattern>
@@ -211,6 +211,61 @@
 	  <!-- TODO: (?) The [Global] extended attribute MUST NOT be used on an interface that can have more than one object implementing it in the same ECMAScript global environment. -->
 	  <!-- TODO: If an interface is declared with the [Global] extended attribute, then there MUST NOT be more than one interface member across the interface and its consequential interfaces with the same identifier. -->
 	  <!-- TODO: There also MUST NOT be more than stringifier, more than one serializer, or more than one iterator across those interfaces.  -->
+       </rule>
+     </pattern>
+     <pattern>
+       <title>Extended attribute MapClass</title>
+       <rule context="//ExtendedAttribute[@name='MapClass']">
+	 <extends rule="extendedAttributeAppliesToInterface"/>
+	 <!-- The [MapClass] extended attribute MUST take a type pair. -->
+	 <assert test="TypeList and count(TypeList/Type)=2">Extended attribute MapClass used on interface <value-of select="ancestor::Interface"/> requires a type pair declaration.</assert>
+	 <!-- The [MapClass] extended attribute MUST NOT be used on an interface that has any inherited interfaces -->
+	  <assert test="not(parent::ExtendedAttributeList/parent::Interface) or not(//Interface[InterfaceInheritance/Name/@name=current()/parent::ExtendedAttributeList/parent::Interface/@name])">Interface <value-of select="//Interface[InterfaceInheritance/Name/@name=current()/parent::ExtendedAttributeList/parent::Interface/@name]/@name"/> inherits from interface <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> that is declared with the MapClass extended attribute.</assert>
+	 <!-- or which is declared with the [ArrayClass] or [Global] extended attribute. -->
+	 <assert test="not(parent::ExtendedAttributeList/parent::Interface) or not(parent::ExtendedAttributeList/ExtendedAttribute[@name='Global'])">Extended attribute MapClass used on interface <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> that is also declared with Global.</assert>
+	 <assert test="not(parent::ExtendedAttributeList/parent::Interface) or not(parent::ExtendedAttributeList/ExtendedAttribute[@name='ArrayClass'])">Extended attribute MapClass used on interface <value-of select="parent::ExtendedAttributeList/parent::Interface/@name"/> that is also declared with ArrayClass.</assert>
+	 <!-- If an interface member with the identifier “clear”, “delete”, “forEach”, “get”, “has” or “set” is declared on the interface or any of its consequential interfaces, then it MUST be defined as in the IDL fragment [in the spec] -->
+	 <assert test="not(parent::ExtendedAttributeList/parent::Interface) or not(ancestor::Interface/*[@name='clear']) or (local-name(ancestor::Interface/*[@name='clear'])='Operation' and not(ancestor::Interface/Operation[@name='clear']/ArgumentList/Argument) and ancestor::Interface/Operation[@name='clear']/Type/@type='void')">The interface <value-of select="ancestor::Interface/@name"/>, declared with a MapClass extended attribute, defines an interface member "clear" that does not match the expected signature.</assert>
+	 <assert test="not(parent::ExtendedAttributeList/parent::Interface) or not(ancestor::Interface/*[@name='delete']) or (local-name(ancestor::Interface/*[@name='delete'])='Operation' and count(ancestor::Interface/Operation[@name='delete']/ArgumentList/Argument)=1 and (ancestor::Interface/Operation[@name='delete']/ArgumentList/Argument/Type/@type=TypeList/Type[1]/@type or ancestor::Interface/Operation[@name='delete']/ArgumentList/Argument/Type/@name=TypeList/Type[1]/@name) and ancestor::Interface/Operation[@name='delete']/Type/@type='boolean')">The interface <value-of select="ancestor::Interface/@name"/>, declared with a MapClass extended attribute, defines an interface member "delete" that does not match the expected signature.</assert>
+	 <assert test="not(parent::ExtendedAttributeList/parent::Interface) or not(ancestor::Interface/*[@name='get']) or (local-name(ancestor::Interface/*[@name='get'])='Operation' and count(ancestor::Interface/Operation[@name='get']/ArgumentList/Argument)=1 and (ancestor::Interface/Operation[@name='get']/ArgumentList/Argument/Type/@type=TypeList/Type[1]/@type or ancestor::Interface/Operation[@name='get']/ArgumentList/Argument/Type/@name=TypeList/Type[1]/@name) and (ancestor::Interface/Operation[@name='get']/Type/@type=TypeList/Type[2]/@type or ancestor::Interface/Operation[@name='get']/Type/@name=TypeList/Type[2]/@name))">The interface <value-of select="ancestor::Interface/@name"/>, declared with a MapClass extended attribute, defines an interface member "get" that does not match the expected signature.</assert>
+	 <assert test="not(parent::ExtendedAttributeList/parent::Interface) or not(ancestor::Interface/*[@name='has']) or (local-name(ancestor::Interface/*[@name='has'])='Operation' and count(ancestor::Interface/Operation[@name='has']/ArgumentList/Argument)=1 and (ancestor::Interface/Operation[@name='has']/ArgumentList/Argument/Type/@type=TypeList/Type[1]/@type or ancestor::Interface/Operation[@name='has']/ArgumentList/Argument/Type/@name=TypeList/Type[1]/@name) and ancestor::Interface/Operation[@name='has']/Type/@type='boolean')">The interface <value-of select="ancestor::Interface/@name"/>, declared with a MapClass extended attribute, defines an interface member "has" that does not match the expected signature.</assert>
+	 <assert test="not(parent::ExtendedAttributeList/parent::Interface) or not(ancestor::Interface/*[@name='set']) or (local-name(ancestor::Interface/*[@name='set'])='Operation' and count(ancestor::Interface/Operation[@name='set']/ArgumentList/Argument)=2 and (ancestor::Interface/Operation[@name='set']/ArgumentList/Argument[1]/Type/@type=TypeList/Type[1]/@type or ancestor::Interface/Operation[@name='set']/ArgumentList/Argument[1]/Type/@name=TypeList/Type[1]/@name) and (ancestor::Interface/Operation[@name='set']/ArgumentList/Argument[2]/Type/@type=TypeList/Type[2]/@type or ancestor::Interface/Operation[@name='set']/ArgumentList/Argument[2]/Type/@name=TypeList/Type[2]/@name) and ancestor::Interface/Operation[@name='set']/Type/@name=ancestor::Interface/@name)">The interface <value-of select="ancestor::Interface/@name"/>, declared with a MapClass extended attribute, defines an interface member "set" that does not match the expected signature.</assert>
+	 <assert 
+	     test="
+		   not(parent::ExtendedAttributeList/parent::Interface) or
+		   not(ancestor::Interface/*[@name='forEach'])
+		   or (
+		   local-name(ancestor::Interface/*[@name='forEach'])='Operation' 
+		   and count(ancestor::Interface/Operation[@name='forEach']/ArgumentList/Argument)=2 
+		   and ancestor::Interface/Operation[@name='forEach']/Type/@type='void' 
+		   and ancestor::Interface/Operation[@name='forEach']/ArgumentList/Argument[2]/Type/@type='any' and ancestor::Interface/Operation[@name='forEach']/ArgumentList/Argument[2]/@optional='optional' 
+		   and //Callback[@name=current()/ancestor::Interface/Operation[@name='forEach']/ArgumentList/Argument[1]/Type/@name])">The interface <value-of select="ancestor::Interface/@name"/>, declared with a MapClass extended attribute, defines an interface member "forEach" that does not match the expected signature.</assert>
+	 <assert 
+	     test="
+		   not(parent::ExtendedAttributeList/parent::Interface)
+		   or not(ancestor::Interface/*[@name='forEach'])
+		   or not(//Callback[@name=current()/ancestor::Interface/Operation[@name='forEach']/ArgumentList/Argument[1]/Type/@name])
+		   or (
+		   //Callback[@name=current()/ancestor::Interface/Operation[@name='forEach']/ArgumentList/Argument[1]/Type/@name]/Type/@type='void' 
+		   and count(//Callback[@name=current()/ancestor::Interface/Operation[@name='forEach']/ArgumentList/Argument[1]/Type/@name]/ArgumentList/Argument)=3 
+		   and (//Callback[@name=current()/ancestor::Interface/Operation[@name='forEach']/ArgumentList/Argument[1]/Type/@name]/ArgumentList/Argument[1]/Type/@type=current()/TypeList/Type[2]/@type or //Callback[@name=current()/ancestor::Interface/Operation[@name='forEach']/ArgumentList/Argument[1]/Type/@name]/ArgumentList/Argument[1]/Type/@name=current()/TypeList/Type[2]/@name)
+		   and (//Callback[@name=current()/ancestor::Interface/Operation[@name='forEach']/ArgumentList/Argument[1]/Type/@name]/ArgumentList/Argument[2]/Type/@type=current()/TypeList/Type[1]/@type or //Callback[@name=current()/ancestor::Interface/Operation[@name='forEach']/ArgumentList/Argument[1]/Type/@name]/ArgumentList/Argument[2]/Type/@name=current()/TypeList/Type[1]/@name)
+		   and //Callback[@name=current()/ancestor::Interface/Operation[@name='forEach']/ArgumentList/Argument[1]/Type/@name]/ArgumentList/Argument[3]/Type/@name=ancestor::Interface/@name
+		   )">The interface <value-of select="ancestor::Interface/@name"/>, declared with a MapClass extended attribute, defines an interface member "forEach" whose associated callback does not match the expected signature.</assert>
+	 <!-- TODO: same tests for consequential interfaces (!) -->
+	 <!-- An interface that is declared with the [MapClass] extended attribute MUST NOT have any interface member declared on it or any of its consequential interfaces with the identifier “size”, “entries”, “keys” or “values”.  -->
+	 <assert 
+	     test="not(parent::ExtendedAttributeList/parent::Interface)
+		   or not(ancestor::Interface/*[@name='size'])">The interface <value-of select="ancestor::Interface/@name"/>, declared with a MapClass extended attribute, defines an interface member "size" that is not allowed.</assert>
+	 <assert 
+	     test="not(parent::ExtendedAttributeList/parent::Interface)
+		   or not(ancestor::Interface/*[@name='entries'])">The interface <value-of select="ancestor::Interface/@name"/>, declared with a MapClass extended attribute, defines an interface member "entries" that is not allowed.</assert>
+	 <assert 
+	     test="not(parent::ExtendedAttributeList/parent::Interface)
+		   or not(ancestor::Interface/*[@name='keys'])">The interface <value-of select="ancestor::Interface/@name"/>, declared with a MapClass extended attribute, defines an interface member "keys" that is not allowed.</assert>
+	 <assert 
+	     test="not(parent::ExtendedAttributeList/parent::Interface)
+		   or not(ancestor::Interface/*[@name='values'])">The interface <value-of select="ancestor::Interface/@name"/>, declared with a MapClass extended attribute, defines an interface member "values" that is not allowed.</assert>
        </rule>
      </pattern>
      <pattern>
