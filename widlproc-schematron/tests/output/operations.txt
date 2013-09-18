@@ -2,5 +2,6 @@ Interface NonSpecialOperationWithoutIdentifier has an operation without identifi
 Operation right in Interface OperationNameClashWithConstant clashes with another interface member.
 Operation right in Interface OperationNameClashWithAttribute clashes with another interface member.
 Interface OperationWithNonLastVariadicArgument defines a variadic operation (multiply) but the ... is not set on the last argument.
+Interface OperationWithVariadicOptionalArgument defines a variadic operation (multiply) whose final argument is declared optional.
 Interface OperationWithOptionalArgumentInMiddle.multiply() has a non-optional argument after an optional one.
 Numeric constant used right in Interface OperationNameClashWithConstant; the Web platform is moving away from using named integer codes in the style of an enumeration, in favor of the use of strings.

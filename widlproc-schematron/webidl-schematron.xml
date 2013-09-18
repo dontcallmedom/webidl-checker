@@ -47,6 +47,7 @@
 	 <assert test="@name or @stringifier or @getter or @setter or @creator or @deleter or @legacycaller"><value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/> has an operation without identifier but which is not a special operation.</assert>
 	 <assert test="not(preceding-sibling::*[local-name()='Attribute' or local-name()='Const'][@name=current()/@name])"><value-of select="concat(local-name(), ' ', @name)"/> in <value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/> clashes with another interface member.</assert>
 	 <assert test="not(ArgumentList/Argument[@ellipsis]) or not(ArgumentList/Argument[@ellipsis]/following-sibling::Argument)"><value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/> defines a variadic operation (<value-of select="@name"/>) but the ... is not set on the last argument.</assert>
+	 <assert test="not(ArgumentList/Argument[@ellipsis and @optional])"><value-of select="concat(local-name(parent::*), ' ', parent::*/@name)"/> defines a variadic operation (<value-of select="@name"/>) whose final argument is declared optional.</assert>
 	 <assert test="not(ArgumentList/Argument[@optional]) or not(ArgumentList/Argument[@optional]/following-sibling::Argument[not(@optional) and not(@ellipsis)])"><value-of select="concat(local-name(parent::*), ' ', parent::*/@name,'.',@name,'()')"/> has a non-optional argument after an optional one.</assert>
        </rule>
      </pattern>

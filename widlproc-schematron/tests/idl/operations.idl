@@ -16,6 +16,11 @@ interface OperationWithNonLastVariadicArgument {
   double multiply(double... numbers, double factor);
 }; 
 
+interface OperationWithVariadicOptionalArgument {
+  double multiply(optional double... numbers);
+}; 
+
+
 interface OperationWithOptionalArgumentInMiddle {
   double multiply(optional double number, double number2);
 };
