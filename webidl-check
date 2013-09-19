@@ -14,6 +14,7 @@ import os
 import urlparse
 import urllib
 import httplib
+import html5lib
 from lxml import etree
 from StringIO import StringIO
 
@@ -270,55 +271,10 @@ def extractIdls(doc,extraRequestHeaders=[]):
             htmldoc = srcdoc.read()
             htmldocio = StringIO(htmldoc)
             # Extract WebIDLs from source document in invidual files
-            # is the document already XML?
             try:
-                parser = etree.XMLParser(resolve_entities=False)
-                tree = etree.parse(htmldocio,parser)
-            except (etree.XMLSyntaxError,TypeError): #TypeError is raised by old versions of lxml :(
-                htmldocio.seek(0)
-                try:
-                    # we try the HTMLParser
-                    tree = etree.parse(htmldocio,etree.HTMLParser())
-                except Exception, e:
-                    # we run tidy on the document
-                    # to make it XHTML
-                    import tidy
-                    import re
-                    # option for tidy
-                    options = dict(output_xhtml=1, # we want XHTML out
-                               tidy_mark=0, # we don't want to change the markup
-                               numeric_entities=1 # but non numeric entities ess up lxml
-                               )
-                    html5doctype = re.compile("<!doctype\s+html\s*>", re.IGNORECASE)
-                    html5 = html5doctype.search(htmldoc)
-                    if html5:
-                        html5_tidy_options = {"add_xml_space": "no",
-                                              "output_xhtml": "yes",
-                                              "tidy_mark": "no",
-                                              "new_blocklevel_tags": 'article,aside,canvas,dialog,details,figcaption,figure,footer,header,hgroup,menu,nav,section,summary',
-                                              "new_inline_tags": 'video,audio,canvas,ruby,rt,rp,time,meter,progress,track,source',
-                                              "break_before_br": "no",
-                                              "vertical_space": "no",
-                                              "enclose_text": "no",
-                                              "numeric_entities": "yes",
-                                              "wrap": "1000",
-                                              "wrap_attributes": "no",
-                                              "drop_empty_paras": "no"
-                                              }
-                        options = dict(options.items() + html5_tidy_options.items())
-
-                    if charset == "iso-8859-1":
-                        options["char_encoding"]='latin1'
-                    else:
-                        options["char_encoding"]='utf8'
-                
-                    t = str(tidy.parseString(htmldoc, **options))
-                    xmldoc = StringIO(t)
-                    try:
-                        tree = etree.parse(xmldoc)
-                    except UnparseableDocumentException, e:
-                        print t
-                        raise UnparseableDocumentException(str(e))
+                tree = html5lib.parse(htmldoc, treebuilder="lxml")
+            except Exception, e:
+                raise UnparseableDocumentException(str(e))
             # and then get extracts IDLs through XPath            
             title = tree.xpath("/html/head/title/text()")
             title += tree.xpath("/html:html/html:head/html:title/text()",namespaces={'html': 'http://www.w3.org/1999/xhtml'})
