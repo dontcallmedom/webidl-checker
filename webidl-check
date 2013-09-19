@@ -262,13 +262,9 @@ def extractIdls(doc,extraRequestHeaders=[]):
         raise UnparseableDocumentException("Invalid URL submitted")
     if srcdoc:
         srcheaders = srcdoc.info()
-        charset = ""
         contentType="text/html", {}
         if srcheaders.has_key('Content-Type'):
             contentType = cgi.parse_header(srcheaders["Content-Type"])
-            if contentType[1].has_key('charset'):
-                from string import lower
-                charset = lower(contentType[1]['charset'])
         errors = []
         xmlOutput = []
         idlOutput = []
