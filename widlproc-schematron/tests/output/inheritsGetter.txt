@@ -1,3 +1,5 @@
-Attribute InheritsGetterOnNonReadOnlyAttribute.name inherits a getter but is not readonly.
+Attribute InheritsGetterOnReadOnlyAttribute.name inherits a getter but is marked as readonly or static.
+Attribute InheritsGetterOnStaticAttribute.name inherits a getter but is marked as readonly or static.
+Attribute InheritsGetterOnInheritedNonReadonlAttribute.writableAttr inherits a getter, but that attribute is not marked as read-only on the inherited interface Base.
 Attribute InheritsGetterOnInterfaceWithoutInheritance.name inherits a getter but does not belong to an interface with inheritance.
 Attribute InheritsGetterWithIncompatibleType.name inherits a getter but does not have the same type (double) as the attribute Base.name (DOMString) it inherits from.

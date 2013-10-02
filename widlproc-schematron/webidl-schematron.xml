@@ -104,10 +104,13 @@
      <pattern>
        <title>Attribute with inherits getter</title>
        <rule context="//Attribute[@inherit='inherit']">
-	 <assert test="@readonly='readonly'">Attribute <value-of select="concat(ancestor::Interface/@name, '.', @name)"/> inherits a getter but is not readonly.</assert>
+	 <assert test="not(@readonly='readonly' or @static='static')">Attribute <value-of select="concat(ancestor::Interface/@name, '.', @name)"/> inherits a getter but is marked as readonly or static.</assert>
 	 <assert test="ancestor::Interface[InterfaceInheritance]">Attribute <value-of select="concat(ancestor::Interface/@name, '.', @name)"/> inherits a getter but does not belong to an interface with inheritance.</assert>
 	 <assert test="not(ancestor::Interface[InterfaceInheritance] and //Interface[@name=current()/ancestor::Interface/InterfaceInheritance/Name/@name] and //Interface[@name=current()/ancestor::Interface/InterfaceInheritance/Name/@name]/Attribute[@name=current()/@name])
 		       or //Interface[@name=current()/ancestor::Interface/InterfaceInheritance/Name/@name]/Attribute[@name=current()/@name]/Type[concat(@type,@name)=concat(current()/Type/@type,current()/Type/@name)]">Attribute <value-of select="concat(ancestor::Interface/@name, '.', @name)"/> inherits a getter but does not have the same type (<value-of select="concat(Type/@name,Type/@type)"/>) as the attribute <value-of select="concat(//Interface[@name=current()/ancestor::Interface/InterfaceInheritance/Name/@name]/@name, '.', //Interface[@name=current()/ancestor::Interface/InterfaceInheritance/Name/@name]/Attribute/@name)"/> (<value-of select="concat(//Interface[@name=current()/ancestor::Interface/InterfaceInheritance/Name/@name]/Attribute[@name=current()/@name]/Type/@type, //Interface[@name=current()/ancestor::Interface/InterfaceInheritance/Name/@name]/Attribute[@name=current()/@name]/Type/@name)"/>) it inherits from.</assert>
+	 <assert test="not(ancestor::Interface[InterfaceInheritance] and //Interface[@name=current()/ancestor::Interface/InterfaceInheritance/Name/@name] and //Interface[@name=current()/ancestor::Interface/InterfaceInheritance/Name/@name]/Attribute[@name=current()/@name])
+		       or //Interface[@name=current()/ancestor::Interface/InterfaceInheritance/Name/@name]/Attribute[@name=current()/@name]/@readonly='readonly'">Attribute <value-of select="concat(ancestor::Interface/@name, '.', @name)"/> inherits a getter, but that attribute is not marked as read-only on the inherited interface <value-of select="//Interface[@name=current()/ancestor::Interface/InterfaceInheritance/Name/@name]/@name"/>.</assert>
+
        </rule>       
      </pattern>
      <pattern>

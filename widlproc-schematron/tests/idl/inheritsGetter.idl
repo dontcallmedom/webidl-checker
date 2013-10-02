@@ -1,19 +1,29 @@
 interface Base {
   readonly attribute DOMString name;
+  attribute DOMString writableAttr;
 };
 
-interface InheritsGetterOnNonReadOnlyAttribute : Base {
-  inherit attribute DOMString name;
+interface InheritsGetterOnReadOnlyAttribute : Base {
+  inherit readonly attribute DOMString name;
+};
+
+interface InheritsGetterOnStaticAttribute : Base {
+  static inherit attribute DOMString name;
+};
+
+
+interface InheritsGetterOnInheritedNonReadonlAttribute : Base {
+  inherit attribute DOMString writableAttr;
 };
 
 interface InheritsGetterOnInterfaceWithoutInheritance  {
-  inherit readonly attribute DOMString name;
+  inherit attribute DOMString name;
 };
 
 interface InheritsGetterWithIncompatibleType : Base  {
-  inherit readonly attribute double name;
+  inherit attribute double name;
 };
 
 interface ValidInheritsGetter : Base {
-  inherit readonly attribute DOMString name;
+  inherit attribute DOMString name;
 };
