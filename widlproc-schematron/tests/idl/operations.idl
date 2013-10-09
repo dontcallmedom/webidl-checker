@@ -21,7 +21,7 @@ interface OperationWithVariadicOptionalArgument {
 }; 
 
 
-interface OperationWithOptionalArgumentInMiddle {
+interface ValidOperationWithOptionalArgumentInMiddle {
   double multiply(optional double number, double number2);
 };
 
