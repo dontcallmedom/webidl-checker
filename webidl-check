@@ -260,8 +260,8 @@ def extractIdls(doc,extraRequestHeaders=[]):
         url_opener.addheader(header)
     try:
         srcdoc = url_opener.open(doc)
-    except IOError, (errno, strerror):
-        raise UnparseableDocumentException("I/O error: %s %s" % (errno,strerror))
+    except IOError as e:
+        raise UnparseableDocumentException("I/O error: %s %s" % (e.errno,e.strerror))
     except httplib.InvalidURL:
         raise UnparseableDocumentException("Invalid URL submitted")
     if srcdoc:
