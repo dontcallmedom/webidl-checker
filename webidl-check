@@ -89,7 +89,7 @@ def serveRequest():
             # cf http://dev.w3.org/cvsweb/2004/PythonLib-IH/checkremote.py
             from checkremote import check_url_safety, UnsupportedResourceError
             try:
-                check_url_safety(url)
+                check_url_safety(doc)
             except UnsupportedResourceError:
                 print "Status: 403"
                 print "Content-Type: text/plain"
