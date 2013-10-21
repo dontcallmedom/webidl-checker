@@ -86,11 +86,15 @@ def serveRequest():
         elif fields.has_key('input'):
             inp = fields['input'].value
         if doc:
-            if doc[:5] == 'file:' or len(urlparse.urlparse(doc)[0])<2:
+            # cf http://dev.w3.org/cvsweb/2004/PythonLib-IH/checkremote.py
+            from checkremote import check_url_safety, UnsupportedResourceError
+            try:
+                check_url_safety(url)
+            except UnsupportedResourceError:
                 print "Status: 403"
                 print "Content-Type: text/plain"
                 print
-                print "sorry, I decline to handle file: addresses"
+                print "sorry, I decline to handle this type of addresses"
                 sys.exit()
         output = "html"
         textoutputselected=""
