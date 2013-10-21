@@ -139,7 +139,7 @@ def serveRequest():
             printOutputAsHTML(errors,idls,doc,title,inp,xmlOutput)
 
 def printError(output,doc, textoutputselected, msg, error):
-    print "500 Internal server error"
+    print "Status: 500 Internal server error"
     if output=="text":
         print "Content-Type: text/plain;charset=utf-8"
         print
