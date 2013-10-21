@@ -85,17 +85,6 @@ def serveRequest():
             doc = fields['doc'].value
         elif fields.has_key('input'):
             inp = fields['input'].value
-        if doc:
-            # cf http://dev.w3.org/cvsweb/2004/PythonLib-IH/checkremote.py
-            from checkremote import check_url_safety, UnsupportedResourceError
-            try:
-                check_url_safety(doc)
-            except UnsupportedResourceError:
-                print "Status: 403"
-                print "Content-Type: text/plain"
-                print
-                print "sorry, I decline to handle this type of addresses"
-                sys.exit()
         output = "html"
         textoutputselected=""
         if fields.has_key('output') and fields['output'].value=='text':
