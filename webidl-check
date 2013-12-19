@@ -148,8 +148,8 @@ def printError(output,doc, textoutputselected, msg, error):
         sys.exit(2)
     else:
         print Page % ("", "")
-        print "<p class='error'>%s: <code>%s</code>.</p>"  % (msg, cgi.escape(error))
-        print Page2 % (doc, textoutputselected, "", "")
+        print "<p class='error'>%s: <code>%s</code>.</p>"  % (cgi.escape(msg), cgi.escape(error))
+        print Page2 % (cgi.escape(doc), textoutputselected, "", "")
         sys.exit()
 
 
@@ -225,7 +225,7 @@ def printOutputAsHTML(errors,idls,doc,title,inp,xmlOutput):
             print "</div>"
     else:
         print "<p class='error'>No WebIDL found in the document at <a href='%s'>%s</a>.</p>" % (doc,doc)
-    print Page2 % (doc,"",inp,"")
+    print Page2 % (cgi.escape(doc),"",inp,"")
 
 def extractIdls(doc,extraRequestHeaders=[]):
     # the function below is used to replace
