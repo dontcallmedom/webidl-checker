@@ -4,7 +4,6 @@
 WebIDL extractor and checker based on widlproc http://widl.webvm.net/
 In the commandline, takes one parameter: the URI from which to extract the WebIDLs
 and optionally --extract-only to only get the extracted WebIDL
-$Id$
 """
 
 
@@ -73,7 +72,6 @@ Page2 = """
 </form>
 
 <address>
-script $Revision$ of $Date$<br>
 by <a href="http://www.w3.org/People/Dom/">Dominique Hazaël-Massieux</a><br>
 powered by <a href="https://github.com/dontcallmedom/webidl-checker/">webidl-checker</a> based on <a href="https://github.com/dontcallmedom/widlproc">widlproc</a>. Please <a href="https://github.com/dontcallmedom/webidl-checker/issues">report bugs on github</a>.
 </address>
