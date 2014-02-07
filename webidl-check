@@ -55,7 +55,7 @@ Page2 = """
 <p><input type="submit" value="Check on-line Web IDL"></p>
 </form>
 <p><strong>OR</strong></p>
-<form method="POST">
+<form method="POST" action="?">
 <p><label for='input'>Direct input</label>: <textarea id='input' name="input" rows="10" cols="70">%s</textarea></p>
 <p><label>Ouput format: <select name="output"><option value="html">HTML</option><option value="text" %s>Text (GNU Error format)</option></select></label></p>
 <p><input type="submit" value="Check Web IDL inline"></p>
@@ -74,20 +74,15 @@ powered by <a href="https://github.com/dontcallmedom/webidl-checker/">webidl-che
 
 def serveRequest():
     fields = cgi.FieldStorage()
-
-    if (not fields.has_key('doc') and not fields.has_key('input')):
+    doc = fields.getfirst('doc', "")
+    inp = fields.getfirst('input', "")
+    if not (doc or inp):
         print Page % ("", "")
 	print Page2 % ("","","", "")
     else:
-        doc = ""
-        inp = ""
-        if fields.has_key('doc') and fields['doc'].value:
-            doc = fields['doc'].value
-        elif fields.has_key('input'):
-            inp = fields['input'].value
         output = "html"
         textoutputselected=""
-        if fields.has_key('output') and fields['output'].value=='text':
+        if fields.getfirst('output') == 'text':
             # we'll output using http://www.gnu.org/prep/standards/standards.html#Errors
             output = "text"
             textoutputselected=" selected='selected'"
