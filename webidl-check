@@ -10,6 +10,7 @@ $Id$
 
 import cgi
 import sys
+import types
 import os
 import urlparse
 import urllib
@@ -17,6 +18,16 @@ import httplib
 import html5lib
 from lxml import etree
 from StringIO import StringIO
+
+try:
+    # http_auth is at http://dev.w3.org/cvsweb/2000/tidy-svc/http_auth.py
+    # only useful for accessing Basic-Auth protected resources
+    # in CGI service
+    import http_auth
+except ImportError:
+    URLOPEN_CLASS = urllib.FancyURLopener
+else:
+    URLOPEN_CLASS = http_auth.ProxyAuthURLopener
 
 class WrongConfigurationException(Exception):
     """Exception raised when the script is not properly configured."""
@@ -70,7 +81,28 @@ powered by <a href="https://github.com/dontcallmedom/webidl-checker/">webidl-che
 </html>
 """
 
-	
+# The next two methods are copied from htmldiff.
+# @@Refactor them into a common module.
+def copyHeader(copy_func, source, key, header_name=None):
+    value = source.get(key)
+    if not value:
+        return False
+    elif header_name is None:
+        header_name = key
+    copy_func("%s: %s" % (header_name, value))
+    return True
+
+def setupRequest(source_headers):
+    # the function below is used to replace
+    # the http_error handling to raise an exception in the url_opener
+    # OK, this is ugly, but I don't want to create two derivative classes just for that
+    def raise_on_http_error(self, url, fp, errcode, errmsg, headers):
+        raise UnparseableDocumentException("HTTP Error: %d %s" %(errcode,errmsg))
+    opener = URLOPEN_CLASS()
+    opener.http_error_default = types.MethodType(raise_on_http_error, opener)
+    copyHeader(opener.addheader, source_headers, 'If-Modified-Since')
+    copyHeader(opener.addheader, os.environ, 'REMOTE_ADDR', 'X_Forward_IP_Addr')
+    return opener
 
 def serveRequest():
     fields = cgi.FieldStorage()
@@ -91,28 +123,21 @@ def serveRequest():
             # we'll output using http://www.gnu.org/prep/standards/standards.html#Errors
             output = "text"
             textoutputselected=" selected='selected'"
-        extraRequestHeaders = []
-        if fields.headers.has_key('If-Modified-Since'):
-            extraRequestHeaders.append("If-Modified-Since: %s" % (fields.headers["If-Modified-Since"]))
-        if os.environ.has_key('REMOTE_ADDR') and os.environ['REMOTE_ADDR']:
-            extraRequestHeaders.append('X_Forward_IP_Addr: %s' %(os.environ['REMOTE_ADDR']))
         idls = []
         xmlOutput = []
         errors = []
         title = doc
         if doc:
             try:
-                srcheaders,idls,xmlOutput,errors = extractIdls(doc,extraRequestHeaders)                            
+                srcheaders,idls,xmlOutput,errors = extractIdls(doc, fields.headers)
             except UnparseableDocumentException,e:
                 printError(output,doc, textoutputselected, "Failed to parse document as HTML", str(e))
             except WrongConfigurationException,e:
                 printError(output,doc, textoutputselected, "Could not run widlproc", str(e))
-            if srcheaders.has_key('Last-Modified'):
-                print "Last-Modified: %s" % ( srcheaders["Last-Modified"] )
-            if srcheaders.has_key("Expires"):
-                print "Expires: %s" % (srcheaders['Expires'] )
-            if srcheaders.has_key("title"):
-                title = srcheaders["title"]
+            for header_name in ('Last-Modified', 'Expires'):
+                if copyHeader(sys.stdout.write, srcheaders, header_name):
+                    print
+            title = srcheaders.get('title', title)
         elif inp:
             idls.append(inp)
             xmlout,error = syntax_check(inp,0,1)
@@ -227,26 +252,8 @@ def printOutputAsHTML(errors,idls,doc,title,inp,xmlOutput):
         print "<p class='error'>No WebIDL found in the document at <a href='%s'>%s</a>.</p>" % (doc,doc)
     print Page2 % (cgi.escape(doc, True),"",inp,"")
 
-def extractIdls(doc,extraRequestHeaders=[]):
-    # the function below is used to replace
-    # the http_error handling to raise an exception in the url_opener
-    # OK, this is ugly, but I don't want to create two derivative classes just for that
-    def raise_on_http_error(self, url, fp, errcode, errmsg, headers):
-        raise UnparseableDocumentException("HTTP Error: %d %s" %(errcode,errmsg))
-    import new
-    try:
-        # http_auth is at http://dev.w3.org/cvsweb/2000/tidy-svc/http_auth.py
-        # only useful for accessing Basic-Auth protected resources
-        # in CGI service
-        import http_auth
-        url_opener = http_auth.ProxyAuthURLopener()
-        url_opener.http_error_default=new.instancemethod(raise_on_http_error,url_opener,http_auth.ProxyAuthURLopener)
-    except ImportError:
-        url_opener = urllib.FancyURLopener()
-        url_opener.http_error_default=new.instancemethod(raise_on_http_error,url_opener,urllib.FancyURLopener)
-
-    for header in extraRequestHeaders:
-        url_opener.addheader(header)
+def extractIdls(doc, sourceHeaders={}):
+    url_opener = setupRequest(sourceHeaders)
     try:
         srcdoc = url_opener.open(doc)
     except IOError as e:
