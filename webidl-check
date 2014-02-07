@@ -172,7 +172,8 @@ def printOutputAsText(errors,idls,doc):
     sys.exit()
 
 def printOutputAsHTML(errors,idls,doc,title,inp,xmlOutput):
-    htmltitle = " <a href='%s'>%s</a>" % (cgi.escape(doc, True), cgi.escape(title))
+    esc_doc = cgi.escape(doc, True)
+    htmltitle = " <a href='%s'>%s</a>" % (esc_doc, cgi.escape(title))
     print Page  % (" " + cgi.escape(title), htmltitle)
     print "<p>Results of checking %s.</p>" % (htmltitle)
     if len(errors):
@@ -224,8 +225,8 @@ def printOutputAsHTML(errors,idls,doc,title,inp,xmlOutput):
             print transform(xmldoc)
             print "</div>"
     else:
-        print "<p class='error'>No WebIDL found in the document at <a href='%s'>%s</a>.</p>" % (doc,doc)
-    print Page2 % (cgi.escape(doc, True),"",inp,"")
+        print "<p class='error'>No WebIDL found in the document at <a href='%s'>%s</a>.</p>" % (esc_doc, esc_doc)
+    print Page2 % (esc_doc, "", cgi.escape(inp), "")
 
 def extractIdls(doc,extraRequestHeaders=[]):
     # the function below is used to replace
