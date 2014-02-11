@@ -4,12 +4,12 @@
 WebIDL extractor and checker based on widlproc http://widl.webvm.net/
 In the commandline, takes one parameter: the URI from which to extract the WebIDLs
 and optionally --extract-only to only get the extracted WebIDL
-$Id$
 """
 
 
 import cgi
 import sys
+import types
 import os
 import urlparse
 import urllib
@@ -17,6 +17,16 @@ import httplib
 import html5lib
 from lxml import etree
 from StringIO import StringIO
+
+try:
+    # http_auth is at http://dev.w3.org/cvsweb/2000/tidy-svc/http_auth.py
+    # only useful for accessing Basic-Auth protected resources
+    # in CGI service
+    import http_auth
+except ImportError:
+    URLOPEN_CLASS = urllib.FancyURLopener
+else:
+    URLOPEN_CLASS = http_auth.ProxyAuthURLopener
 
 class WrongConfigurationException(Exception):
     """Exception raised when the script is not properly configured."""
@@ -62,7 +72,6 @@ Page2 = """
 </form>
 
 <address>
-script $Revision$ of $Date$<br>
 by <a href="http://www.w3.org/People/Dom/">Dominique Hazaël-Massieux</a><br>
 powered by <a href="https://github.com/dontcallmedom/webidl-checker/">webidl-checker</a> based on <a href="https://github.com/dontcallmedom/widlproc">widlproc</a>. Please <a href="https://github.com/dontcallmedom/webidl-checker/issues">report bugs on github</a>.
 </address>
@@ -70,7 +79,28 @@ powered by <a href="https://github.com/dontcallmedom/webidl-checker/">webidl-che
 </html>
 """
 
-	
+# The next two methods are copied from htmldiff.
+# @@Refactor them into a common module.
+def copyHeader(copy_func, source, key, header_name=None):
+    value = source.get(key)
+    if not value:
+        return False
+    elif header_name is None:
+        header_name = key
+    copy_func("%s: %s" % (header_name, value))
+    return True
+
+def setupRequest(source_headers):
+    # the function below is used to replace
+    # the http_error handling to raise an exception in the url_opener
+    # OK, this is ugly, but I don't want to create two derivative classes just for that
+    def raise_on_http_error(self, url, fp, errcode, errmsg, headers):
+        raise UnparseableDocumentException("HTTP Error: %d %s" %(errcode,errmsg))
+    opener = URLOPEN_CLASS()
+    opener.http_error_default = types.MethodType(raise_on_http_error, opener)
+    copyHeader(opener.addheader, source_headers, 'If-Modified-Since')
+    copyHeader(opener.addheader, os.environ, 'REMOTE_ADDR', 'X_Forward_IP_Addr')
+    return opener
 
 def serveRequest():
     fields = cgi.FieldStorage()
@@ -91,28 +121,21 @@ def serveRequest():
             # we'll output using http://www.gnu.org/prep/standards/standards.html#Errors
             output = "text"
             textoutputselected=" selected='selected'"
-        extraRequestHeaders = []
-        if fields.headers.has_key('If-Modified-Since'):
-            extraRequestHeaders.append("If-Modified-Since: %s" % (fields.headers["If-Modified-Since"]))
-        if os.environ.has_key('REMOTE_ADDR') and os.environ['REMOTE_ADDR']:
-            extraRequestHeaders.append('X_Forward_IP_Addr: %s' %(os.environ['REMOTE_ADDR']))
         idls = []
         xmlOutput = []
         errors = []
         title = doc
         if doc:
             try:
-                srcheaders,idls,xmlOutput,errors = extractIdls(doc,extraRequestHeaders)                            
+                srcheaders,idls,xmlOutput,errors = extractIdls(doc, fields.headers)
             except UnparseableDocumentException,e:
                 printError(output,doc, textoutputselected, "Failed to parse document as HTML", str(e))
             except WrongConfigurationException,e:
                 printError(output,doc, textoutputselected, "Could not run widlproc", str(e))
-            if srcheaders.has_key('Last-Modified'):
-                print "Last-Modified: %s" % ( srcheaders["Last-Modified"] )
-            if srcheaders.has_key("Expires"):
-                print "Expires: %s" % (srcheaders['Expires'] )
-            if srcheaders.has_key("title"):
-                title = srcheaders["title"]
+            for header_name in ('Last-Modified', 'Expires'):
+                if copyHeader(sys.stdout.write, srcheaders, header_name):
+                    print
+            title = srcheaders.get('title', title)
         elif inp:
             idls.append(inp)
             xmlout,error = syntax_check(inp,0,1)
@@ -123,9 +146,7 @@ def serveRequest():
 
         if not len(errors):
             xmlWrapper = "<Module>" + "".join(xmlOutput) + "</Module>"
-            semanticErrors = semantic_check(xmlWrapper, "\n".join(idls), None, 0)
-            if len(semanticErrors):
-                errors = errors + semanticErrors
+            errors.extend(semantic_check(xmlWrapper, "\n".join(idls), None, 0))
 
         # sending content type header based on ouput param
         if output=='text':
@@ -152,21 +173,34 @@ def printError(output,doc, textoutputselected, msg, error):
         print Page2 % (cgi.escape(doc, True), textoutputselected, "", "")
         sys.exit()
 
+def iter_errors(errors):
+    for errnum, error in enumerate(errors, 1):
+        idl, errstr, idlline, idlnum = error
+        try:
+            errline, errmsg = errstr.split(':', 1)
+            errline = int(errline)
+        except ValueError:
+            errmsg = errstr
+            errline = 0
+        yield errnum, errline, errmsg, idlnum, idlline, idl
+
+def highlightIdl(idllist, errline, errfmt):
+    if 0 < (errline or -1) <= len(idllist):
+        idllist[errline - 1] = errfmt % (idllist[errline - 1],)
+
+def describeIdl(idlline, idlnum):
+    if not idlline:
+        return "IDL #%d" % (idlnum,)
+    return "IDL at line %d" % (idlline,)
 
 def printOutputAsText(errors,idls,doc):
     if len(errors):
-        for error in errors:
-            idl,errormsg,idlline,position=error
-            try:
-                errorline,msg = errormsg.split(':',1)
-            except:
-                errorline = 0
-                msg = errormsg
+        for error_data in iter_errors(errors):
+            errorline, msg, position, idlline = error_data[1:5]
             if idlline:
-                line = int(errorline) + idlline
-                print "%d:%s" % (line,msg)
+                print "%d:%s" % (errorline + idlline, msg)
             else:
-                print "Line %d of IDL #%d:%s" % (int(errorline),position,msg)
+                print "Line %d of IDL #%d:%s" % (errorline, position, msg)
     elif len(idls)==0:
         print "# No WebIDL found in document at %s" % (doc)
     sys.exit()
@@ -177,37 +211,18 @@ def printOutputAsHTML(errors,idls,doc,title,inp,xmlOutput):
     print "<p>Results of checking %s.</p>" % (htmltitle)
     if len(errors):
         print "<p class='error'>The following errors were found in the extracted WebIDLs:</p><ul>"
-        counter = 0
-        for e in errors:
-            counter = counter + 1
-            try:
-                errorline,msg = e[1].split(':',1)
-            except:
-                errorline = None
-                msg = e[1]
-            print "<li><a href='#e%d'>%s</a></li>\n" % (counter,msg)
+        for e in iter_errors(errors):
+            print "<li><a href='#e%d'>%s</a></li>\n" % (e[0], cgi.escape(e[2]))
         print "</ul>"
-        counter = 0
-        for e in errors:
-            counter = counter + 1
-            try:
-                errorline = int(e[1].split(':')[0])
-            except:
-                errorline = None
+        for (counter, errorline, errmsg, idlnum, idlline,
+             idl) in iter_errors(errors):
             # highlighting said line in IDL
-            idllines = e[0].split("\n")
-            highlightedidl = e[0]
-            if errorline!=None and errorline < len(idllines)+1 and errorline > 0:
-                highlightedidl = cgi.escape("\n".join(idllines[0:errorline-1])) + "\n" + "<span class='highlight'>%s</span>" % (cgi.escape(idllines[errorline-1]))
-                if errorline < len(idllines):
-                    highlightedidl = highlightedidl + "\n" + cgi.escape("\n".join(idllines[errorline:]))
+            idllines = [cgi.escape(line) for line in idl.split("\n")]
+            highlightIdl(idllines, errorline,
+                         "<span class='highlight'>%s</span>")
             # and printing out the report
             print "<div class='report' id='e%d'>" % (counter)
-            if e[2]:
-                idldesc = "IDL at line %d" %(e[2])
-            else:
-                idldesc = "IDL #%d" %(e[3])
-            print "<pre class='error'>Line %s</pre><p>error in %s</p><pre class='idl'>%s</pre>" % (cgi.escape(e[1]),idldesc,highlightedidl)
+            print "<pre class='error'>Line %s:%s</pre><p>error in %s</p><pre class='idl'>%s</pre>" % (errorline or "??", cgi.escape(errmsg), describeIdl(idlline, idlnum), "\n".join(idllines))
             print "</div>"
         if len(xmlOutput):
             # @@@ print name of valid interfaces?
@@ -227,26 +242,8 @@ def printOutputAsHTML(errors,idls,doc,title,inp,xmlOutput):
         print "<p class='error'>No WebIDL found in the document at <a href='%s'>%s</a>.</p>" % (doc,doc)
     print Page2 % (cgi.escape(doc, True),"",inp,"")
 
-def extractIdls(doc,extraRequestHeaders=[]):
-    # the function below is used to replace
-    # the http_error handling to raise an exception in the url_opener
-    # OK, this is ugly, but I don't want to create two derivative classes just for that
-    def raise_on_http_error(self, url, fp, errcode, errmsg, headers):
-        raise UnparseableDocumentException("HTTP Error: %d %s" %(errcode,errmsg))
-    import new
-    try:
-        # http_auth is at http://dev.w3.org/cvsweb/2000/tidy-svc/http_auth.py
-        # only useful for accessing Basic-Auth protected resources
-        # in CGI service
-        import http_auth
-        url_opener = http_auth.ProxyAuthURLopener()
-        url_opener.http_error_default=new.instancemethod(raise_on_http_error,url_opener,http_auth.ProxyAuthURLopener)
-    except ImportError:
-        url_opener = urllib.FancyURLopener()
-        url_opener.http_error_default=new.instancemethod(raise_on_http_error,url_opener,urllib.FancyURLopener)
-
-    for header in extraRequestHeaders:
-        url_opener.addheader(header)
+def extractIdls(doc, sourceHeaders={}):
+    url_opener = setupRequest(sourceHeaders)
     try:
         srcdoc = url_opener.open(doc)
     except IOError as e:
@@ -276,9 +273,7 @@ def extractIdls(doc,extraRequestHeaders=[]):
             if len(title):
                 srcheaders["title"] = title[0]
             idls = tree.xpath("/html:html/html:body//html:pre[@class='idl' or contains(@class,'webidl') or html:code[@class='idl-code']]",namespaces=ns)
-            counter = 0
-            for idlHtml in idls:
-                counter = counter + 1
+            for counter, idlHtml in enumerate(idls, 1):
                 idl = "".join(idlHtml.xpath("descendant-or-self::text()"))
                 idlOutput.append(idl)
                 idlline = None
@@ -340,9 +335,7 @@ def semantic_check(idlXml, idl, idlline, counter):
     errorsInXml = errorReport.xpath("//svrl:failed-assert/svrl:text",namespaces={'svrl': 'http://purl.oclc.org/dsdl/svrl'})
     for err in errorsInXml:
         errmsg = "".join(err.xpath("descendant-or-self::text()"))
-        error = (idl, errmsg, idlline, counter)
-        if error:
-            errors.append(error)
+        errors.append((idl, errmsg, idlline, counter))
     return errors
 
 def process(url,output='default'):
@@ -361,27 +354,14 @@ def process(url,output='default'):
         
     if output=='default':
         if len(errors):
-            for error in errors:
-                try:
-                    errorline = int(error[1].split(':')[0])
-                except:
-                    errorline = None
+            for (counter, errorline, errmsg, idlnum, idlline,
+                 idl) in iter_errors(errors):
                 # highlighting said line in IDL
-                print error[0]
-                idllines = error[0].split("\n")
-                highlightedidl = error[0]
-                if errorline!=None and errorline < len(idllines)+1 and errorline > 0:
-                    highlightedidl = "\n".join(idllines[0:errorline-1]) + "\n" + "*** %s" % (idllines[errorline-1])
-                    if errorline < len(idllines):
-                        highlightedidl = highlightedidl + "\n" + "\n".join(idllines[errorline:])
-                if error[2]:
-                    idldesc="IDL at line %d" % (error[2])
-                else:
-                    idldesc="IDL #%d" % (error[3])
-
+                print idl
+                idllines = idl.split("\n")
+                highlightIdl(idllines, errorline, "*** %s")
                 # and printing out the report
-                
-                sys.stderr.write("%s\nerror found in %s\n%s" % (error[1],idldesc,highlightedidl))
+                sys.stderr.write("%s:%s\nerror found in %s\n%s" % (errorline or "??", errmsg, describeIdl(idlline, idlnum), "\n".join(idllines)))
                 sys.stderr.write("-" * 30 + "\n")
         if not(len(errors)) and len(xmlOutput):
             print "<Module>" + "".join(xmlOutput) + "</Module>"
