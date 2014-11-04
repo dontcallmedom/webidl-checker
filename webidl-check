@@ -362,11 +362,13 @@ def process(url,output='default'):
                 idl = u"\n".join(idllines)
                 sys.stderr.write((u"%s:%s\nerror found in %s\n%s" % (errorline or u"??", errmsg, describeIdl(idlline, idlnum), idl)))
                 sys.stderr.write("-" * 30 + "\n")
+                sys.exit(64)
         if not(len(errors)) and len(xmlOutput):
             print "<Module>" + "".join(xmlOutput) + "</Module>"
+            sys.exit(0)
         if len(idls)==0:
             sys.stderr.write( "No WebIDL found in %s" % (url))
-            sys.exit(1)
+            sys.exit(2)
     elif output=='extract-only':
         for idl in idls:
             print idl
