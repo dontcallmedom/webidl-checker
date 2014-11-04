@@ -347,7 +347,7 @@ def process(url,output='default'):
         sys.exit(1)
     except WrongConfigurationException,e:
         sys.stderr.write( "Couldn't run widlproc: %s\n" % (str(e)))
-        sys.stderr.write( "Install it from http://widl.webvm.net/\n")
+        sys.stderr.write( "Install it from https://github.com/dontcallmedom/widlproc\n")
         sys.exit(1)
 
     if output=='default':
