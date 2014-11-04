@@ -6,7 +6,6 @@ In the commandline, takes one parameter: the URI from which to extract the WebID
 and optionally --extract-only to only get the extracted WebIDL
 """
 
-
 import cgi
 import sys
 import types
@@ -137,7 +136,7 @@ def serveRequest():
             if xmlout:
                 xmlOutput.append(xmlout)
             if error:
-                errors.append(error)                    
+                errors.append(error)
 
         if not len(errors):
             xmlWrapper = "<Module>" + "".join(xmlOutput) + "</Module>"
@@ -185,8 +184,8 @@ def highlightIdl(idllist, errline, errfmt):
 
 def describeIdl(idlline, idlnum):
     if not idlline:
-        return "IDL #%d" % (idlnum,)
-    return "IDL at line %d" % (idlline,)
+        return u"IDL #%d" % (idlnum,)
+    return u"IDL at line %d" % (idlline,)
 
 def printOutputAsText(errors,idls,doc):
     exit_code = 0
@@ -293,7 +292,7 @@ def extractIdls(doc, sourceHeaders={}):
             if xmlout:
                 xmlOutput.append(xmlout)
             if error:
-                errors.append(error)        
+                errors.append(error)
         return srcheaders,idlOutput,xmlOutput,errors
     else:
         raise UnparseableDocumentException("could not load resource: ")
@@ -310,13 +309,13 @@ def syntax_check(idl,idlline,counter):
         p =  Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE)
     except OSError:
         raise WrongConfigurationException("widlproc not available at %s" % (command[0]))
-    p.stdin.write(idl)
+    p.stdin.write(idl.encode("utf-8"))
     p.stdin.close()
     retcode = p.wait()
     errmsg = None
     if retcode!=0:
         # widlproc prepends the error message with the filename - we don't need that
-        errmsg = p.stderr.read()[len("/dev/stdin: "):]
+        errmsg = p.stderr.read()[len("/dev/stdin: "):].decode("latin-1")
     if errmsg:
         error = (idl,errmsg,idlline,counter)
     else:
@@ -358,9 +357,10 @@ def process(url,output='default'):
                 # highlighting said line in IDL
                 print idl
                 idllines = idl.split("\n")
-                highlightIdl(idllines, errorline, "*** %s")
+                highlightIdl(idllines, errorline, u"*** %s")
                 # and printing out the report
-                sys.stderr.write("%s:%s\nerror found in %s\n%s" % (errorline or "??", errmsg, describeIdl(idlline, idlnum), "\n".join(idllines)))
+                idl = u"\n".join(idllines)
+                sys.stderr.write((u"%s:%s\nerror found in %s\n%s" % (errorline or u"??", errmsg, describeIdl(idlline, idlnum), idl)))
                 sys.stderr.write("-" * 30 + "\n")
         if not(len(errors)) and len(xmlOutput):
             print "<Module>" + "".join(xmlOutput) + "</Module>"
@@ -387,7 +387,7 @@ if __name__ == '__main__':
             sys.exit(2)
         if len(args) == 0:
                 print __doc__
-                sys.exit(2)            
+                sys.exit(2)
         # process options
         output='default'
         for o, a in opts:
