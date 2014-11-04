@@ -189,7 +189,9 @@ def describeIdl(idlline, idlnum):
     return "IDL at line %d" % (idlline,)
 
 def printOutputAsText(errors,idls,doc):
+    exit_code = 0
     if len(errors):
+        exit_code = 64
         for error_data in iter_errors(errors):
             errorline, msg, position, idlline = error_data[1:5]
             if idlline:
@@ -198,7 +200,7 @@ def printOutputAsText(errors,idls,doc):
                 print "Line %d of IDL #%d:%s" % (errorline, position, msg)
     elif len(idls)==0:
         print "# No WebIDL found in document at %s" % (doc)
-    sys.exit()
+    sys.exit(exit_code)
 
 def printOutputAsHTML(errors,idls,doc,title,inp,xmlOutput):
     esc_doc = cgi.escape(doc, True)
@@ -347,7 +349,7 @@ def process(url,output='default'):
         sys.stderr.write( "Couldn't run widlproc: %s\n" % (str(e)))
         sys.stderr.write( "Install it from http://widl.webvm.net/\n")
         sys.exit(1)
-        
+
     if output=='default':
         if len(errors):
             for (counter, errorline, errmsg, idlnum, idlline,
