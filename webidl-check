@@ -301,7 +301,8 @@ def extractIdls(doc, sourceHeaders={}):
 # process an IDL fragment with widlproc
 # returns the XML representation of the fragment, and a list of errors
 def syntax_check(idl,idlline,counter):
-    command = ['/usr/local/bin/widlproc','-no-dtd-ref','/dev/stdin']
+    widlproc = os.getenv('WIDLPROC_PATH', '/usr/local/bin/widlproc')
+    command = [widlproc,'-no-dtd-ref','/dev/stdin']
     error = None
     xmlOutput = None
     from subprocess import Popen, PIPE
