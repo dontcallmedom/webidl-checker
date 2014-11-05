@@ -261,6 +261,9 @@ def extractIdls(doc, sourceHeaders={}):
 
             ns = {'html': 'http://www.w3.org/1999/xhtml'}
             # Extract WebIDLs from source document in invidual files
+            import warnings
+            from html5lib.constants import DataLossWarning
+            warnings.simplefilter("ignore", DataLossWarning) 
             try:
                 tree = html5lib.parse(htmldoc, treebuilder="lxml")
             except Exception, e:
