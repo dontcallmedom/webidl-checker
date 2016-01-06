@@ -197,7 +197,7 @@
 	 <extends rule="extendedAttributeNoArg"/>
 	 <assert test="parent::ExtendedAttributeList/parent::Operation">Extended attribute NewObject used on <value-of select="local-name(parent::ExtendedAttributeList/parent::*)" /> — NewObject expected only on operations.</assert>
 	 <assert test="not(parent::ExtendedAttributeList/parent::Operation) or parent::ExtendedAttributeList/parent::Operation/@name">Extended attribute NewObject used on an operation without identifier in <value-of select="ancestor::Interface/@name" /> — NewObject expected only on regular or static operations.</assert>
-	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#NewObject" test="not(parent::ExtendedAttributeList/parent::Operation/Type) or parent::ExtendedAttributeList/parent::Operation/Type/@name">Extended attribute NewObject used on an operation whose return type (<value-of select='parent::ExtendedAttributeList/parent::Operation/Type/@type'/>) is not an interface type interface.</assert>
+	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#NewObject" test="not(parent::ExtendedAttributeList/parent::Operation/Type) or parent::ExtendedAttributeList/parent::Operation/Type/@name or parent::ExtendedAttributeList/parent::Operation/Type/@type='Promise'">Extended attribute NewObject used on an operation whose return type (<value-of select='parent::ExtendedAttributeList/parent::Operation/Type/@type'/>) is not an interface type or a promise.</assert>
        </rule>
      </pattern>
      <pattern>
@@ -289,7 +289,7 @@
        <rule context="//ExtendedAttribute[@name='SameObject']" >
 	 <extends see="http://dev.w3.org/2006/webapi/WebIDL/#SameObject" rule="extendedAttributeAppliesToReadonlyAttribute"/>
 	 <extends rule="extendedAttributeNoArg"/>
-	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#SameObject" test="not(parent::ExtendedAttributeList/parent::Attribute/Type) or parent::ExtendedAttributeList/parent::Attribute/Type/@name">Extended attribute SameObject used on an attribute whose type (<value-of select='parent::ExtendedAttributeList/parent::Attribute/Type/@type'/>) is not an interface type interface.</assert>
+	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#SameObject" test="not(parent::ExtendedAttributeList/parent::Attribute/Type) or parent::ExtendedAttributeList/parent::Attribute/Type/@name or parent::ExtendedAttributeList/parent::Attribute/Type/@type='Promise'">Extended attribute SameObject used on an attribute whose type (<value-of select='parent::ExtendedAttributeList/parent::Attribute/Type/@type'/>) is not an interface type or a promise.</assert>
        </rule>
      </pattern>
      <pattern>
