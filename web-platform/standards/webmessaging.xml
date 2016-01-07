@@ -1,0 +1,242 @@
+<Definitions>
+  <webidl>[Constructor(DOMString type, optional <ref>MessageEventInit</ref> eventInitDict), Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface MessageEvent : <ref>Event</ref> {
+  readonly attribute any data;
+  readonly attribute DOMString origin;
+  readonly attribute DOMString lastEventId;
+  readonly attribute (<ref>WindowProxy</ref> or <ref>MessagePort</ref>)? source;
+  readonly attribute <ref>MessagePort</ref>[]? ports;
+
+  void initMessageEvent(DOMString typeArg, boolean canBubbleArg, boolean cancelableArg, any dataArg, DOMString originArg, DOMString lastEventIdArg, (<ref>WindowProxy</ref> or <ref>MessagePort</ref>) sourceArg, sequence&lt;<ref>MessagePort</ref>>? portsArg);
+};
+
+dictionary MessageEventInit : <ref>EventInit</ref> {
+  any data;
+  DOMString origin;
+  DOMString lastEventId;
+  (<ref>WindowProxy</ref> or <ref>MessagePort</ref>)? source;
+  sequence&lt;<ref>MessagePort</ref>> ports;
+};
+[Constructor, Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface MessageChannel {
+  readonly attribute <ref>MessagePort</ref> port1;
+  readonly attribute <ref>MessagePort</ref> port2;
+};
+[Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface MessagePort : <ref>EventTarget</ref> {
+  void postMessage(any message, optional sequence&lt;<ref>Transferable</ref>> transfer);
+  void start();
+  void close();
+
+  attribute <ref>EventHandler</ref> onmessage;
+};</webidl>
+  <Interface name="MessageEvent" id="::MessageEvent">
+    <webidl>[Constructor(DOMString type, optional <ref>MessageEventInit</ref> eventInitDict), Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface MessageEvent : <ref>Event</ref> {
+  readonly attribute any data;
+  readonly attribute DOMString origin;
+  readonly attribute DOMString lastEventId;
+  readonly attribute (<ref>WindowProxy</ref> or <ref>MessagePort</ref>)? source;
+  readonly attribute <ref>MessagePort</ref>[]? ports;
+
+  void initMessageEvent(DOMString typeArg, boolean canBubbleArg, boolean cancelableArg, any dataArg, DOMString originArg, DOMString lastEventIdArg, (<ref>WindowProxy</ref> or <ref>MessagePort</ref>) sourceArg, sequence&lt;<ref>MessagePort</ref>>? portsArg);
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="Constructor">
+        <webidl>Constructor(DOMString type, optional <ref>MessageEventInit</ref> eventInitDict)</webidl>
+        <ArgumentList>
+          <Argument name="type">
+            <Type type="DOMString"/>
+          </Argument>
+          <Argument optional="optional" name="eventInitDict">
+            <Type name="MessageEventInit"/>
+          </Argument>
+        </ArgumentList>
+      </ExtendedAttribute>
+      <ExtendedAttribute name="Exposed">
+        <webidl> Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]</webidl>
+        <TypeList>
+          <Type name="Window"/>
+          <Type name="Worker"/>
+        </TypeList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <InterfaceInheritance>
+      <Name name="Event"/>
+    </InterfaceInheritance>
+    <Attribute name="data" readonly="readonly" id="::MessageEvent::data">
+      <webidl>  readonly attribute any data;</webidl>
+      <Type type="any"/>
+    </Attribute>
+    <Attribute name="origin" readonly="readonly" id="::MessageEvent::origin">
+      <webidl>  readonly attribute DOMString origin;</webidl>
+      <Type type="DOMString"/>
+    </Attribute>
+    <Attribute name="lastEventId" readonly="readonly" id="::MessageEvent::lastEventId">
+      <webidl>  readonly attribute DOMString lastEventId;</webidl>
+      <Type type="DOMString"/>
+    </Attribute>
+    <Attribute name="source" readonly="readonly" id="::MessageEvent::source">
+      <webidl>  readonly attribute (<ref>WindowProxy</ref> or <ref>MessagePort</ref>)? source;</webidl>
+      <Type type="union" nullable="nullable">
+        <Type name="WindowProxy"/>
+        <Type name="MessagePort"/>
+      </Type>
+    </Attribute>
+    <Attribute name="ports" readonly="readonly" id="::MessageEvent::ports">
+      <webidl>  readonly attribute <ref>MessagePort</ref>[]? ports;</webidl>
+      <Type type="array" nullable="nullable">
+        <Type name="MessagePort"/>
+      </Type>
+    </Attribute>
+    <Operation name="initMessageEvent" id="::MessageEvent::initMessageEvent">
+      <webidl>  void initMessageEvent(DOMString typeArg, boolean canBubbleArg, boolean cancelableArg, any dataArg, DOMString originArg, DOMString lastEventIdArg, (<ref>WindowProxy</ref> or <ref>MessagePort</ref>) sourceArg, sequence&lt;<ref>MessagePort</ref>>? portsArg);</webidl>
+      <Type type="void"/>
+      <ArgumentList>
+        <Argument name="typeArg">
+          <Type type="DOMString"/>
+        </Argument>
+        <Argument name="canBubbleArg">
+          <Type type="boolean"/>
+        </Argument>
+        <Argument name="cancelableArg">
+          <Type type="boolean"/>
+        </Argument>
+        <Argument name="dataArg">
+          <Type type="any"/>
+        </Argument>
+        <Argument name="originArg">
+          <Type type="DOMString"/>
+        </Argument>
+        <Argument name="lastEventIdArg">
+          <Type type="DOMString"/>
+        </Argument>
+        <Argument name="sourceArg">
+          <Type type="union">
+            <Type name="WindowProxy"/>
+            <Type name="MessagePort"/>
+          </Type>
+        </Argument>
+        <Argument name="portsArg">
+          <Type type="sequence" nullable="nullable">
+            <Type name="MessagePort"/>
+          </Type>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+  </Interface>
+  <Dictionary name="MessageEventInit" id="::MessageEventInit">
+    <webidl>dictionary MessageEventInit : <ref>EventInit</ref> {
+  any data;
+  DOMString origin;
+  DOMString lastEventId;
+  (<ref>WindowProxy</ref> or <ref>MessagePort</ref>)? source;
+  sequence&lt;<ref>MessagePort</ref>> ports;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="EventInit"/>
+    </DictionaryInheritance>
+    <DictionaryMember name="data" id="::MessageEventInit::data">
+      <webidl>  any data;</webidl>
+      <Type type="any"/>
+    </DictionaryMember>
+    <DictionaryMember name="origin" id="::MessageEventInit::origin">
+      <webidl>  DOMString origin;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+    <DictionaryMember name="lastEventId" id="::MessageEventInit::lastEventId">
+      <webidl>  DOMString lastEventId;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+    <DictionaryMember name="source" id="::MessageEventInit::source">
+      <webidl>  (<ref>WindowProxy</ref> or <ref>MessagePort</ref>)? source;</webidl>
+      <Type type="union" nullable="nullable">
+        <Type name="WindowProxy"/>
+        <Type name="MessagePort"/>
+      </Type>
+    </DictionaryMember>
+    <DictionaryMember name="ports" id="::MessageEventInit::ports">
+      <webidl>  sequence&lt;<ref>MessagePort</ref>> ports;</webidl>
+      <Type type="sequence">
+        <Type name="MessagePort"/>
+      </Type>
+    </DictionaryMember>
+  </Dictionary>
+  <Interface name="MessageChannel" id="::MessageChannel">
+    <webidl>[Constructor, Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface MessageChannel {
+  readonly attribute <ref>MessagePort</ref> port1;
+  readonly attribute <ref>MessagePort</ref> port2;
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="Constructor">
+        <webidl>Constructor</webidl>
+      </ExtendedAttribute>
+      <ExtendedAttribute name="Exposed">
+        <webidl> Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]</webidl>
+        <TypeList>
+          <Type name="Window"/>
+          <Type name="Worker"/>
+        </TypeList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <Attribute name="port1" readonly="readonly" id="::MessageChannel::port1">
+      <webidl>  readonly attribute <ref>MessagePort</ref> port1;</webidl>
+      <Type name="MessagePort"/>
+    </Attribute>
+    <Attribute name="port2" readonly="readonly" id="::MessageChannel::port2">
+      <webidl>  readonly attribute <ref>MessagePort</ref> port2;</webidl>
+      <Type name="MessagePort"/>
+    </Attribute>
+  </Interface>
+  <Interface name="MessagePort" id="::MessagePort">
+    <webidl>[Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface MessagePort : <ref>EventTarget</ref> {
+  void postMessage(any message, optional sequence&lt;<ref>Transferable</ref>> transfer);
+  void start();
+  void close();
+
+  attribute <ref>EventHandler</ref> onmessage;
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="Exposed">
+        <webidl>Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]</webidl>
+        <TypeList>
+          <Type name="Window"/>
+          <Type name="Worker"/>
+        </TypeList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <InterfaceInheritance>
+      <Name name="EventTarget"/>
+    </InterfaceInheritance>
+    <Operation name="postMessage" id="::MessagePort::postMessage">
+      <webidl>  void postMessage(any message, optional sequence&lt;<ref>Transferable</ref>> transfer);</webidl>
+      <Type type="void"/>
+      <ArgumentList>
+        <Argument name="message">
+          <Type type="any"/>
+        </Argument>
+        <Argument optional="optional" name="transfer">
+          <Type type="sequence">
+            <Type name="Transferable"/>
+          </Type>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Operation name="start" id="::MessagePort::start">
+      <webidl>  void start();</webidl>
+      <Type type="void"/>
+      <ArgumentList/>
+    </Operation>
+    <Operation name="close" id="::MessagePort::close">
+      <webidl>  void close();</webidl>
+      <Type type="void"/>
+      <ArgumentList/>
+    </Operation>
+    <Attribute name="onmessage" id="::MessagePort::onmessage">
+      <webidl>  attribute <ref>EventHandler</ref> onmessage;</webidl>
+      <Type name="EventHandler"/>
+    </Attribute>
+  </Interface>
+</Definitions>

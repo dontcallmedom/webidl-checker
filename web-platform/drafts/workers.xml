@@ -1,0 +1,374 @@
+<Definitions>
+  <webidl>[Exposed=<ref>Worker</ref>] interface WorkerGlobalScope : <ref>EventTarget</ref> {
+  readonly attribute <ref>WorkerGlobalScope</ref> self;
+  readonly attribute <ref>WorkerLocation</ref> location;
+
+  void close();
+  attribute <ref>OnErrorEventHandler</ref> onerror;
+  attribute <ref>EventHandler</ref> onlanguagechange;
+  attribute <ref>EventHandler</ref> onoffline;
+  attribute <ref>EventHandler</ref> ononline;
+
+};
+
+[Global=(<ref>Worker</ref>,<ref>DedicatedWorker</ref>),Exposed=<ref>DedicatedWorker</ref>]
+interface DedicatedWorkerGlobalScope : <ref>WorkerGlobalScope</ref> {
+  void postMessage(any message, optional sequence&lt;<ref>Transferable</ref>> transfer);
+  attribute <ref>EventHandler</ref> onmessage;
+};
+[Global=(<ref>Worker</ref>,<ref>SharedWorker</ref>),Exposed=<ref>SharedWorker</ref>]
+interface SharedWorkerGlobalScope : <ref>WorkerGlobalScope</ref> {
+  readonly attribute DOMString name;
+  readonly attribute <ref>ApplicationCache</ref> applicationCache;
+  attribute <ref>EventHandler</ref> onconnect;
+};
+[NoInterfaceObject, Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface AbstractWorker {
+    attribute <ref>EventHandler</ref> onerror;
+};
+[Constructor(DOMString scriptURL), Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface Worker : <ref>EventTarget</ref> {
+  void terminate();
+
+  void postMessage(any message, optional sequence&lt;<ref>Transferable</ref>> transfer);
+  attribute <ref>EventHandler</ref> onmessage;
+};
+<ref>Worker</ref> implements <ref>AbstractWorker</ref>;
+[Constructor(DOMString scriptURL, optional DOMString name), Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface SharedWorker : <ref>EventTarget</ref> {
+  readonly attribute <ref>MessagePort</ref> port;
+};
+<ref>SharedWorker</ref> implements <ref>AbstractWorker</ref>;
+[Exposed=<ref>Worker</ref>]
+partial interface WorkerGlobalScope { 
+  void importScripts(DOMString... urls);
+  readonly attribute <ref>WorkerNavigator</ref> navigator;
+};
+<ref>WorkerGlobalScope</ref> implements <ref>WindowTimers</ref>;
+<ref>WorkerGlobalScope</ref> implements <ref>WindowBase64</ref>;
+[Exposed=<ref>Worker</ref>]
+interface WorkerNavigator {};
+<ref>WorkerNavigator</ref> implements <ref>NavigatorID</ref>;
+<ref>WorkerNavigator</ref> implements <ref>NavigatorLanguage</ref>;
+<ref>WorkerNavigator</ref> implements <ref>NavigatorOnLine</ref>;
+[Exposed=<ref>Worker</ref>]
+interface WorkerLocation { };
+<ref>WorkerLocation</ref> implements <ref>URLUtilsReadOnly</ref>;</webidl>
+  <Interface name="WorkerGlobalScope" id="::WorkerGlobalScope">
+    <webidl>[Exposed=<ref>Worker</ref>] interface WorkerGlobalScope : <ref>EventTarget</ref> {
+  readonly attribute <ref>WorkerGlobalScope</ref> self;
+  readonly attribute <ref>WorkerLocation</ref> location;
+
+  void close();
+  attribute <ref>OnErrorEventHandler</ref> onerror;
+  attribute <ref>EventHandler</ref> onlanguagechange;
+  attribute <ref>EventHandler</ref> onoffline;
+  attribute <ref>EventHandler</ref> ononline;
+
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="Exposed">
+        <webidl>Exposed=<ref>Worker</ref>]</webidl>
+        <TypeList>
+          <Type name="Worker"/>
+        </TypeList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <InterfaceInheritance>
+      <Name name="EventTarget"/>
+    </InterfaceInheritance>
+    <Attribute name="self" readonly="readonly" id="::WorkerGlobalScope::self">
+      <webidl>  readonly attribute <ref>WorkerGlobalScope</ref> self;</webidl>
+      <Type name="WorkerGlobalScope"/>
+    </Attribute>
+    <Attribute name="location" readonly="readonly" id="::WorkerGlobalScope::location">
+      <webidl>  readonly attribute <ref>WorkerLocation</ref> location;</webidl>
+      <Type name="WorkerLocation"/>
+    </Attribute>
+    <Operation name="close" id="::WorkerGlobalScope::close">
+      <webidl>  void close();</webidl>
+      <Type type="void"/>
+      <ArgumentList/>
+    </Operation>
+    <Attribute name="onerror" id="::WorkerGlobalScope::onerror">
+      <webidl>  attribute <ref>OnErrorEventHandler</ref> onerror;</webidl>
+      <Type name="OnErrorEventHandler"/>
+    </Attribute>
+    <Attribute name="onlanguagechange" id="::WorkerGlobalScope::onlanguagechange">
+      <webidl>  attribute <ref>EventHandler</ref> onlanguagechange;</webidl>
+      <Type name="EventHandler"/>
+    </Attribute>
+    <Attribute name="onoffline" id="::WorkerGlobalScope::onoffline">
+      <webidl>  attribute <ref>EventHandler</ref> onoffline;</webidl>
+      <Type name="EventHandler"/>
+    </Attribute>
+    <Attribute name="ononline" id="::WorkerGlobalScope::ononline">
+      <webidl>  attribute <ref>EventHandler</ref> ononline;</webidl>
+      <Type name="EventHandler"/>
+    </Attribute>
+  </Interface>
+  <Interface name="DedicatedWorkerGlobalScope" id="::DedicatedWorkerGlobalScope">
+    <webidl>[Global=(<ref>Worker</ref>,<ref>DedicatedWorker</ref>),Exposed=<ref>DedicatedWorker</ref>]
+interface DedicatedWorkerGlobalScope : <ref>WorkerGlobalScope</ref> {
+  void postMessage(any message, optional sequence&lt;<ref>Transferable</ref>> transfer);
+  attribute <ref>EventHandler</ref> onmessage;
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="Global">
+        <webidl>Global=(<ref>Worker</ref>,<ref>DedicatedWorker</ref>),</webidl>
+        <TypeList>
+          <Type name="Worker"/>
+          <Type name="DedicatedWorker"/>
+        </TypeList>
+      </ExtendedAttribute>
+      <ExtendedAttribute name="Exposed">
+        <webidl>Exposed=<ref>DedicatedWorker</ref>]</webidl>
+        <TypeList>
+          <Type name="DedicatedWorker"/>
+        </TypeList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <InterfaceInheritance>
+      <Name name="WorkerGlobalScope"/>
+    </InterfaceInheritance>
+    <Operation name="postMessage" id="::DedicatedWorkerGlobalScope::postMessage">
+      <webidl>  void postMessage(any message, optional sequence&lt;<ref>Transferable</ref>> transfer);</webidl>
+      <Type type="void"/>
+      <ArgumentList>
+        <Argument name="message">
+          <Type type="any"/>
+        </Argument>
+        <Argument optional="optional" name="transfer">
+          <Type type="sequence">
+            <Type name="Transferable"/>
+          </Type>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Attribute name="onmessage" id="::DedicatedWorkerGlobalScope::onmessage">
+      <webidl>  attribute <ref>EventHandler</ref> onmessage;</webidl>
+      <Type name="EventHandler"/>
+    </Attribute>
+  </Interface>
+  <Interface name="SharedWorkerGlobalScope" id="::SharedWorkerGlobalScope">
+    <webidl>[Global=(<ref>Worker</ref>,<ref>SharedWorker</ref>),Exposed=<ref>SharedWorker</ref>]
+interface SharedWorkerGlobalScope : <ref>WorkerGlobalScope</ref> {
+  readonly attribute DOMString name;
+  readonly attribute <ref>ApplicationCache</ref> applicationCache;
+  attribute <ref>EventHandler</ref> onconnect;
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="Global">
+        <webidl>Global=(<ref>Worker</ref>,<ref>SharedWorker</ref>),</webidl>
+        <TypeList>
+          <Type name="Worker"/>
+          <Type name="SharedWorker"/>
+        </TypeList>
+      </ExtendedAttribute>
+      <ExtendedAttribute name="Exposed">
+        <webidl>Exposed=<ref>SharedWorker</ref>]</webidl>
+        <TypeList>
+          <Type name="SharedWorker"/>
+        </TypeList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <InterfaceInheritance>
+      <Name name="WorkerGlobalScope"/>
+    </InterfaceInheritance>
+    <Attribute name="name" readonly="readonly" id="::SharedWorkerGlobalScope::name">
+      <webidl>  readonly attribute DOMString name;</webidl>
+      <Type type="DOMString"/>
+    </Attribute>
+    <Attribute name="applicationCache" readonly="readonly" id="::SharedWorkerGlobalScope::applicationCache">
+      <webidl>  readonly attribute <ref>ApplicationCache</ref> applicationCache;</webidl>
+      <Type name="ApplicationCache"/>
+    </Attribute>
+    <Attribute name="onconnect" id="::SharedWorkerGlobalScope::onconnect">
+      <webidl>  attribute <ref>EventHandler</ref> onconnect;</webidl>
+      <Type name="EventHandler"/>
+    </Attribute>
+  </Interface>
+  <Interface name="AbstractWorker" id="::AbstractWorker">
+    <webidl>[NoInterfaceObject, Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface AbstractWorker {
+    attribute <ref>EventHandler</ref> onerror;
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="NoInterfaceObject">
+        <webidl>NoInterfaceObject</webidl>
+      </ExtendedAttribute>
+      <ExtendedAttribute name="Exposed">
+        <webidl> Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]</webidl>
+        <TypeList>
+          <Type name="Window"/>
+          <Type name="Worker"/>
+        </TypeList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <Attribute name="onerror" id="::AbstractWorker::onerror">
+      <webidl>    attribute <ref>EventHandler</ref> onerror;</webidl>
+      <Type name="EventHandler"/>
+    </Attribute>
+  </Interface>
+  <Interface name="Worker" id="::Worker">
+    <webidl>[Constructor(DOMString scriptURL), Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface Worker : <ref>EventTarget</ref> {
+  void terminate();
+
+  void postMessage(any message, optional sequence&lt;<ref>Transferable</ref>> transfer);
+  attribute <ref>EventHandler</ref> onmessage;
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="Constructor">
+        <webidl>Constructor(DOMString scriptURL)</webidl>
+        <ArgumentList>
+          <Argument name="scriptURL">
+            <Type type="DOMString"/>
+          </Argument>
+        </ArgumentList>
+      </ExtendedAttribute>
+      <ExtendedAttribute name="Exposed">
+        <webidl> Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]</webidl>
+        <TypeList>
+          <Type name="Window"/>
+          <Type name="Worker"/>
+        </TypeList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <InterfaceInheritance>
+      <Name name="EventTarget"/>
+    </InterfaceInheritance>
+    <Operation name="terminate" id="::Worker::terminate">
+      <webidl>  void terminate();</webidl>
+      <Type type="void"/>
+      <ArgumentList/>
+    </Operation>
+    <Operation name="postMessage" id="::Worker::postMessage">
+      <webidl>  void postMessage(any message, optional sequence&lt;<ref>Transferable</ref>> transfer);</webidl>
+      <Type type="void"/>
+      <ArgumentList>
+        <Argument name="message">
+          <Type type="any"/>
+        </Argument>
+        <Argument optional="optional" name="transfer">
+          <Type type="sequence">
+            <Type name="Transferable"/>
+          </Type>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Attribute name="onmessage" id="::Worker::onmessage">
+      <webidl>  attribute <ref>EventHandler</ref> onmessage;</webidl>
+      <Type name="EventHandler"/>
+    </Attribute>
+  </Interface>
+  <Implements name1="Worker" name2="AbstractWorker">
+    <webidl><ref>Worker</ref> implements <ref>AbstractWorker</ref>;</webidl>
+  </Implements>
+  <Interface name="SharedWorker" id="::SharedWorker">
+    <webidl>[Constructor(DOMString scriptURL, optional DOMString name), Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface SharedWorker : <ref>EventTarget</ref> {
+  readonly attribute <ref>MessagePort</ref> port;
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="Constructor">
+        <webidl>Constructor(DOMString scriptURL, optional DOMString name)</webidl>
+        <ArgumentList>
+          <Argument name="scriptURL">
+            <Type type="DOMString"/>
+          </Argument>
+          <Argument optional="optional" name="name">
+            <Type type="DOMString"/>
+          </Argument>
+        </ArgumentList>
+      </ExtendedAttribute>
+      <ExtendedAttribute name="Exposed">
+        <webidl> Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]</webidl>
+        <TypeList>
+          <Type name="Window"/>
+          <Type name="Worker"/>
+        </TypeList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <InterfaceInheritance>
+      <Name name="EventTarget"/>
+    </InterfaceInheritance>
+    <Attribute name="port" readonly="readonly" id="::SharedWorker::port">
+      <webidl>  readonly attribute <ref>MessagePort</ref> port;</webidl>
+      <Type name="MessagePort"/>
+    </Attribute>
+  </Interface>
+  <Implements name1="SharedWorker" name2="AbstractWorker">
+    <webidl><ref>SharedWorker</ref> implements <ref>AbstractWorker</ref>;</webidl>
+  </Implements>
+  <Interface name="WorkerGlobalScope" partial="partial" id="::WorkerGlobalScope">
+    <webidl>[Exposed=<ref>Worker</ref>]
+partial interface WorkerGlobalScope { 
+  void importScripts(DOMString... urls);
+  readonly attribute <ref>WorkerNavigator</ref> navigator;
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="Exposed">
+        <webidl>Exposed=<ref>Worker</ref>]</webidl>
+        <TypeList>
+          <Type name="Worker"/>
+        </TypeList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <Operation name="importScripts" id="::WorkerGlobalScope::importScripts">
+      <webidl>  void importScripts(DOMString... urls);</webidl>
+      <Type type="void"/>
+      <ArgumentList>
+        <Argument ellipsis="ellipsis" name="urls">
+          <Type type="DOMString"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Attribute name="navigator" readonly="readonly" id="::WorkerGlobalScope::navigator">
+      <webidl>  readonly attribute <ref>WorkerNavigator</ref> navigator;</webidl>
+      <Type name="WorkerNavigator"/>
+    </Attribute>
+  </Interface>
+  <Implements name1="WorkerGlobalScope" name2="WindowTimers">
+    <webidl><ref>WorkerGlobalScope</ref> implements <ref>WindowTimers</ref>;</webidl>
+  </Implements>
+  <Implements name1="WorkerGlobalScope" name2="WindowBase64">
+    <webidl><ref>WorkerGlobalScope</ref> implements <ref>WindowBase64</ref>;</webidl>
+  </Implements>
+  <Interface name="WorkerNavigator" id="::WorkerNavigator">
+    <webidl>[Exposed=<ref>Worker</ref>]
+interface WorkerNavigator {};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="Exposed">
+        <webidl>Exposed=<ref>Worker</ref>]</webidl>
+        <TypeList>
+          <Type name="Worker"/>
+        </TypeList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+  </Interface>
+  <Implements name1="WorkerNavigator" name2="NavigatorID">
+    <webidl><ref>WorkerNavigator</ref> implements <ref>NavigatorID</ref>;</webidl>
+  </Implements>
+  <Implements name1="WorkerNavigator" name2="NavigatorLanguage">
+    <webidl><ref>WorkerNavigator</ref> implements <ref>NavigatorLanguage</ref>;</webidl>
+  </Implements>
+  <Implements name1="WorkerNavigator" name2="NavigatorOnLine">
+    <webidl><ref>WorkerNavigator</ref> implements <ref>NavigatorOnLine</ref>;</webidl>
+  </Implements>
+  <Interface name="WorkerLocation" id="::WorkerLocation">
+    <webidl>[Exposed=<ref>Worker</ref>]
+interface WorkerLocation { };</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="Exposed">
+        <webidl>Exposed=<ref>Worker</ref>]</webidl>
+        <TypeList>
+          <Type name="Worker"/>
+        </TypeList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+  </Interface>
+  <Implements name1="WorkerLocation" name2="URLUtilsReadOnly">
+    <webidl><ref>WorkerLocation</ref> implements <ref>URLUtilsReadOnly</ref>;</webidl>
+  </Implements>
+</Definitions>

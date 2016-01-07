@@ -1,0 +1,826 @@
+<Definitions>
+  <webidl>enum ReferrerPolicy {
+  &quot;&quot;,
+  &quot;no-referrer&quot;,
+  &quot;no-referrer-when-downgrade&quot;,
+  &quot;origin-only&quot;,
+  &quot;origin-when-cross-origin&quot;,
+  &quot;unsafe-url&quot;
+};
+typedef (<ref>Headers</ref> or sequence&lt;sequence&lt;ByteString>>) HeadersInit;
+[Constructor(optional <ref>HeadersInit</ref> init),
+ Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface Headers {
+  void append(ByteString name, ByteString value);
+  void delete(ByteString name);
+  ByteString? get(ByteString name);
+  sequence&lt;ByteString> getAll(ByteString name);
+  boolean has(ByteString name);
+  void set(ByteString name, ByteString value);
+  iterable&lt;ByteString, ByteString>;
+};
+typedef any JSON;
+typedef (<ref>Blob</ref> or <ref>BufferSource</ref> or <ref>FormData</ref> or <ref>URLSearchParams</ref> or USVString) BodyInit;
+[NoInterfaceObject,
+ Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface Body {
+  readonly attribute boolean bodyUsed;
+  [NewObject] Promise&lt;<ref>ArrayBuffer</ref>> arrayBuffer();
+  [NewObject] Promise&lt;<ref>Blob</ref>> blob();
+  [NewObject] Promise&lt;<ref>FormData</ref>> formData();
+  [NewObject] Promise&lt;<ref>JSON</ref>> json();
+  [NewObject] Promise&lt;USVString> text();
+};
+typedef (<ref>Request</ref> or USVString) RequestInfo;
+
+[Constructor(<ref>RequestInfo</ref> input, optional <ref>RequestInit</ref> init),
+ Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface Request {
+  readonly attribute ByteString method;
+  readonly attribute USVString url;
+  [SameObject] readonly attribute <ref>Headers</ref> headers;
+
+  readonly attribute <ref>RequestType</ref> type;
+  readonly attribute <ref>RequestDestination</ref> destination;
+  readonly attribute USVString referrer;
+  readonly attribute <ref>ReferrerPolicy</ref> referrerPolicy;
+  readonly attribute <ref>RequestMode</ref> mode;
+  readonly attribute <ref>RequestCredentials</ref> credentials;
+  readonly attribute <ref>RequestCache</ref> cache;
+  readonly attribute <ref>RequestRedirect</ref> redirect;
+  readonly attribute DOMString integrity;
+
+  [NewObject] <ref>Request</ref> clone();
+};
+<ref>Request</ref> implements <ref>Body</ref>;
+
+dictionary RequestInit {
+  ByteString method;
+  <ref>HeadersInit</ref> headers;
+  <ref>BodyInit</ref>? body;
+  USVString referrer;
+  <ref>ReferrerPolicy</ref> referrerPolicy;
+  <ref>RequestMode</ref> mode;
+  <ref>RequestCredentials</ref> credentials;
+  <ref>RequestCache</ref> cache;
+  <ref>RequestRedirect</ref> redirect;
+  DOMString integrity;
+  any window; 
+};
+
+enum RequestType { &quot;&quot;, &quot;audio&quot;, &quot;font&quot;, &quot;image&quot;, &quot;script&quot;, &quot;style&quot;, &quot;track&quot;, &quot;video&quot; };
+enum RequestDestination { &quot;&quot;, &quot;document&quot;, &quot;sharedworker&quot;, &quot;subresource&quot;, &quot;unknown&quot;, &quot;worker&quot; };
+enum RequestMode { &quot;navigate&quot;, &quot;same-origin&quot;, &quot;no-cors&quot;, &quot;cors&quot; };
+enum RequestCredentials { &quot;omit&quot;, &quot;same-origin&quot;, &quot;include&quot; };
+enum RequestCache { &quot;default&quot;, &quot;no-store&quot;, &quot;reload&quot;, &quot;no-cache&quot;, &quot;force-cache&quot; };
+enum RequestRedirect { &quot;follow&quot;, &quot;error&quot;, &quot;manual&quot; };
+[Constructor(optional <ref>BodyInit</ref>? body = null, optional <ref>ResponseInit</ref> init),
+ Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface Response {
+  [NewObject] static <ref>Response</ref> error();
+  [NewObject] static <ref>Response</ref> redirect(USVString url, optional unsigned short status = 302);
+
+  readonly attribute <ref>ResponseType</ref> type;
+
+  readonly attribute USVString url;
+  readonly attribute unsigned short status;
+  readonly attribute boolean ok;
+  readonly attribute ByteString statusText;
+  [SameObject] readonly attribute <ref>Headers</ref> headers;
+  readonly attribute <ref>ReadableStream</ref>? body;
+
+  [NewObject] <ref>Response</ref> clone();
+};
+<ref>Response</ref> implements <ref>Body</ref>;
+
+dictionary ResponseInit {
+  unsigned short status = 200;
+  ByteString statusText = &quot;OK&quot;;
+  <ref>HeadersInit</ref> headers;
+};
+
+enum ResponseType { &quot;basic&quot;, &quot;cors&quot;, &quot;default&quot;, &quot;error&quot;, &quot;opaque&quot;, &quot;opaqueredirect&quot; };
+[NoInterfaceObject,
+ Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface GlobalFetch {
+  [NewObject] Promise&lt;<ref>Response</ref>> fetch(<ref>RequestInfo</ref> input, optional <ref>RequestInit</ref> init);
+};
+<ref>Window</ref> implements <ref>GlobalFetch</ref>;
+<ref>WorkerGlobalScope</ref> implements <ref>GlobalFetch</ref>;</webidl>
+  <Enum name="ReferrerPolicy" id="::ReferrerPolicy">
+    <webidl>enum ReferrerPolicy {
+  &quot;&quot;,
+  &quot;no-referrer&quot;,
+  &quot;no-referrer-when-downgrade&quot;,
+  &quot;origin-only&quot;,
+  &quot;origin-when-cross-origin&quot;,
+  &quot;unsafe-url&quot;
+};</webidl>
+    <EnumValue stringvalue="">
+      <webidl>  &quot;</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="no-referrer">
+      <webidl>  &quot;no-referrer</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="no-referrer-when-downgrade">
+      <webidl>  &quot;no-referrer-when-downgrade</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="origin-only">
+      <webidl>  &quot;origin-only</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="origin-when-cross-origin">
+      <webidl>  &quot;origin-when-cross-origin</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="unsafe-url">
+      <webidl>  &quot;unsafe-url</webidl>
+    </EnumValue>
+  </Enum>
+  <Typedef name="HeadersInit" id="::HeadersInit">
+    <webidl>typedef (<ref>Headers</ref> or sequence&lt;sequence&lt;ByteString>>) HeadersInit;</webidl>
+    <Type type="union">
+      <Type name="Headers"/>
+      <Type type="sequence">
+        <Type type="sequence">
+          <Type type="ByteString"/>
+        </Type>
+      </Type>
+    </Type>
+  </Typedef>
+  <Interface name="Headers" id="::Headers">
+    <webidl>[Constructor(optional <ref>HeadersInit</ref> init),
+ Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface Headers {
+  void append(ByteString name, ByteString value);
+  void delete(ByteString name);
+  ByteString? get(ByteString name);
+  sequence&lt;ByteString> getAll(ByteString name);
+  boolean has(ByteString name);
+  void set(ByteString name, ByteString value);
+  iterable&lt;ByteString, ByteString>;
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="Constructor">
+        <webidl>Constructor(optional <ref>HeadersInit</ref> init)</webidl>
+        <ArgumentList>
+          <Argument optional="optional" name="init">
+            <Type name="HeadersInit"/>
+          </Argument>
+        </ArgumentList>
+      </ExtendedAttribute>
+      <ExtendedAttribute name="Exposed">
+        <webidl> Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]</webidl>
+        <TypeList>
+          <Type name="Window"/>
+          <Type name="Worker"/>
+        </TypeList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <Operation name="append" id="::Headers::append">
+      <webidl>  void append(ByteString name, ByteString value);</webidl>
+      <Type type="void"/>
+      <ArgumentList>
+        <Argument name="name">
+          <Type type="ByteString"/>
+        </Argument>
+        <Argument name="value">
+          <Type type="ByteString"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Operation name="delete" id="::Headers::delete">
+      <webidl>  void delete(ByteString name);</webidl>
+      <Type type="void"/>
+      <ArgumentList>
+        <Argument name="name">
+          <Type type="ByteString"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Operation name="get" id="::Headers::get">
+      <webidl>  ByteString? get(ByteString name);</webidl>
+      <Type type="ByteString" nullable="nullable"/>
+      <ArgumentList>
+        <Argument name="name">
+          <Type type="ByteString"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Operation name="getAll" id="::Headers::getAll">
+      <webidl>  sequence&lt;ByteString> getAll(ByteString name);</webidl>
+      <Type type="sequence">
+        <Type type="ByteString"/>
+      </Type>
+      <ArgumentList>
+        <Argument name="name">
+          <Type type="ByteString"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Operation name="has" id="::Headers::has">
+      <webidl>  boolean has(ByteString name);</webidl>
+      <Type type="boolean"/>
+      <ArgumentList>
+        <Argument name="name">
+          <Type type="ByteString"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Operation name="set" id="::Headers::set">
+      <webidl>  void set(ByteString name, ByteString value);</webidl>
+      <Type type="void"/>
+      <ArgumentList>
+        <Argument name="name">
+          <Type type="ByteString"/>
+        </Argument>
+        <Argument name="value">
+          <Type type="ByteString"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Iterable>
+      <webidl>  iterable&lt;ByteString, ByteString>;</webidl>
+      <Key>
+        <Type type="ByteString"/>
+      </Key>
+      <Value>
+        <Type type="ByteString"/>
+      </Value>
+    </Iterable>
+  </Interface>
+  <Typedef name="JSON" id="::JSON">
+    <webidl>typedef any JSON;</webidl>
+    <Type type="any"/>
+  </Typedef>
+  <Typedef name="BodyInit" id="::BodyInit">
+    <webidl>typedef (<ref>Blob</ref> or <ref>BufferSource</ref> or <ref>FormData</ref> or <ref>URLSearchParams</ref> or USVString) BodyInit;</webidl>
+    <Type type="union">
+      <Type name="Blob"/>
+      <Type name="BufferSource"/>
+      <Type name="FormData"/>
+      <Type name="URLSearchParams"/>
+      <Type type="USVString"/>
+    </Type>
+  </Typedef>
+  <Interface name="Body" id="::Body">
+    <webidl>[NoInterfaceObject,
+ Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface Body {
+  readonly attribute boolean bodyUsed;
+  [NewObject] Promise&lt;<ref>ArrayBuffer</ref>> arrayBuffer();
+  [NewObject] Promise&lt;<ref>Blob</ref>> blob();
+  [NewObject] Promise&lt;<ref>FormData</ref>> formData();
+  [NewObject] Promise&lt;<ref>JSON</ref>> json();
+  [NewObject] Promise&lt;USVString> text();
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="NoInterfaceObject">
+        <webidl>NoInterfaceObject</webidl>
+      </ExtendedAttribute>
+      <ExtendedAttribute name="Exposed">
+        <webidl> Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]</webidl>
+        <TypeList>
+          <Type name="Window"/>
+          <Type name="Worker"/>
+        </TypeList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <Attribute name="bodyUsed" readonly="readonly" id="::Body::bodyUsed">
+      <webidl>  readonly attribute boolean bodyUsed;</webidl>
+      <Type type="boolean"/>
+    </Attribute>
+    <Operation name="arrayBuffer" id="::Body::arrayBuffer">
+      <webidl>  [NewObject] Promise&lt;<ref>ArrayBuffer</ref>> arrayBuffer();</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="NewObject">
+          <webidl>NewObject</webidl>
+        </ExtendedAttribute>
+      </ExtendedAttributeList>
+      <Type type="Promise">
+        <Type name="ArrayBuffer"/>
+      </Type>
+      <ArgumentList/>
+    </Operation>
+    <Operation name="blob" id="::Body::blob">
+      <webidl>  [NewObject] Promise&lt;<ref>Blob</ref>> blob();</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="NewObject">
+          <webidl>NewObject</webidl>
+        </ExtendedAttribute>
+      </ExtendedAttributeList>
+      <Type type="Promise">
+        <Type name="Blob"/>
+      </Type>
+      <ArgumentList/>
+    </Operation>
+    <Operation name="formData" id="::Body::formData">
+      <webidl>  [NewObject] Promise&lt;<ref>FormData</ref>> formData();</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="NewObject">
+          <webidl>NewObject</webidl>
+        </ExtendedAttribute>
+      </ExtendedAttributeList>
+      <Type type="Promise">
+        <Type name="FormData"/>
+      </Type>
+      <ArgumentList/>
+    </Operation>
+    <Operation name="json" id="::Body::json">
+      <webidl>  [NewObject] Promise&lt;<ref>JSON</ref>> json();</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="NewObject">
+          <webidl>NewObject</webidl>
+        </ExtendedAttribute>
+      </ExtendedAttributeList>
+      <Type type="Promise">
+        <Type name="JSON"/>
+      </Type>
+      <ArgumentList/>
+    </Operation>
+    <Operation name="text" id="::Body::text">
+      <webidl>  [NewObject] Promise&lt;USVString> text();</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="NewObject">
+          <webidl>NewObject</webidl>
+        </ExtendedAttribute>
+      </ExtendedAttributeList>
+      <Type type="Promise">
+        <Type type="USVString"/>
+      </Type>
+      <ArgumentList/>
+    </Operation>
+  </Interface>
+  <Typedef name="RequestInfo" id="::RequestInfo">
+    <webidl>typedef (<ref>Request</ref> or USVString) RequestInfo;</webidl>
+    <Type type="union">
+      <Type name="Request"/>
+      <Type type="USVString"/>
+    </Type>
+  </Typedef>
+  <Interface name="Request" id="::Request">
+    <webidl>[Constructor(<ref>RequestInfo</ref> input, optional <ref>RequestInit</ref> init),
+ Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface Request {
+  readonly attribute ByteString method;
+  readonly attribute USVString url;
+  [SameObject] readonly attribute <ref>Headers</ref> headers;
+
+  readonly attribute <ref>RequestType</ref> type;
+  readonly attribute <ref>RequestDestination</ref> destination;
+  readonly attribute USVString referrer;
+  readonly attribute <ref>ReferrerPolicy</ref> referrerPolicy;
+  readonly attribute <ref>RequestMode</ref> mode;
+  readonly attribute <ref>RequestCredentials</ref> credentials;
+  readonly attribute <ref>RequestCache</ref> cache;
+  readonly attribute <ref>RequestRedirect</ref> redirect;
+  readonly attribute DOMString integrity;
+
+  [NewObject] <ref>Request</ref> clone();
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="Constructor">
+        <webidl>Constructor(<ref>RequestInfo</ref> input, optional <ref>RequestInit</ref> init)</webidl>
+        <ArgumentList>
+          <Argument name="input">
+            <Type name="RequestInfo"/>
+          </Argument>
+          <Argument optional="optional" name="init">
+            <Type name="RequestInit"/>
+          </Argument>
+        </ArgumentList>
+      </ExtendedAttribute>
+      <ExtendedAttribute name="Exposed">
+        <webidl> Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]</webidl>
+        <TypeList>
+          <Type name="Window"/>
+          <Type name="Worker"/>
+        </TypeList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <Attribute name="method" readonly="readonly" id="::Request::method">
+      <webidl>  readonly attribute ByteString method;</webidl>
+      <Type type="ByteString"/>
+    </Attribute>
+    <Attribute name="url" readonly="readonly" id="::Request::url">
+      <webidl>  readonly attribute USVString url;</webidl>
+      <Type type="USVString"/>
+    </Attribute>
+    <Attribute name="headers" readonly="readonly" id="::Request::headers">
+      <webidl>  [SameObject] readonly attribute <ref>Headers</ref> headers;</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="SameObject">
+          <webidl>SameObject</webidl>
+        </ExtendedAttribute>
+      </ExtendedAttributeList>
+      <Type name="Headers"/>
+    </Attribute>
+    <Attribute name="type" readonly="readonly" id="::Request::type">
+      <webidl>  readonly attribute <ref>RequestType</ref> type;</webidl>
+      <Type name="RequestType"/>
+    </Attribute>
+    <Attribute name="destination" readonly="readonly" id="::Request::destination">
+      <webidl>  readonly attribute <ref>RequestDestination</ref> destination;</webidl>
+      <Type name="RequestDestination"/>
+    </Attribute>
+    <Attribute name="referrer" readonly="readonly" id="::Request::referrer">
+      <webidl>  readonly attribute USVString referrer;</webidl>
+      <Type type="USVString"/>
+    </Attribute>
+    <Attribute name="referrerPolicy" readonly="readonly" id="::Request::referrerPolicy">
+      <webidl>  readonly attribute <ref>ReferrerPolicy</ref> referrerPolicy;</webidl>
+      <Type name="ReferrerPolicy"/>
+    </Attribute>
+    <Attribute name="mode" readonly="readonly" id="::Request::mode">
+      <webidl>  readonly attribute <ref>RequestMode</ref> mode;</webidl>
+      <Type name="RequestMode"/>
+    </Attribute>
+    <Attribute name="credentials" readonly="readonly" id="::Request::credentials">
+      <webidl>  readonly attribute <ref>RequestCredentials</ref> credentials;</webidl>
+      <Type name="RequestCredentials"/>
+    </Attribute>
+    <Attribute name="cache" readonly="readonly" id="::Request::cache">
+      <webidl>  readonly attribute <ref>RequestCache</ref> cache;</webidl>
+      <Type name="RequestCache"/>
+    </Attribute>
+    <Attribute name="redirect" readonly="readonly" id="::Request::redirect">
+      <webidl>  readonly attribute <ref>RequestRedirect</ref> redirect;</webidl>
+      <Type name="RequestRedirect"/>
+    </Attribute>
+    <Attribute name="integrity" readonly="readonly" id="::Request::integrity">
+      <webidl>  readonly attribute DOMString integrity;</webidl>
+      <Type type="DOMString"/>
+    </Attribute>
+    <Operation name="clone" id="::Request::clone">
+      <webidl>  [NewObject] <ref>Request</ref> clone();</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="NewObject">
+          <webidl>NewObject</webidl>
+        </ExtendedAttribute>
+      </ExtendedAttributeList>
+      <Type name="Request"/>
+      <ArgumentList/>
+    </Operation>
+  </Interface>
+  <Implements name1="Request" name2="Body">
+    <webidl><ref>Request</ref> implements <ref>Body</ref>;</webidl>
+  </Implements>
+  <Dictionary name="RequestInit" id="::RequestInit">
+    <webidl>dictionary RequestInit {
+  ByteString method;
+  <ref>HeadersInit</ref> headers;
+  <ref>BodyInit</ref>? body;
+  USVString referrer;
+  <ref>ReferrerPolicy</ref> referrerPolicy;
+  <ref>RequestMode</ref> mode;
+  <ref>RequestCredentials</ref> credentials;
+  <ref>RequestCache</ref> cache;
+  <ref>RequestRedirect</ref> redirect;
+  DOMString integrity;
+  any window; 
+};</webidl>
+    <DictionaryMember name="method" id="::RequestInit::method">
+      <webidl>  ByteString method;</webidl>
+      <Type type="ByteString"/>
+    </DictionaryMember>
+    <DictionaryMember name="headers" id="::RequestInit::headers">
+      <webidl>  <ref>HeadersInit</ref> headers;</webidl>
+      <Type name="HeadersInit"/>
+    </DictionaryMember>
+    <DictionaryMember name="body" id="::RequestInit::body">
+      <webidl>  <ref>BodyInit</ref>? body;</webidl>
+      <Type name="BodyInit" nullable="nullable"/>
+    </DictionaryMember>
+    <DictionaryMember name="referrer" id="::RequestInit::referrer">
+      <webidl>  USVString referrer;</webidl>
+      <Type type="USVString"/>
+    </DictionaryMember>
+    <DictionaryMember name="referrerPolicy" id="::RequestInit::referrerPolicy">
+      <webidl>  <ref>ReferrerPolicy</ref> referrerPolicy;</webidl>
+      <Type name="ReferrerPolicy"/>
+    </DictionaryMember>
+    <DictionaryMember name="mode" id="::RequestInit::mode">
+      <webidl>  <ref>RequestMode</ref> mode;</webidl>
+      <Type name="RequestMode"/>
+    </DictionaryMember>
+    <DictionaryMember name="credentials" id="::RequestInit::credentials">
+      <webidl>  <ref>RequestCredentials</ref> credentials;</webidl>
+      <Type name="RequestCredentials"/>
+    </DictionaryMember>
+    <DictionaryMember name="cache" id="::RequestInit::cache">
+      <webidl>  <ref>RequestCache</ref> cache;</webidl>
+      <Type name="RequestCache"/>
+    </DictionaryMember>
+    <DictionaryMember name="redirect" id="::RequestInit::redirect">
+      <webidl>  <ref>RequestRedirect</ref> redirect;</webidl>
+      <Type name="RequestRedirect"/>
+    </DictionaryMember>
+    <DictionaryMember name="integrity" id="::RequestInit::integrity">
+      <webidl>  DOMString integrity;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+    <DictionaryMember name="window" id="::RequestInit::window">
+      <webidl>  any window;</webidl>
+      <Type type="any"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Enum name="RequestType" id="::RequestType">
+    <webidl>enum RequestType { &quot;&quot;, &quot;audio&quot;, &quot;font&quot;, &quot;image&quot;, &quot;script&quot;, &quot;style&quot;, &quot;track&quot;, &quot;video&quot; };</webidl>
+    <EnumValue stringvalue="">
+      <webidl> &quot;</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="audio">
+      <webidl> &quot;audio</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="font">
+      <webidl> &quot;font</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="image">
+      <webidl> &quot;image</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="script">
+      <webidl> &quot;script</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="style">
+      <webidl> &quot;style</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="track">
+      <webidl> &quot;track</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="video">
+      <webidl> &quot;video</webidl>
+    </EnumValue>
+  </Enum>
+  <Enum name="RequestDestination" id="::RequestDestination">
+    <webidl>enum RequestDestination { &quot;&quot;, &quot;document&quot;, &quot;sharedworker&quot;, &quot;subresource&quot;, &quot;unknown&quot;, &quot;worker&quot; };</webidl>
+    <EnumValue stringvalue="">
+      <webidl> &quot;</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="document">
+      <webidl> &quot;document</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="sharedworker">
+      <webidl> &quot;sharedworker</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="subresource">
+      <webidl> &quot;subresource</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="unknown">
+      <webidl> &quot;unknown</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="worker">
+      <webidl> &quot;worker</webidl>
+    </EnumValue>
+  </Enum>
+  <Enum name="RequestMode" id="::RequestMode">
+    <webidl>enum RequestMode { &quot;navigate&quot;, &quot;same-origin&quot;, &quot;no-cors&quot;, &quot;cors&quot; };</webidl>
+    <EnumValue stringvalue="navigate">
+      <webidl> &quot;navigate</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="same-origin">
+      <webidl> &quot;same-origin</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="no-cors">
+      <webidl> &quot;no-cors</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="cors">
+      <webidl> &quot;cors</webidl>
+    </EnumValue>
+  </Enum>
+  <Enum name="RequestCredentials" id="::RequestCredentials">
+    <webidl>enum RequestCredentials { &quot;omit&quot;, &quot;same-origin&quot;, &quot;include&quot; };</webidl>
+    <EnumValue stringvalue="omit">
+      <webidl> &quot;omit</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="same-origin">
+      <webidl> &quot;same-origin</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="include">
+      <webidl> &quot;include</webidl>
+    </EnumValue>
+  </Enum>
+  <Enum name="RequestCache" id="::RequestCache">
+    <webidl>enum RequestCache { &quot;default&quot;, &quot;no-store&quot;, &quot;reload&quot;, &quot;no-cache&quot;, &quot;force-cache&quot; };</webidl>
+    <EnumValue stringvalue="default">
+      <webidl> &quot;default</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="no-store">
+      <webidl> &quot;no-store</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="reload">
+      <webidl> &quot;reload</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="no-cache">
+      <webidl> &quot;no-cache</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="force-cache">
+      <webidl> &quot;force-cache</webidl>
+    </EnumValue>
+  </Enum>
+  <Enum name="RequestRedirect" id="::RequestRedirect">
+    <webidl>enum RequestRedirect { &quot;follow&quot;, &quot;error&quot;, &quot;manual&quot; };</webidl>
+    <EnumValue stringvalue="follow">
+      <webidl> &quot;follow</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="error">
+      <webidl> &quot;error</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="manual">
+      <webidl> &quot;manual</webidl>
+    </EnumValue>
+  </Enum>
+  <Interface name="Response" id="::Response">
+    <webidl>[Constructor(optional <ref>BodyInit</ref>? body = null, optional <ref>ResponseInit</ref> init),
+ Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface Response {
+  [NewObject] static <ref>Response</ref> error();
+  [NewObject] static <ref>Response</ref> redirect(USVString url, optional unsigned short status = 302);
+
+  readonly attribute <ref>ResponseType</ref> type;
+
+  readonly attribute USVString url;
+  readonly attribute unsigned short status;
+  readonly attribute boolean ok;
+  readonly attribute ByteString statusText;
+  [SameObject] readonly attribute <ref>Headers</ref> headers;
+  readonly attribute <ref>ReadableStream</ref>? body;
+
+  [NewObject] <ref>Response</ref> clone();
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="Constructor">
+        <webidl>Constructor(optional <ref>BodyInit</ref>? body = null, optional <ref>ResponseInit</ref> init)</webidl>
+        <ArgumentList>
+          <Argument optional="optional" name="body" value="null">
+            <Type name="BodyInit" nullable="nullable"/>
+          </Argument>
+          <Argument optional="optional" name="init">
+            <Type name="ResponseInit"/>
+          </Argument>
+        </ArgumentList>
+      </ExtendedAttribute>
+      <ExtendedAttribute name="Exposed">
+        <webidl> Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]</webidl>
+        <TypeList>
+          <Type name="Window"/>
+          <Type name="Worker"/>
+        </TypeList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <Operation static="static" name="error" id="::Response::error">
+      <webidl>  [NewObject] static <ref>Response</ref> error();</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="NewObject">
+          <webidl>NewObject</webidl>
+        </ExtendedAttribute>
+      </ExtendedAttributeList>
+      <Type name="Response"/>
+      <ArgumentList/>
+    </Operation>
+    <Operation static="static" name="redirect" id="::Response::redirect">
+      <webidl>  [NewObject] static <ref>Response</ref> redirect(USVString url, optional unsigned short status = 302);</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="NewObject">
+          <webidl>NewObject</webidl>
+        </ExtendedAttribute>
+      </ExtendedAttributeList>
+      <Type name="Response"/>
+      <ArgumentList>
+        <Argument name="url">
+          <Type type="USVString"/>
+        </Argument>
+        <Argument optional="optional" name="status" value="302">
+          <Type type="unsigned short"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Attribute name="type" readonly="readonly" id="::Response::type">
+      <webidl>  readonly attribute <ref>ResponseType</ref> type;</webidl>
+      <Type name="ResponseType"/>
+    </Attribute>
+    <Attribute name="url" readonly="readonly" id="::Response::url">
+      <webidl>  readonly attribute USVString url;</webidl>
+      <Type type="USVString"/>
+    </Attribute>
+    <Attribute name="status" readonly="readonly" id="::Response::status">
+      <webidl>  readonly attribute unsigned short status;</webidl>
+      <Type type="unsigned short"/>
+    </Attribute>
+    <Attribute name="ok" readonly="readonly" id="::Response::ok">
+      <webidl>  readonly attribute boolean ok;</webidl>
+      <Type type="boolean"/>
+    </Attribute>
+    <Attribute name="statusText" readonly="readonly" id="::Response::statusText">
+      <webidl>  readonly attribute ByteString statusText;</webidl>
+      <Type type="ByteString"/>
+    </Attribute>
+    <Attribute name="headers" readonly="readonly" id="::Response::headers">
+      <webidl>  [SameObject] readonly attribute <ref>Headers</ref> headers;</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="SameObject">
+          <webidl>SameObject</webidl>
+        </ExtendedAttribute>
+      </ExtendedAttributeList>
+      <Type name="Headers"/>
+    </Attribute>
+    <Attribute name="body" readonly="readonly" id="::Response::body">
+      <webidl>  readonly attribute <ref>ReadableStream</ref>? body;</webidl>
+      <Type name="ReadableStream" nullable="nullable"/>
+    </Attribute>
+    <Operation name="clone" id="::Response::clone">
+      <webidl>  [NewObject] <ref>Response</ref> clone();</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="NewObject">
+          <webidl>NewObject</webidl>
+        </ExtendedAttribute>
+      </ExtendedAttributeList>
+      <Type name="Response"/>
+      <ArgumentList/>
+    </Operation>
+  </Interface>
+  <Implements name1="Response" name2="Body">
+    <webidl><ref>Response</ref> implements <ref>Body</ref>;</webidl>
+  </Implements>
+  <Dictionary name="ResponseInit" id="::ResponseInit">
+    <webidl>dictionary ResponseInit {
+  unsigned short status = 200;
+  ByteString statusText = &quot;OK&quot;;
+  <ref>HeadersInit</ref> headers;
+};</webidl>
+    <DictionaryMember name="status" value="200" id="::ResponseInit::status">
+      <webidl>  unsigned short status = 200;</webidl>
+      <Type type="unsigned short"/>
+    </DictionaryMember>
+    <DictionaryMember name="statusText" stringvalue="OK" id="::ResponseInit::statusText">
+      <webidl>  ByteString statusText = &quot;OK&quot;;</webidl>
+      <Type type="ByteString"/>
+    </DictionaryMember>
+    <DictionaryMember name="headers" id="::ResponseInit::headers">
+      <webidl>  <ref>HeadersInit</ref> headers;</webidl>
+      <Type name="HeadersInit"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Enum name="ResponseType" id="::ResponseType">
+    <webidl>enum ResponseType { &quot;basic&quot;, &quot;cors&quot;, &quot;default&quot;, &quot;error&quot;, &quot;opaque&quot;, &quot;opaqueredirect&quot; };</webidl>
+    <EnumValue stringvalue="basic">
+      <webidl> &quot;basic</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="cors">
+      <webidl> &quot;cors</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="default">
+      <webidl> &quot;default</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="error">
+      <webidl> &quot;error</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="opaque">
+      <webidl> &quot;opaque</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="opaqueredirect">
+      <webidl> &quot;opaqueredirect</webidl>
+    </EnumValue>
+  </Enum>
+  <Interface name="GlobalFetch" id="::GlobalFetch">
+    <webidl>[NoInterfaceObject,
+ Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface GlobalFetch {
+  [NewObject] Promise&lt;<ref>Response</ref>> fetch(<ref>RequestInfo</ref> input, optional <ref>RequestInit</ref> init);
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="NoInterfaceObject">
+        <webidl>NoInterfaceObject</webidl>
+      </ExtendedAttribute>
+      <ExtendedAttribute name="Exposed">
+        <webidl> Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]</webidl>
+        <TypeList>
+          <Type name="Window"/>
+          <Type name="Worker"/>
+        </TypeList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <Operation name="fetch" id="::GlobalFetch::fetch">
+      <webidl>  [NewObject] Promise&lt;<ref>Response</ref>> fetch(<ref>RequestInfo</ref> input, optional <ref>RequestInit</ref> init);</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="NewObject">
+          <webidl>NewObject</webidl>
+        </ExtendedAttribute>
+      </ExtendedAttributeList>
+      <Type type="Promise">
+        <Type name="Response"/>
+      </Type>
+      <ArgumentList>
+        <Argument name="input">
+          <Type name="RequestInfo"/>
+        </Argument>
+        <Argument optional="optional" name="init">
+          <Type name="RequestInit"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+  </Interface>
+  <Implements name1="Window" name2="GlobalFetch">
+    <webidl><ref>Window</ref> implements <ref>GlobalFetch</ref>;</webidl>
+  </Implements>
+  <Implements name1="WorkerGlobalScope" name2="GlobalFetch">
+    <webidl><ref>WorkerGlobalScope</ref> implements <ref>GlobalFetch</ref>;</webidl>
+  </Implements>
+</Definitions>
