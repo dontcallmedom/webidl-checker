@@ -341,12 +341,15 @@ def semantic_check(idlXml, idl, idlline, counter):
         errors.append((idl, errmsg, idlline, counter))
     return errors
 
-def process(url,output='default'):
+def process(url,output='default',semantic=False):
     import codecs, sys
     sys.stderr = codecs.getwriter('utf8')(sys.stderr)
 
     try:
         (info,idls,xmlOutput,errors)=extractIdls(url)
+        if not len(errors):
+            xmlWrapper = "<Module>" + "".join(xmlOutput) + "</Module>"
+            errors.extend(semantic_check(xmlWrapper, "\n".join(idls), 0, 0))
     except UnparseableDocumentException,e:
         sys.stderr.write( "Couldn't parse document at %s:%s" % (url,str(e)))
         sys.exit(1)
@@ -397,11 +400,14 @@ if __name__ == '__main__':
                 sys.exit(2)
         # process options
         output='default'
+        semantic=False
         for o, a in opts:
             if o in ("-h", "--help"):
                 print __doc__
                 sys.exit(0)
             if o in ("-e", "--extract-only"):
                 output='extract-only'
+            if o in ("-s", "--semantic-checks"):
+                semantic=True
         # process arguments
-        process(args[0],output)
+        process(args[0],output,semantic)
