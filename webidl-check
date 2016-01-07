@@ -328,8 +328,10 @@ def syntax_check(idl,idlline,counter):
     return (xmlOutput,error)
 
 def semantic_check(idlXml, idl, idlline, counter):
+    import os
+    dir = os.path.dirname(__file__)
     errors = []
-    schematron = etree.parse("widlproc-schematron/webidl-schematron.xsl")
+    schematron = etree.parse(os.path.join(dir, "widlproc-schematron/webidl-schematron.xsl"))
     transform = etree.XSLT(schematron)
     idlXmlTree = etree.fromstring(idlXml)
     errorReport = transform(idlXmlTree)
