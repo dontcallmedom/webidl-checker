@@ -1,0 +1,31 @@
+<Definitions>
+  <webidl>typedef (<ref>ArrayBufferView</ref> or <ref>ArrayBuffer</ref>) BufferSource;
+typedef unsigned long long DOMTimeStamp;
+callback Function = any (any... arguments);
+callback VoidFunction = void ();</webidl>
+  <Typedef name="BufferSource" id="::BufferSource">
+    <webidl>typedef (<ref>ArrayBufferView</ref> or <ref>ArrayBuffer</ref>) BufferSource;</webidl>
+    <Type type="union">
+      <Type name="ArrayBufferView"/>
+      <Type name="ArrayBuffer"/>
+    </Type>
+  </Typedef>
+  <Typedef name="DOMTimeStamp" id="::DOMTimeStamp">
+    <webidl>typedef unsigned long long DOMTimeStamp;</webidl>
+    <Type type="unsigned long long"/>
+  </Typedef>
+  <Callback name="Function" id="::Function">
+    <webidl>callback Function = any (any... arguments);</webidl>
+    <Type type="any"/>
+    <ArgumentList>
+      <Argument ellipsis="ellipsis" name="arguments">
+        <Type type="any"/>
+      </Argument>
+    </ArgumentList>
+  </Callback>
+  <Callback name="VoidFunction" id="::VoidFunction">
+    <webidl>callback VoidFunction = void ();</webidl>
+    <Type type="void"/>
+    <ArgumentList/>
+  </Callback>
+</Definitions>

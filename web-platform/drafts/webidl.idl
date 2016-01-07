@@ -1,0 +1,4 @@
+typedef (ArrayBufferView or ArrayBuffer) BufferSource;
+typedef unsigned long long DOMTimeStamp;
+callback Function = any (any... arguments);
+callback VoidFunction = void ();
