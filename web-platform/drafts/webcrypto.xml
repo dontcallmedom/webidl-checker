@@ -1,0 +1,1279 @@
+<Definitions>
+  <webidl>[NoInterfaceObject]
+interface GlobalCrypto {
+  readonly attribute <ref>Crypto</ref> crypto;
+};
+
+<ref>Window</ref> implements <ref>GlobalCrypto</ref>;
+<ref>WorkerGlobalScope</ref> implements <ref>GlobalCrypto</ref>;        
+        
+[Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface Crypto {
+  readonly attribute <ref>SubtleCrypto</ref> subtle;
+  <ref>ArrayBufferView</ref> getRandomValues(<ref>ArrayBufferView</ref> array);
+};
+        
+
+typedef (object or DOMString) AlgorithmIdentifier;
+
+typedef <ref>AlgorithmIdentifier</ref> HashAlgorithmIdentifier;
+
+dictionary Algorithm {
+  required DOMString name;
+};
+        
+
+dictionary KeyAlgorithm {
+  required DOMString name;
+};
+        
+
+enum KeyType { &quot;public&quot;, &quot;private&quot;, &quot;secret&quot; };
+
+enum KeyUsage { &quot;encrypt&quot;, &quot;decrypt&quot;, &quot;sign&quot;, &quot;verify&quot;, &quot;deriveKey&quot;, &quot;deriveBits&quot;, &quot;wrapKey&quot;, &quot;unwrapKey&quot; };
+
+[Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface CryptoKey {
+  readonly attribute <ref>KeyType</ref> type;
+  readonly attribute boolean extractable;
+  readonly attribute object algorithm;
+  readonly attribute object usages;
+};
+        
+
+enum KeyFormat { &quot;raw&quot;, &quot;spki&quot;, &quot;pkcs8&quot;, &quot;jwk&quot; };
+
+[Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface SubtleCrypto {
+  Promise&lt;any> encrypt(<ref>AlgorithmIdentifier</ref> algorithm,
+                       <ref>CryptoKey</ref> key,
+                       <ref>BufferSource</ref> data);
+  Promise&lt;any> decrypt(<ref>AlgorithmIdentifier</ref> algorithm,
+                       <ref>CryptoKey</ref> key,
+                       <ref>BufferSource</ref> data);
+  Promise&lt;any> sign(<ref>AlgorithmIdentifier</ref> algorithm,
+                    <ref>CryptoKey</ref> key,
+                    <ref>BufferSource</ref> data);
+  Promise&lt;any> verify(<ref>AlgorithmIdentifier</ref> algorithm,
+                      <ref>CryptoKey</ref> key,
+                      <ref>BufferSource</ref> signature,
+                      <ref>BufferSource</ref> data);
+  Promise&lt;any> digest(<ref>AlgorithmIdentifier</ref> algorithm,
+                      <ref>BufferSource</ref> data);
+
+  Promise&lt;any> generateKey(<ref>AlgorithmIdentifier</ref> algorithm,
+                          boolean extractable,
+                          sequence&lt;<ref>KeyUsage</ref>> keyUsages );
+  Promise&lt;any> deriveKey(<ref>AlgorithmIdentifier</ref> algorithm,
+                         <ref>CryptoKey</ref> baseKey,
+                         <ref>AlgorithmIdentifier</ref> derivedKeyType,
+                         boolean extractable,
+                         sequence&lt;<ref>KeyUsage</ref>> keyUsages );
+  Promise&lt;any> deriveBits(<ref>AlgorithmIdentifier</ref> algorithm,
+                          <ref>CryptoKey</ref> baseKey,
+                          unsigned long length);
+  
+  Promise&lt;any> importKey(<ref>KeyFormat</ref> format,
+                         (<ref>BufferSource</ref> or <ref>JsonWebKey</ref>) keyData,
+                         <ref>AlgorithmIdentifier</ref> algorithm,
+                         boolean extractable,
+                         sequence&lt;<ref>KeyUsage</ref>> keyUsages );
+  Promise&lt;any> exportKey(<ref>KeyFormat</ref> format, <ref>CryptoKey</ref> key);
+
+  Promise&lt;any> wrapKey(<ref>KeyFormat</ref> format,
+                       <ref>CryptoKey</ref> key,
+                       <ref>CryptoKey</ref> wrappingKey,
+                       <ref>AlgorithmIdentifier</ref> wrapAlgorithm);
+  Promise&lt;any> unwrapKey(<ref>KeyFormat</ref> format,
+                         <ref>BufferSource</ref> wrappedKey,
+                         <ref>CryptoKey</ref> unwrappingKey,
+                         <ref>AlgorithmIdentifier</ref> unwrapAlgorithm,
+                         <ref>AlgorithmIdentifier</ref> unwrappedKeyAlgorithm,
+                         boolean extractable,
+                         sequence&lt;<ref>KeyUsage</ref>> keyUsages );
+};
+        
+
+dictionary RsaOtherPrimesInfo {
+  DOMString r;
+  DOMString d;
+  DOMString t;
+};
+
+dictionary JsonWebKey {
+  DOMString kty;
+  DOMString use;
+  sequence&lt;DOMString> key_ops;
+  DOMString alg;
+
+  boolean ext;
+
+  DOMString crv;
+  DOMString x;
+  DOMString y;
+  DOMString d;
+  DOMString n;
+  DOMString e;
+  DOMString p;
+  DOMString q;
+  DOMString dp;
+  DOMString dq;
+  DOMString qi;
+  sequence&lt;<ref>RsaOtherPrimesInfo</ref>> oth;
+  DOMString k;
+};
+        
+
+typedef <ref>Uint8Array</ref> BigInteger;
+        
+
+dictionary CryptoKeyPair {
+  <ref>CryptoKey</ref> publicKey;
+  <ref>CryptoKey</ref> privateKey;
+};
+        
+
+dictionary RsaKeyGenParams : <ref>Algorithm</ref> {
+  [EnforceRange] required unsigned long modulusLength;
+  required <ref>BigInteger</ref> publicExponent;
+};
+          
+
+dictionary RsaHashedKeyGenParams : <ref>RsaKeyGenParams</ref> {
+  required <ref>HashAlgorithmIdentifier</ref> hash;
+};
+          
+
+dictionary RsaKeyAlgorithm : <ref>KeyAlgorithm</ref> {
+  required unsigned long modulusLength;
+  required <ref>BigInteger</ref> publicExponent;
+};
+          
+
+dictionary RsaHashedKeyAlgorithm : <ref>RsaKeyAlgorithm</ref> {
+  required <ref>KeyAlgorithm</ref> hash;
+};
+          
+
+dictionary RsaHashedImportParams {
+  required <ref>HashAlgorithmIdentifier</ref> hash;
+};
+          
+
+dictionary RsaPssParams : <ref>Algorithm</ref> {
+[EnforceRange] required unsigned long saltLength;
+};
+          
+
+dictionary RsaOaepParams : <ref>Algorithm</ref> {
+<ref>BufferSource</ref> label;
+};
+          
+
+dictionary EcdsaParams : <ref>Algorithm</ref> {
+required <ref>HashAlgorithmIdentifier</ref> hash;
+};
+          
+
+typedef DOMString NamedCurve;
+
+dictionary EcKeyGenParams : <ref>Algorithm</ref> {
+required <ref>NamedCurve</ref> namedCurve;
+};
+          
+
+dictionary EcKeyAlgorithm : <ref>KeyAlgorithm</ref> {
+required <ref>NamedCurve</ref> namedCurve;
+};
+          
+
+dictionary EcKeyImportParams : <ref>Algorithm</ref> {
+required <ref>NamedCurve</ref> namedCurve;
+};
+          
+
+dictionary EcdhKeyDeriveParams : <ref>Algorithm</ref> {
+required <ref>CryptoKey</ref> public;
+};
+          
+
+dictionary AesCtrParams : <ref>Algorithm</ref> {
+required <ref>BufferSource</ref> counter;
+[EnforceRange] required octet length;
+};
+          
+
+dictionary AesKeyAlgorithm : <ref>KeyAlgorithm</ref> {
+required unsigned short length;
+};
+          
+
+dictionary AesKeyGenParams : <ref>Algorithm</ref> {
+[EnforceRange] required unsigned short length;
+};
+          
+
+dictionary AesDerivedKeyParams : <ref>Algorithm</ref> {
+[EnforceRange] required unsigned short length;
+};
+          
+
+dictionary AesCbcParams : <ref>Algorithm</ref> {
+required <ref>BufferSource</ref> iv;
+};
+          
+
+dictionary AesGcmParams : <ref>Algorithm</ref> {
+required <ref>BufferSource</ref> iv;
+<ref>BufferSource</ref> additionalData;
+[EnforceRange] octet tagLength;
+};
+          
+
+dictionary HmacImportParams : <ref>Algorithm</ref> {
+<ref>HashAlgorithmIdentifier</ref> hash;
+[EnforceRange] unsigned long length;
+};
+          
+
+dictionary HmacKeyAlgorithm : <ref>KeyAlgorithm</ref> {
+required <ref>KeyAlgorithm</ref> hash;
+required unsigned long length;
+};
+          
+
+dictionary HmacKeyGenParams : <ref>Algorithm</ref> {
+required <ref>HashAlgorithmIdentifier</ref> hash;
+[EnforceRange] unsigned long length;
+};
+          
+
+dictionary HkdfCtrParams : <ref>Algorithm</ref> {
+required <ref>HashAlgorithmIdentifier</ref> hash;
+required <ref>BufferSource</ref> label;
+required <ref>BufferSource</ref> context;
+};
+          
+
+dictionary Pbkdf2Params : <ref>Algorithm</ref> {
+required <ref>BufferSource</ref> salt;
+[EnforceRange] required unsigned long iterations;
+required <ref>HashAlgorithmIdentifier</ref> hash;
+};</webidl>
+  <Interface name="GlobalCrypto" id="::GlobalCrypto">
+    <webidl>[NoInterfaceObject]
+interface GlobalCrypto {
+  readonly attribute <ref>Crypto</ref> crypto;
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="NoInterfaceObject">
+        <webidl>NoInterfaceObject</webidl>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <Attribute name="crypto" readonly="readonly" id="::GlobalCrypto::crypto">
+      <webidl>  readonly attribute <ref>Crypto</ref> crypto;</webidl>
+      <Type name="Crypto"/>
+    </Attribute>
+  </Interface>
+  <Implements name1="Window" name2="GlobalCrypto">
+    <webidl><ref>Window</ref> implements <ref>GlobalCrypto</ref>;</webidl>
+  </Implements>
+  <Implements name1="WorkerGlobalScope" name2="GlobalCrypto">
+    <webidl><ref>WorkerGlobalScope</ref> implements <ref>GlobalCrypto</ref>;</webidl>
+  </Implements>
+  <Interface name="Crypto" id="::Crypto">
+    <webidl>[Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface Crypto {
+  readonly attribute <ref>SubtleCrypto</ref> subtle;
+  <ref>ArrayBufferView</ref> getRandomValues(<ref>ArrayBufferView</ref> array);
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="Exposed">
+        <webidl>Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]</webidl>
+        <TypeList>
+          <Type name="Window"/>
+          <Type name="Worker"/>
+        </TypeList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <Attribute name="subtle" readonly="readonly" id="::Crypto::subtle">
+      <webidl>  readonly attribute <ref>SubtleCrypto</ref> subtle;</webidl>
+      <Type name="SubtleCrypto"/>
+    </Attribute>
+    <Operation name="getRandomValues" id="::Crypto::getRandomValues">
+      <webidl>  <ref>ArrayBufferView</ref> getRandomValues(<ref>ArrayBufferView</ref> array);</webidl>
+      <Type name="ArrayBufferView"/>
+      <ArgumentList>
+        <Argument name="array">
+          <Type name="ArrayBufferView"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+  </Interface>
+  <Typedef name="AlgorithmIdentifier" id="::AlgorithmIdentifier">
+    <webidl>typedef (object or DOMString) AlgorithmIdentifier;</webidl>
+    <Type type="union">
+      <Type type="object"/>
+      <Type type="DOMString"/>
+    </Type>
+  </Typedef>
+  <Typedef name="HashAlgorithmIdentifier" id="::HashAlgorithmIdentifier">
+    <webidl>typedef <ref>AlgorithmIdentifier</ref> HashAlgorithmIdentifier;</webidl>
+    <Type name="AlgorithmIdentifier"/>
+  </Typedef>
+  <Dictionary name="Algorithm" id="::Algorithm">
+    <webidl>dictionary Algorithm {
+  required DOMString name;
+};</webidl>
+    <DictionaryMember required="required" name="name" id="::Algorithm::name">
+      <webidl>  required DOMString name;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="KeyAlgorithm" id="::KeyAlgorithm">
+    <webidl>dictionary KeyAlgorithm {
+  required DOMString name;
+};</webidl>
+    <DictionaryMember required="required" name="name" id="::KeyAlgorithm::name">
+      <webidl>  required DOMString name;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Enum name="KeyType" id="::KeyType">
+    <webidl>enum KeyType { &quot;public&quot;, &quot;private&quot;, &quot;secret&quot; };</webidl>
+    <EnumValue stringvalue="public">
+      <webidl> &quot;public</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="private">
+      <webidl> &quot;private</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="secret">
+      <webidl> &quot;secret</webidl>
+    </EnumValue>
+  </Enum>
+  <Enum name="KeyUsage" id="::KeyUsage">
+    <webidl>enum KeyUsage { &quot;encrypt&quot;, &quot;decrypt&quot;, &quot;sign&quot;, &quot;verify&quot;, &quot;deriveKey&quot;, &quot;deriveBits&quot;, &quot;wrapKey&quot;, &quot;unwrapKey&quot; };</webidl>
+    <EnumValue stringvalue="encrypt">
+      <webidl> &quot;encrypt</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="decrypt">
+      <webidl> &quot;decrypt</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="sign">
+      <webidl> &quot;sign</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="verify">
+      <webidl> &quot;verify</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="deriveKey">
+      <webidl> &quot;deriveKey</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="deriveBits">
+      <webidl> &quot;deriveBits</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="wrapKey">
+      <webidl> &quot;wrapKey</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="unwrapKey">
+      <webidl> &quot;unwrapKey</webidl>
+    </EnumValue>
+  </Enum>
+  <Interface name="CryptoKey" id="::CryptoKey">
+    <webidl>[Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface CryptoKey {
+  readonly attribute <ref>KeyType</ref> type;
+  readonly attribute boolean extractable;
+  readonly attribute object algorithm;
+  readonly attribute object usages;
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="Exposed">
+        <webidl>Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]</webidl>
+        <TypeList>
+          <Type name="Window"/>
+          <Type name="Worker"/>
+        </TypeList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <Attribute name="type" readonly="readonly" id="::CryptoKey::type">
+      <webidl>  readonly attribute <ref>KeyType</ref> type;</webidl>
+      <Type name="KeyType"/>
+    </Attribute>
+    <Attribute name="extractable" readonly="readonly" id="::CryptoKey::extractable">
+      <webidl>  readonly attribute boolean extractable;</webidl>
+      <Type type="boolean"/>
+    </Attribute>
+    <Attribute name="algorithm" readonly="readonly" id="::CryptoKey::algorithm">
+      <webidl>  readonly attribute object algorithm;</webidl>
+      <Type type="object"/>
+    </Attribute>
+    <Attribute name="usages" readonly="readonly" id="::CryptoKey::usages">
+      <webidl>  readonly attribute object usages;</webidl>
+      <Type type="object"/>
+    </Attribute>
+  </Interface>
+  <Enum name="KeyFormat" id="::KeyFormat">
+    <webidl>enum KeyFormat { &quot;raw&quot;, &quot;spki&quot;, &quot;pkcs8&quot;, &quot;jwk&quot; };</webidl>
+    <EnumValue stringvalue="raw">
+      <webidl> &quot;raw</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="spki">
+      <webidl> &quot;spki</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="pkcs8">
+      <webidl> &quot;pkcs8</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="jwk">
+      <webidl> &quot;jwk</webidl>
+    </EnumValue>
+  </Enum>
+  <Interface name="SubtleCrypto" id="::SubtleCrypto">
+    <webidl>[Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
+interface SubtleCrypto {
+  Promise&lt;any> encrypt(<ref>AlgorithmIdentifier</ref> algorithm,
+                       <ref>CryptoKey</ref> key,
+                       <ref>BufferSource</ref> data);
+  Promise&lt;any> decrypt(<ref>AlgorithmIdentifier</ref> algorithm,
+                       <ref>CryptoKey</ref> key,
+                       <ref>BufferSource</ref> data);
+  Promise&lt;any> sign(<ref>AlgorithmIdentifier</ref> algorithm,
+                    <ref>CryptoKey</ref> key,
+                    <ref>BufferSource</ref> data);
+  Promise&lt;any> verify(<ref>AlgorithmIdentifier</ref> algorithm,
+                      <ref>CryptoKey</ref> key,
+                      <ref>BufferSource</ref> signature,
+                      <ref>BufferSource</ref> data);
+  Promise&lt;any> digest(<ref>AlgorithmIdentifier</ref> algorithm,
+                      <ref>BufferSource</ref> data);
+
+  Promise&lt;any> generateKey(<ref>AlgorithmIdentifier</ref> algorithm,
+                          boolean extractable,
+                          sequence&lt;<ref>KeyUsage</ref>> keyUsages );
+  Promise&lt;any> deriveKey(<ref>AlgorithmIdentifier</ref> algorithm,
+                         <ref>CryptoKey</ref> baseKey,
+                         <ref>AlgorithmIdentifier</ref> derivedKeyType,
+                         boolean extractable,
+                         sequence&lt;<ref>KeyUsage</ref>> keyUsages );
+  Promise&lt;any> deriveBits(<ref>AlgorithmIdentifier</ref> algorithm,
+                          <ref>CryptoKey</ref> baseKey,
+                          unsigned long length);
+  
+  Promise&lt;any> importKey(<ref>KeyFormat</ref> format,
+                         (<ref>BufferSource</ref> or <ref>JsonWebKey</ref>) keyData,
+                         <ref>AlgorithmIdentifier</ref> algorithm,
+                         boolean extractable,
+                         sequence&lt;<ref>KeyUsage</ref>> keyUsages );
+  Promise&lt;any> exportKey(<ref>KeyFormat</ref> format, <ref>CryptoKey</ref> key);
+
+  Promise&lt;any> wrapKey(<ref>KeyFormat</ref> format,
+                       <ref>CryptoKey</ref> key,
+                       <ref>CryptoKey</ref> wrappingKey,
+                       <ref>AlgorithmIdentifier</ref> wrapAlgorithm);
+  Promise&lt;any> unwrapKey(<ref>KeyFormat</ref> format,
+                         <ref>BufferSource</ref> wrappedKey,
+                         <ref>CryptoKey</ref> unwrappingKey,
+                         <ref>AlgorithmIdentifier</ref> unwrapAlgorithm,
+                         <ref>AlgorithmIdentifier</ref> unwrappedKeyAlgorithm,
+                         boolean extractable,
+                         sequence&lt;<ref>KeyUsage</ref>> keyUsages );
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="Exposed">
+        <webidl>Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]</webidl>
+        <TypeList>
+          <Type name="Window"/>
+          <Type name="Worker"/>
+        </TypeList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <Operation name="encrypt" id="::SubtleCrypto::encrypt">
+      <webidl>  Promise&lt;any> encrypt(<ref>AlgorithmIdentifier</ref> algorithm,
+                       <ref>CryptoKey</ref> key,
+                       <ref>BufferSource</ref> data);</webidl>
+      <Type type="Promise">
+        <Type type="any"/>
+      </Type>
+      <ArgumentList>
+        <Argument name="algorithm">
+          <Type name="AlgorithmIdentifier"/>
+        </Argument>
+        <Argument name="key">
+          <Type name="CryptoKey"/>
+        </Argument>
+        <Argument name="data">
+          <Type name="BufferSource"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Operation name="decrypt" id="::SubtleCrypto::decrypt">
+      <webidl>  Promise&lt;any> decrypt(<ref>AlgorithmIdentifier</ref> algorithm,
+                       <ref>CryptoKey</ref> key,
+                       <ref>BufferSource</ref> data);</webidl>
+      <Type type="Promise">
+        <Type type="any"/>
+      </Type>
+      <ArgumentList>
+        <Argument name="algorithm">
+          <Type name="AlgorithmIdentifier"/>
+        </Argument>
+        <Argument name="key">
+          <Type name="CryptoKey"/>
+        </Argument>
+        <Argument name="data">
+          <Type name="BufferSource"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Operation name="sign" id="::SubtleCrypto::sign">
+      <webidl>  Promise&lt;any> sign(<ref>AlgorithmIdentifier</ref> algorithm,
+                    <ref>CryptoKey</ref> key,
+                    <ref>BufferSource</ref> data);</webidl>
+      <Type type="Promise">
+        <Type type="any"/>
+      </Type>
+      <ArgumentList>
+        <Argument name="algorithm">
+          <Type name="AlgorithmIdentifier"/>
+        </Argument>
+        <Argument name="key">
+          <Type name="CryptoKey"/>
+        </Argument>
+        <Argument name="data">
+          <Type name="BufferSource"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Operation name="verify" id="::SubtleCrypto::verify">
+      <webidl>  Promise&lt;any> verify(<ref>AlgorithmIdentifier</ref> algorithm,
+                      <ref>CryptoKey</ref> key,
+                      <ref>BufferSource</ref> signature,
+                      <ref>BufferSource</ref> data);</webidl>
+      <Type type="Promise">
+        <Type type="any"/>
+      </Type>
+      <ArgumentList>
+        <Argument name="algorithm">
+          <Type name="AlgorithmIdentifier"/>
+        </Argument>
+        <Argument name="key">
+          <Type name="CryptoKey"/>
+        </Argument>
+        <Argument name="signature">
+          <Type name="BufferSource"/>
+        </Argument>
+        <Argument name="data">
+          <Type name="BufferSource"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Operation name="digest" id="::SubtleCrypto::digest">
+      <webidl>  Promise&lt;any> digest(<ref>AlgorithmIdentifier</ref> algorithm,
+                      <ref>BufferSource</ref> data);</webidl>
+      <Type type="Promise">
+        <Type type="any"/>
+      </Type>
+      <ArgumentList>
+        <Argument name="algorithm">
+          <Type name="AlgorithmIdentifier"/>
+        </Argument>
+        <Argument name="data">
+          <Type name="BufferSource"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Operation name="generateKey" id="::SubtleCrypto::generateKey">
+      <webidl>  Promise&lt;any> generateKey(<ref>AlgorithmIdentifier</ref> algorithm,
+                          boolean extractable,
+                          sequence&lt;<ref>KeyUsage</ref>> keyUsages );</webidl>
+      <Type type="Promise">
+        <Type type="any"/>
+      </Type>
+      <ArgumentList>
+        <Argument name="algorithm">
+          <Type name="AlgorithmIdentifier"/>
+        </Argument>
+        <Argument name="extractable">
+          <Type type="boolean"/>
+        </Argument>
+        <Argument name="keyUsages">
+          <Type type="sequence">
+            <Type name="KeyUsage"/>
+          </Type>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Operation name="deriveKey" id="::SubtleCrypto::deriveKey">
+      <webidl>  Promise&lt;any> deriveKey(<ref>AlgorithmIdentifier</ref> algorithm,
+                         <ref>CryptoKey</ref> baseKey,
+                         <ref>AlgorithmIdentifier</ref> derivedKeyType,
+                         boolean extractable,
+                         sequence&lt;<ref>KeyUsage</ref>> keyUsages );</webidl>
+      <Type type="Promise">
+        <Type type="any"/>
+      </Type>
+      <ArgumentList>
+        <Argument name="algorithm">
+          <Type name="AlgorithmIdentifier"/>
+        </Argument>
+        <Argument name="baseKey">
+          <Type name="CryptoKey"/>
+        </Argument>
+        <Argument name="derivedKeyType">
+          <Type name="AlgorithmIdentifier"/>
+        </Argument>
+        <Argument name="extractable">
+          <Type type="boolean"/>
+        </Argument>
+        <Argument name="keyUsages">
+          <Type type="sequence">
+            <Type name="KeyUsage"/>
+          </Type>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Operation name="deriveBits" id="::SubtleCrypto::deriveBits">
+      <webidl>  Promise&lt;any> deriveBits(<ref>AlgorithmIdentifier</ref> algorithm,
+                          <ref>CryptoKey</ref> baseKey,
+                          unsigned long length);</webidl>
+      <Type type="Promise">
+        <Type type="any"/>
+      </Type>
+      <ArgumentList>
+        <Argument name="algorithm">
+          <Type name="AlgorithmIdentifier"/>
+        </Argument>
+        <Argument name="baseKey">
+          <Type name="CryptoKey"/>
+        </Argument>
+        <Argument name="length">
+          <Type type="unsigned long"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Operation name="importKey" id="::SubtleCrypto::importKey">
+      <webidl>  Promise&lt;any> importKey(<ref>KeyFormat</ref> format,
+                         (<ref>BufferSource</ref> or <ref>JsonWebKey</ref>) keyData,
+                         <ref>AlgorithmIdentifier</ref> algorithm,
+                         boolean extractable,
+                         sequence&lt;<ref>KeyUsage</ref>> keyUsages );</webidl>
+      <Type type="Promise">
+        <Type type="any"/>
+      </Type>
+      <ArgumentList>
+        <Argument name="format">
+          <Type name="KeyFormat"/>
+        </Argument>
+        <Argument name="keyData">
+          <Type type="union">
+            <Type name="BufferSource"/>
+            <Type name="JsonWebKey"/>
+          </Type>
+        </Argument>
+        <Argument name="algorithm">
+          <Type name="AlgorithmIdentifier"/>
+        </Argument>
+        <Argument name="extractable">
+          <Type type="boolean"/>
+        </Argument>
+        <Argument name="keyUsages">
+          <Type type="sequence">
+            <Type name="KeyUsage"/>
+          </Type>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Operation name="exportKey" id="::SubtleCrypto::exportKey">
+      <webidl>  Promise&lt;any> exportKey(<ref>KeyFormat</ref> format, <ref>CryptoKey</ref> key);</webidl>
+      <Type type="Promise">
+        <Type type="any"/>
+      </Type>
+      <ArgumentList>
+        <Argument name="format">
+          <Type name="KeyFormat"/>
+        </Argument>
+        <Argument name="key">
+          <Type name="CryptoKey"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Operation name="wrapKey" id="::SubtleCrypto::wrapKey">
+      <webidl>  Promise&lt;any> wrapKey(<ref>KeyFormat</ref> format,
+                       <ref>CryptoKey</ref> key,
+                       <ref>CryptoKey</ref> wrappingKey,
+                       <ref>AlgorithmIdentifier</ref> wrapAlgorithm);</webidl>
+      <Type type="Promise">
+        <Type type="any"/>
+      </Type>
+      <ArgumentList>
+        <Argument name="format">
+          <Type name="KeyFormat"/>
+        </Argument>
+        <Argument name="key">
+          <Type name="CryptoKey"/>
+        </Argument>
+        <Argument name="wrappingKey">
+          <Type name="CryptoKey"/>
+        </Argument>
+        <Argument name="wrapAlgorithm">
+          <Type name="AlgorithmIdentifier"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Operation name="unwrapKey" id="::SubtleCrypto::unwrapKey">
+      <webidl>  Promise&lt;any> unwrapKey(<ref>KeyFormat</ref> format,
+                         <ref>BufferSource</ref> wrappedKey,
+                         <ref>CryptoKey</ref> unwrappingKey,
+                         <ref>AlgorithmIdentifier</ref> unwrapAlgorithm,
+                         <ref>AlgorithmIdentifier</ref> unwrappedKeyAlgorithm,
+                         boolean extractable,
+                         sequence&lt;<ref>KeyUsage</ref>> keyUsages );</webidl>
+      <Type type="Promise">
+        <Type type="any"/>
+      </Type>
+      <ArgumentList>
+        <Argument name="format">
+          <Type name="KeyFormat"/>
+        </Argument>
+        <Argument name="wrappedKey">
+          <Type name="BufferSource"/>
+        </Argument>
+        <Argument name="unwrappingKey">
+          <Type name="CryptoKey"/>
+        </Argument>
+        <Argument name="unwrapAlgorithm">
+          <Type name="AlgorithmIdentifier"/>
+        </Argument>
+        <Argument name="unwrappedKeyAlgorithm">
+          <Type name="AlgorithmIdentifier"/>
+        </Argument>
+        <Argument name="extractable">
+          <Type type="boolean"/>
+        </Argument>
+        <Argument name="keyUsages">
+          <Type type="sequence">
+            <Type name="KeyUsage"/>
+          </Type>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+  </Interface>
+  <Dictionary name="RsaOtherPrimesInfo" id="::RsaOtherPrimesInfo">
+    <webidl>dictionary RsaOtherPrimesInfo {
+  DOMString r;
+  DOMString d;
+  DOMString t;
+};</webidl>
+    <DictionaryMember name="r" id="::RsaOtherPrimesInfo::r">
+      <webidl>  DOMString r;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+    <DictionaryMember name="d" id="::RsaOtherPrimesInfo::d">
+      <webidl>  DOMString d;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+    <DictionaryMember name="t" id="::RsaOtherPrimesInfo::t">
+      <webidl>  DOMString t;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="JsonWebKey" id="::JsonWebKey">
+    <webidl>dictionary JsonWebKey {
+  DOMString kty;
+  DOMString use;
+  sequence&lt;DOMString> key_ops;
+  DOMString alg;
+
+  boolean ext;
+
+  DOMString crv;
+  DOMString x;
+  DOMString y;
+  DOMString d;
+  DOMString n;
+  DOMString e;
+  DOMString p;
+  DOMString q;
+  DOMString dp;
+  DOMString dq;
+  DOMString qi;
+  sequence&lt;<ref>RsaOtherPrimesInfo</ref>> oth;
+  DOMString k;
+};</webidl>
+    <DictionaryMember name="kty" id="::JsonWebKey::kty">
+      <webidl>  DOMString kty;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+    <DictionaryMember name="use" id="::JsonWebKey::use">
+      <webidl>  DOMString use;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+    <DictionaryMember name="key_ops" id="::JsonWebKey::key_ops">
+      <webidl>  sequence&lt;DOMString> key_ops;</webidl>
+      <Type type="sequence">
+        <Type type="DOMString"/>
+      </Type>
+    </DictionaryMember>
+    <DictionaryMember name="alg" id="::JsonWebKey::alg">
+      <webidl>  DOMString alg;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+    <DictionaryMember name="ext" id="::JsonWebKey::ext">
+      <webidl>  boolean ext;</webidl>
+      <Type type="boolean"/>
+    </DictionaryMember>
+    <DictionaryMember name="crv" id="::JsonWebKey::crv">
+      <webidl>  DOMString crv;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+    <DictionaryMember name="x" id="::JsonWebKey::x">
+      <webidl>  DOMString x;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+    <DictionaryMember name="y" id="::JsonWebKey::y">
+      <webidl>  DOMString y;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+    <DictionaryMember name="d" id="::JsonWebKey::d">
+      <webidl>  DOMString d;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+    <DictionaryMember name="n" id="::JsonWebKey::n">
+      <webidl>  DOMString n;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+    <DictionaryMember name="e" id="::JsonWebKey::e">
+      <webidl>  DOMString e;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+    <DictionaryMember name="p" id="::JsonWebKey::p">
+      <webidl>  DOMString p;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+    <DictionaryMember name="q" id="::JsonWebKey::q">
+      <webidl>  DOMString q;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+    <DictionaryMember name="dp" id="::JsonWebKey::dp">
+      <webidl>  DOMString dp;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+    <DictionaryMember name="dq" id="::JsonWebKey::dq">
+      <webidl>  DOMString dq;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+    <DictionaryMember name="qi" id="::JsonWebKey::qi">
+      <webidl>  DOMString qi;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+    <DictionaryMember name="oth" id="::JsonWebKey::oth">
+      <webidl>  sequence&lt;<ref>RsaOtherPrimesInfo</ref>> oth;</webidl>
+      <Type type="sequence">
+        <Type name="RsaOtherPrimesInfo"/>
+      </Type>
+    </DictionaryMember>
+    <DictionaryMember name="k" id="::JsonWebKey::k">
+      <webidl>  DOMString k;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Typedef name="BigInteger" id="::BigInteger">
+    <webidl>typedef <ref>Uint8Array</ref> BigInteger;</webidl>
+    <Type name="Uint8Array"/>
+  </Typedef>
+  <Dictionary name="CryptoKeyPair" id="::CryptoKeyPair">
+    <webidl>dictionary CryptoKeyPair {
+  <ref>CryptoKey</ref> publicKey;
+  <ref>CryptoKey</ref> privateKey;
+};</webidl>
+    <DictionaryMember name="publicKey" id="::CryptoKeyPair::publicKey">
+      <webidl>  <ref>CryptoKey</ref> publicKey;</webidl>
+      <Type name="CryptoKey"/>
+    </DictionaryMember>
+    <DictionaryMember name="privateKey" id="::CryptoKeyPair::privateKey">
+      <webidl>  <ref>CryptoKey</ref> privateKey;</webidl>
+      <Type name="CryptoKey"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="RsaKeyGenParams" id="::RsaKeyGenParams">
+    <webidl>dictionary RsaKeyGenParams : <ref>Algorithm</ref> {
+  [EnforceRange] required unsigned long modulusLength;
+  required <ref>BigInteger</ref> publicExponent;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="Algorithm"/>
+    </DictionaryInheritance>
+    <DictionaryMember required="required" name="modulusLength" id="::RsaKeyGenParams::modulusLength">
+      <webidl>  [EnforceRange] required unsigned long modulusLength;</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="EnforceRange">
+          <webidl>EnforceRange</webidl>
+        </ExtendedAttribute>
+      </ExtendedAttributeList>
+      <Type type="unsigned long"/>
+    </DictionaryMember>
+    <DictionaryMember required="required" name="publicExponent" id="::RsaKeyGenParams::publicExponent">
+      <webidl>  required <ref>BigInteger</ref> publicExponent;</webidl>
+      <Type name="BigInteger"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="RsaHashedKeyGenParams" id="::RsaHashedKeyGenParams">
+    <webidl>dictionary RsaHashedKeyGenParams : <ref>RsaKeyGenParams</ref> {
+  required <ref>HashAlgorithmIdentifier</ref> hash;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="RsaKeyGenParams"/>
+    </DictionaryInheritance>
+    <DictionaryMember required="required" name="hash" id="::RsaHashedKeyGenParams::hash">
+      <webidl>  required <ref>HashAlgorithmIdentifier</ref> hash;</webidl>
+      <Type name="HashAlgorithmIdentifier"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="RsaKeyAlgorithm" id="::RsaKeyAlgorithm">
+    <webidl>dictionary RsaKeyAlgorithm : <ref>KeyAlgorithm</ref> {
+  required unsigned long modulusLength;
+  required <ref>BigInteger</ref> publicExponent;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="KeyAlgorithm"/>
+    </DictionaryInheritance>
+    <DictionaryMember required="required" name="modulusLength" id="::RsaKeyAlgorithm::modulusLength">
+      <webidl>  required unsigned long modulusLength;</webidl>
+      <Type type="unsigned long"/>
+    </DictionaryMember>
+    <DictionaryMember required="required" name="publicExponent" id="::RsaKeyAlgorithm::publicExponent">
+      <webidl>  required <ref>BigInteger</ref> publicExponent;</webidl>
+      <Type name="BigInteger"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="RsaHashedKeyAlgorithm" id="::RsaHashedKeyAlgorithm">
+    <webidl>dictionary RsaHashedKeyAlgorithm : <ref>RsaKeyAlgorithm</ref> {
+  required <ref>KeyAlgorithm</ref> hash;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="RsaKeyAlgorithm"/>
+    </DictionaryInheritance>
+    <DictionaryMember required="required" name="hash" id="::RsaHashedKeyAlgorithm::hash">
+      <webidl>  required <ref>KeyAlgorithm</ref> hash;</webidl>
+      <Type name="KeyAlgorithm"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="RsaHashedImportParams" id="::RsaHashedImportParams">
+    <webidl>dictionary RsaHashedImportParams {
+  required <ref>HashAlgorithmIdentifier</ref> hash;
+};</webidl>
+    <DictionaryMember required="required" name="hash" id="::RsaHashedImportParams::hash">
+      <webidl>  required <ref>HashAlgorithmIdentifier</ref> hash;</webidl>
+      <Type name="HashAlgorithmIdentifier"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="RsaPssParams" id="::RsaPssParams">
+    <webidl>dictionary RsaPssParams : <ref>Algorithm</ref> {
+[EnforceRange] required unsigned long saltLength;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="Algorithm"/>
+    </DictionaryInheritance>
+    <DictionaryMember required="required" name="saltLength" id="::RsaPssParams::saltLength">
+      <webidl>[EnforceRange] required unsigned long saltLength;</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="EnforceRange">
+          <webidl>EnforceRange</webidl>
+        </ExtendedAttribute>
+      </ExtendedAttributeList>
+      <Type type="unsigned long"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="RsaOaepParams" id="::RsaOaepParams">
+    <webidl>dictionary RsaOaepParams : <ref>Algorithm</ref> {
+<ref>BufferSource</ref> label;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="Algorithm"/>
+    </DictionaryInheritance>
+    <DictionaryMember name="label" id="::RsaOaepParams::label">
+      <webidl><ref>BufferSource</ref> label;</webidl>
+      <Type name="BufferSource"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="EcdsaParams" id="::EcdsaParams">
+    <webidl>dictionary EcdsaParams : <ref>Algorithm</ref> {
+required <ref>HashAlgorithmIdentifier</ref> hash;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="Algorithm"/>
+    </DictionaryInheritance>
+    <DictionaryMember required="required" name="hash" id="::EcdsaParams::hash">
+      <webidl>required <ref>HashAlgorithmIdentifier</ref> hash;</webidl>
+      <Type name="HashAlgorithmIdentifier"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Typedef name="NamedCurve" id="::NamedCurve">
+    <webidl>typedef DOMString NamedCurve;</webidl>
+    <Type type="DOMString"/>
+  </Typedef>
+  <Dictionary name="EcKeyGenParams" id="::EcKeyGenParams">
+    <webidl>dictionary EcKeyGenParams : <ref>Algorithm</ref> {
+required <ref>NamedCurve</ref> namedCurve;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="Algorithm"/>
+    </DictionaryInheritance>
+    <DictionaryMember required="required" name="namedCurve" id="::EcKeyGenParams::namedCurve">
+      <webidl>required <ref>NamedCurve</ref> namedCurve;</webidl>
+      <Type name="NamedCurve"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="EcKeyAlgorithm" id="::EcKeyAlgorithm">
+    <webidl>dictionary EcKeyAlgorithm : <ref>KeyAlgorithm</ref> {
+required <ref>NamedCurve</ref> namedCurve;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="KeyAlgorithm"/>
+    </DictionaryInheritance>
+    <DictionaryMember required="required" name="namedCurve" id="::EcKeyAlgorithm::namedCurve">
+      <webidl>required <ref>NamedCurve</ref> namedCurve;</webidl>
+      <Type name="NamedCurve"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="EcKeyImportParams" id="::EcKeyImportParams">
+    <webidl>dictionary EcKeyImportParams : <ref>Algorithm</ref> {
+required <ref>NamedCurve</ref> namedCurve;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="Algorithm"/>
+    </DictionaryInheritance>
+    <DictionaryMember required="required" name="namedCurve" id="::EcKeyImportParams::namedCurve">
+      <webidl>required <ref>NamedCurve</ref> namedCurve;</webidl>
+      <Type name="NamedCurve"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="EcdhKeyDeriveParams" id="::EcdhKeyDeriveParams">
+    <webidl>dictionary EcdhKeyDeriveParams : <ref>Algorithm</ref> {
+required <ref>CryptoKey</ref> public;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="Algorithm"/>
+    </DictionaryInheritance>
+    <DictionaryMember required="required" name="public" id="::EcdhKeyDeriveParams::public">
+      <webidl>required <ref>CryptoKey</ref> public;</webidl>
+      <Type name="CryptoKey"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="AesCtrParams" id="::AesCtrParams">
+    <webidl>dictionary AesCtrParams : <ref>Algorithm</ref> {
+required <ref>BufferSource</ref> counter;
+[EnforceRange] required octet length;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="Algorithm"/>
+    </DictionaryInheritance>
+    <DictionaryMember required="required" name="counter" id="::AesCtrParams::counter">
+      <webidl>required <ref>BufferSource</ref> counter;</webidl>
+      <Type name="BufferSource"/>
+    </DictionaryMember>
+    <DictionaryMember required="required" name="length" id="::AesCtrParams::length">
+      <webidl>[EnforceRange] required octet length;</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="EnforceRange">
+          <webidl>EnforceRange</webidl>
+        </ExtendedAttribute>
+      </ExtendedAttributeList>
+      <Type type="octet"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="AesKeyAlgorithm" id="::AesKeyAlgorithm">
+    <webidl>dictionary AesKeyAlgorithm : <ref>KeyAlgorithm</ref> {
+required unsigned short length;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="KeyAlgorithm"/>
+    </DictionaryInheritance>
+    <DictionaryMember required="required" name="length" id="::AesKeyAlgorithm::length">
+      <webidl>required unsigned short length;</webidl>
+      <Type type="unsigned short"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="AesKeyGenParams" id="::AesKeyGenParams">
+    <webidl>dictionary AesKeyGenParams : <ref>Algorithm</ref> {
+[EnforceRange] required unsigned short length;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="Algorithm"/>
+    </DictionaryInheritance>
+    <DictionaryMember required="required" name="length" id="::AesKeyGenParams::length">
+      <webidl>[EnforceRange] required unsigned short length;</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="EnforceRange">
+          <webidl>EnforceRange</webidl>
+        </ExtendedAttribute>
+      </ExtendedAttributeList>
+      <Type type="unsigned short"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="AesDerivedKeyParams" id="::AesDerivedKeyParams">
+    <webidl>dictionary AesDerivedKeyParams : <ref>Algorithm</ref> {
+[EnforceRange] required unsigned short length;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="Algorithm"/>
+    </DictionaryInheritance>
+    <DictionaryMember required="required" name="length" id="::AesDerivedKeyParams::length">
+      <webidl>[EnforceRange] required unsigned short length;</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="EnforceRange">
+          <webidl>EnforceRange</webidl>
+        </ExtendedAttribute>
+      </ExtendedAttributeList>
+      <Type type="unsigned short"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="AesCbcParams" id="::AesCbcParams">
+    <webidl>dictionary AesCbcParams : <ref>Algorithm</ref> {
+required <ref>BufferSource</ref> iv;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="Algorithm"/>
+    </DictionaryInheritance>
+    <DictionaryMember required="required" name="iv" id="::AesCbcParams::iv">
+      <webidl>required <ref>BufferSource</ref> iv;</webidl>
+      <Type name="BufferSource"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="AesGcmParams" id="::AesGcmParams">
+    <webidl>dictionary AesGcmParams : <ref>Algorithm</ref> {
+required <ref>BufferSource</ref> iv;
+<ref>BufferSource</ref> additionalData;
+[EnforceRange] octet tagLength;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="Algorithm"/>
+    </DictionaryInheritance>
+    <DictionaryMember required="required" name="iv" id="::AesGcmParams::iv">
+      <webidl>required <ref>BufferSource</ref> iv;</webidl>
+      <Type name="BufferSource"/>
+    </DictionaryMember>
+    <DictionaryMember name="additionalData" id="::AesGcmParams::additionalData">
+      <webidl><ref>BufferSource</ref> additionalData;</webidl>
+      <Type name="BufferSource"/>
+    </DictionaryMember>
+    <DictionaryMember name="tagLength" id="::AesGcmParams::tagLength">
+      <webidl>[EnforceRange] octet tagLength;</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="EnforceRange">
+          <webidl>EnforceRange</webidl>
+        </ExtendedAttribute>
+      </ExtendedAttributeList>
+      <Type type="octet"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="HmacImportParams" id="::HmacImportParams">
+    <webidl>dictionary HmacImportParams : <ref>Algorithm</ref> {
+<ref>HashAlgorithmIdentifier</ref> hash;
+[EnforceRange] unsigned long length;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="Algorithm"/>
+    </DictionaryInheritance>
+    <DictionaryMember name="hash" id="::HmacImportParams::hash">
+      <webidl><ref>HashAlgorithmIdentifier</ref> hash;</webidl>
+      <Type name="HashAlgorithmIdentifier"/>
+    </DictionaryMember>
+    <DictionaryMember name="length" id="::HmacImportParams::length">
+      <webidl>[EnforceRange] unsigned long length;</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="EnforceRange">
+          <webidl>EnforceRange</webidl>
+        </ExtendedAttribute>
+      </ExtendedAttributeList>
+      <Type type="unsigned long"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="HmacKeyAlgorithm" id="::HmacKeyAlgorithm">
+    <webidl>dictionary HmacKeyAlgorithm : <ref>KeyAlgorithm</ref> {
+required <ref>KeyAlgorithm</ref> hash;
+required unsigned long length;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="KeyAlgorithm"/>
+    </DictionaryInheritance>
+    <DictionaryMember required="required" name="hash" id="::HmacKeyAlgorithm::hash">
+      <webidl>required <ref>KeyAlgorithm</ref> hash;</webidl>
+      <Type name="KeyAlgorithm"/>
+    </DictionaryMember>
+    <DictionaryMember required="required" name="length" id="::HmacKeyAlgorithm::length">
+      <webidl>required unsigned long length;</webidl>
+      <Type type="unsigned long"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="HmacKeyGenParams" id="::HmacKeyGenParams">
+    <webidl>dictionary HmacKeyGenParams : <ref>Algorithm</ref> {
+required <ref>HashAlgorithmIdentifier</ref> hash;
+[EnforceRange] unsigned long length;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="Algorithm"/>
+    </DictionaryInheritance>
+    <DictionaryMember required="required" name="hash" id="::HmacKeyGenParams::hash">
+      <webidl>required <ref>HashAlgorithmIdentifier</ref> hash;</webidl>
+      <Type name="HashAlgorithmIdentifier"/>
+    </DictionaryMember>
+    <DictionaryMember name="length" id="::HmacKeyGenParams::length">
+      <webidl>[EnforceRange] unsigned long length;</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="EnforceRange">
+          <webidl>EnforceRange</webidl>
+        </ExtendedAttribute>
+      </ExtendedAttributeList>
+      <Type type="unsigned long"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="HkdfCtrParams" id="::HkdfCtrParams">
+    <webidl>dictionary HkdfCtrParams : <ref>Algorithm</ref> {
+required <ref>HashAlgorithmIdentifier</ref> hash;
+required <ref>BufferSource</ref> label;
+required <ref>BufferSource</ref> context;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="Algorithm"/>
+    </DictionaryInheritance>
+    <DictionaryMember required="required" name="hash" id="::HkdfCtrParams::hash">
+      <webidl>required <ref>HashAlgorithmIdentifier</ref> hash;</webidl>
+      <Type name="HashAlgorithmIdentifier"/>
+    </DictionaryMember>
+    <DictionaryMember required="required" name="label" id="::HkdfCtrParams::label">
+      <webidl>required <ref>BufferSource</ref> label;</webidl>
+      <Type name="BufferSource"/>
+    </DictionaryMember>
+    <DictionaryMember required="required" name="context" id="::HkdfCtrParams::context">
+      <webidl>required <ref>BufferSource</ref> context;</webidl>
+      <Type name="BufferSource"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="Pbkdf2Params" id="::Pbkdf2Params">
+    <webidl>dictionary Pbkdf2Params : <ref>Algorithm</ref> {
+required <ref>BufferSource</ref> salt;
+[EnforceRange] required unsigned long iterations;
+required <ref>HashAlgorithmIdentifier</ref> hash;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="Algorithm"/>
+    </DictionaryInheritance>
+    <DictionaryMember required="required" name="salt" id="::Pbkdf2Params::salt">
+      <webidl>required <ref>BufferSource</ref> salt;</webidl>
+      <Type name="BufferSource"/>
+    </DictionaryMember>
+    <DictionaryMember required="required" name="iterations" id="::Pbkdf2Params::iterations">
+      <webidl>[EnforceRange] required unsigned long iterations;</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="EnforceRange">
+          <webidl>EnforceRange</webidl>
+        </ExtendedAttribute>
+      </ExtendedAttributeList>
+      <Type type="unsigned long"/>
+    </DictionaryMember>
+    <DictionaryMember required="required" name="hash" id="::Pbkdf2Params::hash">
+      <webidl>required <ref>HashAlgorithmIdentifier</ref> hash;</webidl>
+      <Type name="HashAlgorithmIdentifier"/>
+    </DictionaryMember>
+  </Dictionary>
+</Definitions>
