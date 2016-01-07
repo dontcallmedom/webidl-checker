@@ -15470,6 +15470,57 @@ callback interface NodeFilter {
   </Interface>
 </Definitions>
 <Definitions>
+  <webidl>typedef (<ref>Int8Array</ref> or <ref>Int16Array</ref> or <ref>Int32Array</ref> or
+         <ref>Uint8Array</ref> or <ref>Uint16Array</ref> or <ref>Uint32Array</ref> or <ref>Uint8ClampedArray</ref> or
+         <ref>Float32Array</ref> or <ref>Float64Array</ref> or <ref>DataView</ref>) ArrayBufferView;
+typedef (<ref>ArrayBufferView</ref> or <ref>ArrayBuffer</ref>) BufferSource;
+typedef unsigned long long DOMTimeStamp;
+callback Function = any (any... arguments);
+callback VoidFunction = void ();</webidl>
+  <Typedef name="ArrayBufferView" id="::ArrayBufferView">
+    <webidl>typedef (<ref>Int8Array</ref> or <ref>Int16Array</ref> or <ref>Int32Array</ref> or
+         <ref>Uint8Array</ref> or <ref>Uint16Array</ref> or <ref>Uint32Array</ref> or <ref>Uint8ClampedArray</ref> or
+         <ref>Float32Array</ref> or <ref>Float64Array</ref> or <ref>DataView</ref>) ArrayBufferView;</webidl>
+    <Type type="union">
+      <Type name="Int8Array"/>
+      <Type name="Int16Array"/>
+      <Type name="Int32Array"/>
+      <Type name="Uint8Array"/>
+      <Type name="Uint16Array"/>
+      <Type name="Uint32Array"/>
+      <Type name="Uint8ClampedArray"/>
+      <Type name="Float32Array"/>
+      <Type name="Float64Array"/>
+      <Type name="DataView"/>
+    </Type>
+  </Typedef>
+  <Typedef name="BufferSource" id="::BufferSource">
+    <webidl>typedef (<ref>ArrayBufferView</ref> or <ref>ArrayBuffer</ref>) BufferSource;</webidl>
+    <Type type="union">
+      <Type name="ArrayBufferView"/>
+      <Type name="ArrayBuffer"/>
+    </Type>
+  </Typedef>
+  <Typedef name="DOMTimeStamp" id="::DOMTimeStamp">
+    <webidl>typedef unsigned long long DOMTimeStamp;</webidl>
+    <Type type="unsigned long long"/>
+  </Typedef>
+  <Callback name="Function" id="::Function">
+    <webidl>callback Function = any (any... arguments);</webidl>
+    <Type type="any"/>
+    <ArgumentList>
+      <Argument ellipsis="ellipsis" name="arguments">
+        <Type type="any"/>
+      </Argument>
+    </ArgumentList>
+  </Callback>
+  <Callback name="VoidFunction" id="::VoidFunction">
+    <webidl>callback VoidFunction = void ();</webidl>
+    <Type type="void"/>
+    <ArgumentList/>
+  </Callback>
+</Definitions>
+<Definitions>
   <webidl>interface HTMLAllCollection : <ref>HTMLCollection</ref> {
   (<ref>HTMLCollection</ref> or <ref>Element</ref>)? item(DOMString name);
   legacycaller getter (<ref>HTMLCollection</ref> or <ref>Element</ref>)? namedItem(DOMString name); 
