@@ -24452,6 +24452,1391 @@ interface DragEvent : <ref>MouseEvent</ref> {
   </Interface>
 </Definitions>
 <Definitions>
+  <webidl>[Exposed=<ref>Window</ref>,
+ Constructor,
+ Constructor (<ref>MediaStream</ref> stream),
+ Constructor (sequence&lt;<ref>MediaStreamTrack</ref>> tracks)]
+interface MediaStream : <ref>EventTarget</ref> {
+    readonly        attribute DOMString    id;
+    sequence&lt;<ref>MediaStreamTrack</ref>> getAudioTracks ();
+    sequence&lt;<ref>MediaStreamTrack</ref>> getVideoTracks ();
+    sequence&lt;<ref>MediaStreamTrack</ref>> getTracks ();
+    <ref>MediaStreamTrack</ref>?          getTrackById (DOMString trackId);
+    void                       addTrack (<ref>MediaStreamTrack</ref> track);
+    void                       removeTrack (<ref>MediaStreamTrack</ref> track);
+    <ref>MediaStream</ref>                clone ();
+    readonly        attribute boolean      active;
+                    attribute <ref>EventHandler</ref> onaddtrack;
+                    attribute <ref>EventHandler</ref> onremovetrack;
+};
+[Exposed=<ref>Window</ref>]
+interface MediaStreamTrack : <ref>EventTarget</ref> {
+    readonly        attribute DOMString             kind;
+    readonly        attribute DOMString             id;
+    readonly        attribute DOMString             label;
+                    attribute boolean               enabled;
+    readonly        attribute boolean               muted;
+                    attribute <ref>EventHandler</ref>          onmute;
+                    attribute <ref>EventHandler</ref>          onunmute;
+    readonly        attribute boolean               _readonly;
+    readonly        attribute boolean               remote;
+    readonly        attribute <ref>MediaStreamTrackState</ref> readyState;
+                    attribute <ref>EventHandler</ref>          onended;
+    <ref>MediaStreamTrack</ref>       clone ();
+    void                   stop ();
+    <ref>MediaTrackCapabilities</ref> getCapabilities ();
+    <ref>MediaTrackConstraints</ref>  getConstraints ();
+    <ref>MediaTrackSettings</ref>     getSettings ();
+    Promise&lt;void>          applyConstraints (optional <ref>MediaTrackConstraints</ref> constraints);
+                    attribute <ref>EventHandler</ref>          onoverconstrained;
+};
+enum MediaStreamTrackState {
+    &quot;live&quot;,
+    &quot;ended&quot;
+};
+enum SourceTypeEnum {
+    &quot;camera&quot;,
+    &quot;microphone&quot;
+};
+dictionary MediaTrackSupportedConstraints {
+             boolean width = true;
+             boolean height = true;
+             boolean aspectRatio = true;
+             boolean frameRate = true;
+             boolean facingMode = true;
+             boolean volume = true;
+             boolean sampleRate = true;
+             boolean sampleSize = true;
+             boolean echoCancellation = true;
+             boolean latency = true;
+             boolean channelCount = true;
+             boolean deviceId = true;
+             boolean groupId = true;
+};
+dictionary MediaTrackCapabilities {
+             (long or <ref>LongRange</ref>)     width;
+             (long or <ref>LongRange</ref>)     height;
+             (double or <ref>DoubleRange</ref>) aspectRatio;
+             (double or <ref>DoubleRange</ref>) frameRate;
+             sequence&lt;DOMString>     facingMode;
+             (double or <ref>DoubleRange</ref>) volume;
+             (long or <ref>LongRange</ref>)     sampleRate;
+             (long or <ref>LongRange</ref>)     sampleSize;
+             sequence&lt;boolean>       echoCancellation;
+             (double or <ref>DoubleRange</ref>) latency;
+             (long or <ref>LongRange</ref>)     channelCount;
+             DOMString               deviceId;
+             DOMString               groupId;
+};
+dictionary MediaTrackConstraints : <ref>MediaTrackConstraintSet</ref> {
+             sequence&lt;<ref>MediaTrackConstraintSet</ref>> advanced;
+};
+dictionary MediaTrackConstraintSet {
+             <ref>ConstrainLong</ref>      width;
+             <ref>ConstrainLong</ref>      height;
+             <ref>ConstrainDouble</ref>    aspectRatio;
+             <ref>ConstrainDouble</ref>    frameRate;
+             <ref>ConstrainDOMString</ref> facingMode;
+             <ref>ConstrainDouble</ref>    volume;
+             <ref>ConstrainLong</ref>      sampleRate;
+             <ref>ConstrainLong</ref>      sampleSize;
+             <ref>ConstrainBoolean</ref>   echoCancellation;
+             <ref>ConstrainDouble</ref>    latency;
+             <ref>ConstrainLong</ref>      channelCount;
+             <ref>ConstrainDOMString</ref> deviceId;
+             <ref>ConstrainDOMString</ref> groupId;
+};
+dictionary MediaTrackSettings {
+             long      width;
+             long      height;
+             double    aspectRatio;
+             double    frameRate;
+             DOMString facingMode;
+             double    volume;
+             long      sampleRate;
+             long      sampleSize;
+             boolean   echoCancellation;
+             double    latency;
+             long      channelCount;
+             DOMString deviceId;
+             DOMString groupId;
+};
+enum VideoFacingModeEnum {
+    &quot;user&quot;,
+    &quot;environment&quot;,
+    &quot;left&quot;,
+    &quot;right&quot;
+};
+dictionary MediaStreamTrackEventInit : <ref>EventInit</ref> {
+    required <ref>MediaStreamTrack</ref> track;
+};[Exposed=<ref>Window</ref>,
+ Constructor (DOMString type, <ref>MediaStreamTrackEventInit</ref> eventInitDict)]
+interface MediaStreamTrackEvent : <ref>Event</ref> {
+    [SameObject]
+    readonly        attribute <ref>MediaStreamTrack</ref> track;
+};
+dictionary OverconstrainedErrorEventInit : <ref>EventInit</ref> {
+             <ref>OverconstrainedError</ref>? error = null;
+};[Exposed=<ref>Window</ref>,
+ Constructor (DOMString type, <ref>OverconstrainedErrorEventInit</ref> eventInitDict)]
+interface OverconstrainedErrorEvent : <ref>Event</ref> {
+    readonly        attribute <ref>OverconstrainedError</ref>? error;
+};
+dictionary ErrorEventInit : <ref>EventInit</ref> {
+             <ref>Error</ref>? error = null;
+};[Exposed=<ref>Window</ref>,
+ Constructor (DOMString type, <ref>ErrorEventInit</ref> eventInitDict)]
+interface ErrorEvent : <ref>Event</ref> {
+    readonly        attribute <ref>Error</ref>? error;
+};
+[Exposed=<ref>Window</ref>, NoInterfaceObject]
+interface NavigatorUserMedia {
+    [SameObject]
+    readonly        attribute <ref>MediaDevices</ref> mediaDevices;
+};
+<ref>Navigator</ref> implements <ref>NavigatorUserMedia</ref>;
+[Exposed=<ref>Window</ref>]
+interface MediaDevices : <ref>EventTarget</ref> {
+                    attribute <ref>EventHandler</ref> ondevicechange;
+    Promise&lt;sequence&lt;<ref>MediaDeviceInfo</ref>>> enumerateDevices ();
+};
+[Exposed=<ref>Window</ref>]
+interface MediaDeviceInfo {
+    readonly        attribute DOMString       deviceId;
+    readonly        attribute <ref>MediaDeviceKind</ref> kind;
+    readonly        attribute DOMString       label;
+    readonly        attribute DOMString       groupId;
+    serializer = {attribute};
+};
+enum MediaDeviceKind {
+    &quot;audioinput&quot;,
+    &quot;audiooutput&quot;,
+    &quot;videoinput&quot;
+};
+interface InputDeviceInfo : <ref>MediaDeviceInfo</ref> {
+    <ref>MediaTrackCapabilities</ref> getCapabilities ();
+};
+partial interface NavigatorUserMedia {
+    void getUserMedia (<ref>MediaStreamConstraints</ref> constraints, <ref>NavigatorUserMediaSuccessCallback</ref> successCallback, <ref>NavigatorUserMediaErrorCallback</ref> errorCallback);
+};
+partial interface MediaDevices {
+    <ref>MediaTrackSupportedConstraints</ref> getSupportedConstraints ();
+    Promise&lt;<ref>MediaStream</ref>>           getUserMedia (<ref>MediaStreamConstraints</ref> constraints);
+};
+dictionary MediaStreamConstraints {
+             (boolean or <ref>MediaTrackConstraints</ref>) video = false;
+             (boolean or <ref>MediaTrackConstraints</ref>) audio = false;
+};
+callback NavigatorUserMediaSuccessCallback = void (<ref>MediaStream</ref> stream);
+callback NavigatorUserMediaErrorCallback = void (<ref>MediaStreamError</ref> error);
+typedef object MediaStreamError;
+[NoInterfaceObject]
+interface ConstrainablePattern {
+    <ref>Capabilities</ref>  getCapabilities ();
+    <ref>Constraints</ref>   getConstraints ();
+    <ref>Settings</ref>      getSettings ();
+    Promise&lt;void> applyConstraints (optional <ref>Constraints</ref> constraints);
+                    attribute <ref>EventHandler</ref> onoverconstrained;
+};
+dictionary DoubleRange {
+             double max;
+             double min;
+};
+dictionary ConstrainDoubleRange : <ref>DoubleRange</ref> {
+             double exact;
+             double ideal;
+};
+dictionary LongRange {
+             long max;
+             long min;
+};
+dictionary ConstrainLongRange : <ref>LongRange</ref> {
+             long exact;
+             long ideal;
+};
+dictionary ConstrainBooleanParameters {
+             boolean exact;
+             boolean ideal;
+};
+dictionary ConstrainDOMStringParameters {
+             (DOMString or sequence&lt;DOMString>) exact;
+             (DOMString or sequence&lt;DOMString>) ideal;
+};
+typedef (long or <ref>ConstrainLongRange</ref>) ConstrainLong;
+typedef (double or <ref>ConstrainDoubleRange</ref>) ConstrainDouble;
+typedef (boolean or <ref>ConstrainBooleanParameters</ref>) ConstrainBoolean;
+typedef (DOMString or sequence&lt;DOMString> or <ref>ConstrainDOMStringParameters</ref>) ConstrainDOMString;
+dictionary Capabilities {
+};
+dictionary Settings {
+};
+dictionary ConstraintSet {
+};
+dictionary Constraints : <ref>ConstraintSet</ref> {
+             sequence&lt;<ref>ConstraintSet</ref>> advanced;
+};</webidl>
+  <Interface name="MediaStream" id="::MediaStream">
+    <webidl>[Exposed=<ref>Window</ref>,
+ Constructor,
+ Constructor (<ref>MediaStream</ref> stream),
+ Constructor (sequence&lt;<ref>MediaStreamTrack</ref>> tracks)]
+interface MediaStream : <ref>EventTarget</ref> {
+    readonly        attribute DOMString    id;
+    sequence&lt;<ref>MediaStreamTrack</ref>> getAudioTracks ();
+    sequence&lt;<ref>MediaStreamTrack</ref>> getVideoTracks ();
+    sequence&lt;<ref>MediaStreamTrack</ref>> getTracks ();
+    <ref>MediaStreamTrack</ref>?          getTrackById (DOMString trackId);
+    void                       addTrack (<ref>MediaStreamTrack</ref> track);
+    void                       removeTrack (<ref>MediaStreamTrack</ref> track);
+    <ref>MediaStream</ref>                clone ();
+    readonly        attribute boolean      active;
+                    attribute <ref>EventHandler</ref> onaddtrack;
+                    attribute <ref>EventHandler</ref> onremovetrack;
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="Exposed">
+        <webidl>Exposed=<ref>Window</ref>,</webidl>
+        <TypeList>
+          <Type name="Window"/>
+        </TypeList>
+      </ExtendedAttribute>
+      <ExtendedAttribute name="Constructor">
+        <webidl> Constructor</webidl>
+      </ExtendedAttribute>
+      <ExtendedAttribute name="Constructor">
+        <webidl> Constructor (<ref>MediaStream</ref> stream)</webidl>
+        <ArgumentList>
+          <Argument name="stream">
+            <Type name="MediaStream"/>
+          </Argument>
+        </ArgumentList>
+      </ExtendedAttribute>
+      <ExtendedAttribute name="Constructor">
+        <webidl> Constructor (sequence&lt;<ref>MediaStreamTrack</ref>> tracks)</webidl>
+        <ArgumentList>
+          <Argument name="tracks">
+            <Type type="sequence">
+              <Type name="MediaStreamTrack"/>
+            </Type>
+          </Argument>
+        </ArgumentList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <InterfaceInheritance>
+      <Name name="EventTarget"/>
+    </InterfaceInheritance>
+    <Attribute name="id" readonly="readonly" id="::MediaStream::id">
+      <webidl>    readonly        attribute DOMString    id;</webidl>
+      <Type type="DOMString"/>
+    </Attribute>
+    <Operation name="getAudioTracks" id="::MediaStream::getAudioTracks">
+      <webidl>    sequence&lt;<ref>MediaStreamTrack</ref>> getAudioTracks ();</webidl>
+      <Type type="sequence">
+        <Type name="MediaStreamTrack"/>
+      </Type>
+      <ArgumentList/>
+    </Operation>
+    <Operation name="getVideoTracks" id="::MediaStream::getVideoTracks">
+      <webidl>    sequence&lt;<ref>MediaStreamTrack</ref>> getVideoTracks ();</webidl>
+      <Type type="sequence">
+        <Type name="MediaStreamTrack"/>
+      </Type>
+      <ArgumentList/>
+    </Operation>
+    <Operation name="getTracks" id="::MediaStream::getTracks">
+      <webidl>    sequence&lt;<ref>MediaStreamTrack</ref>> getTracks ();</webidl>
+      <Type type="sequence">
+        <Type name="MediaStreamTrack"/>
+      </Type>
+      <ArgumentList/>
+    </Operation>
+    <Operation name="getTrackById" id="::MediaStream::getTrackById">
+      <webidl>    <ref>MediaStreamTrack</ref>?          getTrackById (DOMString trackId);</webidl>
+      <Type name="MediaStreamTrack" nullable="nullable"/>
+      <ArgumentList>
+        <Argument name="trackId">
+          <Type type="DOMString"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Operation name="addTrack" id="::MediaStream::addTrack">
+      <webidl>    void                       addTrack (<ref>MediaStreamTrack</ref> track);</webidl>
+      <Type type="void"/>
+      <ArgumentList>
+        <Argument name="track">
+          <Type name="MediaStreamTrack"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Operation name="removeTrack" id="::MediaStream::removeTrack">
+      <webidl>    void                       removeTrack (<ref>MediaStreamTrack</ref> track);</webidl>
+      <Type type="void"/>
+      <ArgumentList>
+        <Argument name="track">
+          <Type name="MediaStreamTrack"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Operation name="clone" id="::MediaStream::clone">
+      <webidl>    <ref>MediaStream</ref>                clone ();</webidl>
+      <Type name="MediaStream"/>
+      <ArgumentList/>
+    </Operation>
+    <Attribute name="active" readonly="readonly" id="::MediaStream::active">
+      <webidl>    readonly        attribute boolean      active;</webidl>
+      <Type type="boolean"/>
+    </Attribute>
+    <Attribute name="onaddtrack" id="::MediaStream::onaddtrack">
+      <webidl>                    attribute <ref>EventHandler</ref> onaddtrack;</webidl>
+      <Type name="EventHandler"/>
+    </Attribute>
+    <Attribute name="onremovetrack" id="::MediaStream::onremovetrack">
+      <webidl>                    attribute <ref>EventHandler</ref> onremovetrack;</webidl>
+      <Type name="EventHandler"/>
+    </Attribute>
+  </Interface>
+  <Interface name="MediaStreamTrack" id="::MediaStreamTrack">
+    <webidl>[Exposed=<ref>Window</ref>]
+interface MediaStreamTrack : <ref>EventTarget</ref> {
+    readonly        attribute DOMString             kind;
+    readonly        attribute DOMString             id;
+    readonly        attribute DOMString             label;
+                    attribute boolean               enabled;
+    readonly        attribute boolean               muted;
+                    attribute <ref>EventHandler</ref>          onmute;
+                    attribute <ref>EventHandler</ref>          onunmute;
+    readonly        attribute boolean               _readonly;
+    readonly        attribute boolean               remote;
+    readonly        attribute <ref>MediaStreamTrackState</ref> readyState;
+                    attribute <ref>EventHandler</ref>          onended;
+    <ref>MediaStreamTrack</ref>       clone ();
+    void                   stop ();
+    <ref>MediaTrackCapabilities</ref> getCapabilities ();
+    <ref>MediaTrackConstraints</ref>  getConstraints ();
+    <ref>MediaTrackSettings</ref>     getSettings ();
+    Promise&lt;void>          applyConstraints (optional <ref>MediaTrackConstraints</ref> constraints);
+                    attribute <ref>EventHandler</ref>          onoverconstrained;
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="Exposed">
+        <webidl>Exposed=<ref>Window</ref>]</webidl>
+        <TypeList>
+          <Type name="Window"/>
+        </TypeList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <InterfaceInheritance>
+      <Name name="EventTarget"/>
+    </InterfaceInheritance>
+    <Attribute name="kind" readonly="readonly" id="::MediaStreamTrack::kind">
+      <webidl>    readonly        attribute DOMString             kind;</webidl>
+      <Type type="DOMString"/>
+    </Attribute>
+    <Attribute name="id" readonly="readonly" id="::MediaStreamTrack::id">
+      <webidl>    readonly        attribute DOMString             id;</webidl>
+      <Type type="DOMString"/>
+    </Attribute>
+    <Attribute name="label" readonly="readonly" id="::MediaStreamTrack::label">
+      <webidl>    readonly        attribute DOMString             label;</webidl>
+      <Type type="DOMString"/>
+    </Attribute>
+    <Attribute name="enabled" id="::MediaStreamTrack::enabled">
+      <webidl>                    attribute boolean               enabled;</webidl>
+      <Type type="boolean"/>
+    </Attribute>
+    <Attribute name="muted" readonly="readonly" id="::MediaStreamTrack::muted">
+      <webidl>    readonly        attribute boolean               muted;</webidl>
+      <Type type="boolean"/>
+    </Attribute>
+    <Attribute name="onmute" id="::MediaStreamTrack::onmute">
+      <webidl>                    attribute <ref>EventHandler</ref>          onmute;</webidl>
+      <Type name="EventHandler"/>
+    </Attribute>
+    <Attribute name="onunmute" id="::MediaStreamTrack::onunmute">
+      <webidl>                    attribute <ref>EventHandler</ref>          onunmute;</webidl>
+      <Type name="EventHandler"/>
+    </Attribute>
+    <Attribute name="readonly" readonly="readonly" id="::MediaStreamTrack::readonly">
+      <webidl>    readonly        attribute boolean               _readonly;</webidl>
+      <Type type="boolean"/>
+    </Attribute>
+    <Attribute name="remote" readonly="readonly" id="::MediaStreamTrack::remote">
+      <webidl>    readonly        attribute boolean               remote;</webidl>
+      <Type type="boolean"/>
+    </Attribute>
+    <Attribute name="readyState" readonly="readonly" id="::MediaStreamTrack::readyState">
+      <webidl>    readonly        attribute <ref>MediaStreamTrackState</ref> readyState;</webidl>
+      <Type name="MediaStreamTrackState"/>
+    </Attribute>
+    <Attribute name="onended" id="::MediaStreamTrack::onended">
+      <webidl>                    attribute <ref>EventHandler</ref>          onended;</webidl>
+      <Type name="EventHandler"/>
+    </Attribute>
+    <Operation name="clone" id="::MediaStreamTrack::clone">
+      <webidl>    <ref>MediaStreamTrack</ref>       clone ();</webidl>
+      <Type name="MediaStreamTrack"/>
+      <ArgumentList/>
+    </Operation>
+    <Operation name="stop" id="::MediaStreamTrack::stop">
+      <webidl>    void                   stop ();</webidl>
+      <Type type="void"/>
+      <ArgumentList/>
+    </Operation>
+    <Operation name="getCapabilities" id="::MediaStreamTrack::getCapabilities">
+      <webidl>    <ref>MediaTrackCapabilities</ref> getCapabilities ();</webidl>
+      <Type name="MediaTrackCapabilities"/>
+      <ArgumentList/>
+    </Operation>
+    <Operation name="getConstraints" id="::MediaStreamTrack::getConstraints">
+      <webidl>    <ref>MediaTrackConstraints</ref>  getConstraints ();</webidl>
+      <Type name="MediaTrackConstraints"/>
+      <ArgumentList/>
+    </Operation>
+    <Operation name="getSettings" id="::MediaStreamTrack::getSettings">
+      <webidl>    <ref>MediaTrackSettings</ref>     getSettings ();</webidl>
+      <Type name="MediaTrackSettings"/>
+      <ArgumentList/>
+    </Operation>
+    <Operation name="applyConstraints" id="::MediaStreamTrack::applyConstraints">
+      <webidl>    Promise&lt;void>          applyConstraints (optional <ref>MediaTrackConstraints</ref> constraints);</webidl>
+      <Type type="Promise">
+        <Type type="void"/>
+      </Type>
+      <ArgumentList>
+        <Argument optional="optional" name="constraints">
+          <Type name="MediaTrackConstraints"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Attribute name="onoverconstrained" id="::MediaStreamTrack::onoverconstrained">
+      <webidl>                    attribute <ref>EventHandler</ref>          onoverconstrained;</webidl>
+      <Type name="EventHandler"/>
+    </Attribute>
+  </Interface>
+  <Enum name="MediaStreamTrackState" id="::MediaStreamTrackState">
+    <webidl>enum MediaStreamTrackState {
+    &quot;live&quot;,
+    &quot;ended&quot;
+};</webidl>
+    <EnumValue stringvalue="live">
+      <webidl>    &quot;live</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="ended">
+      <webidl>    &quot;ended</webidl>
+    </EnumValue>
+  </Enum>
+  <Enum name="SourceTypeEnum" id="::SourceTypeEnum">
+    <webidl>enum SourceTypeEnum {
+    &quot;camera&quot;,
+    &quot;microphone&quot;
+};</webidl>
+    <EnumValue stringvalue="camera">
+      <webidl>    &quot;camera</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="microphone">
+      <webidl>    &quot;microphone</webidl>
+    </EnumValue>
+  </Enum>
+  <Dictionary name="MediaTrackSupportedConstraints" id="::MediaTrackSupportedConstraints">
+    <webidl>dictionary MediaTrackSupportedConstraints {
+             boolean width = true;
+             boolean height = true;
+             boolean aspectRatio = true;
+             boolean frameRate = true;
+             boolean facingMode = true;
+             boolean volume = true;
+             boolean sampleRate = true;
+             boolean sampleSize = true;
+             boolean echoCancellation = true;
+             boolean latency = true;
+             boolean channelCount = true;
+             boolean deviceId = true;
+             boolean groupId = true;
+};</webidl>
+    <DictionaryMember name="width" value="true" id="::MediaTrackSupportedConstraints::width">
+      <webidl>             boolean width = true;</webidl>
+      <Type type="boolean"/>
+    </DictionaryMember>
+    <DictionaryMember name="height" value="true" id="::MediaTrackSupportedConstraints::height">
+      <webidl>             boolean height = true;</webidl>
+      <Type type="boolean"/>
+    </DictionaryMember>
+    <DictionaryMember name="aspectRatio" value="true" id="::MediaTrackSupportedConstraints::aspectRatio">
+      <webidl>             boolean aspectRatio = true;</webidl>
+      <Type type="boolean"/>
+    </DictionaryMember>
+    <DictionaryMember name="frameRate" value="true" id="::MediaTrackSupportedConstraints::frameRate">
+      <webidl>             boolean frameRate = true;</webidl>
+      <Type type="boolean"/>
+    </DictionaryMember>
+    <DictionaryMember name="facingMode" value="true" id="::MediaTrackSupportedConstraints::facingMode">
+      <webidl>             boolean facingMode = true;</webidl>
+      <Type type="boolean"/>
+    </DictionaryMember>
+    <DictionaryMember name="volume" value="true" id="::MediaTrackSupportedConstraints::volume">
+      <webidl>             boolean volume = true;</webidl>
+      <Type type="boolean"/>
+    </DictionaryMember>
+    <DictionaryMember name="sampleRate" value="true" id="::MediaTrackSupportedConstraints::sampleRate">
+      <webidl>             boolean sampleRate = true;</webidl>
+      <Type type="boolean"/>
+    </DictionaryMember>
+    <DictionaryMember name="sampleSize" value="true" id="::MediaTrackSupportedConstraints::sampleSize">
+      <webidl>             boolean sampleSize = true;</webidl>
+      <Type type="boolean"/>
+    </DictionaryMember>
+    <DictionaryMember name="echoCancellation" value="true" id="::MediaTrackSupportedConstraints::echoCancellation">
+      <webidl>             boolean echoCancellation = true;</webidl>
+      <Type type="boolean"/>
+    </DictionaryMember>
+    <DictionaryMember name="latency" value="true" id="::MediaTrackSupportedConstraints::latency">
+      <webidl>             boolean latency = true;</webidl>
+      <Type type="boolean"/>
+    </DictionaryMember>
+    <DictionaryMember name="channelCount" value="true" id="::MediaTrackSupportedConstraints::channelCount">
+      <webidl>             boolean channelCount = true;</webidl>
+      <Type type="boolean"/>
+    </DictionaryMember>
+    <DictionaryMember name="deviceId" value="true" id="::MediaTrackSupportedConstraints::deviceId">
+      <webidl>             boolean deviceId = true;</webidl>
+      <Type type="boolean"/>
+    </DictionaryMember>
+    <DictionaryMember name="groupId" value="true" id="::MediaTrackSupportedConstraints::groupId">
+      <webidl>             boolean groupId = true;</webidl>
+      <Type type="boolean"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="MediaTrackCapabilities" id="::MediaTrackCapabilities">
+    <webidl>dictionary MediaTrackCapabilities {
+             (long or <ref>LongRange</ref>)     width;
+             (long or <ref>LongRange</ref>)     height;
+             (double or <ref>DoubleRange</ref>) aspectRatio;
+             (double or <ref>DoubleRange</ref>) frameRate;
+             sequence&lt;DOMString>     facingMode;
+             (double or <ref>DoubleRange</ref>) volume;
+             (long or <ref>LongRange</ref>)     sampleRate;
+             (long or <ref>LongRange</ref>)     sampleSize;
+             sequence&lt;boolean>       echoCancellation;
+             (double or <ref>DoubleRange</ref>) latency;
+             (long or <ref>LongRange</ref>)     channelCount;
+             DOMString               deviceId;
+             DOMString               groupId;
+};</webidl>
+    <DictionaryMember name="width" id="::MediaTrackCapabilities::width">
+      <webidl>             (long or <ref>LongRange</ref>)     width;</webidl>
+      <Type type="union">
+        <Type type="long"/>
+        <Type name="LongRange"/>
+      </Type>
+    </DictionaryMember>
+    <DictionaryMember name="height" id="::MediaTrackCapabilities::height">
+      <webidl>             (long or <ref>LongRange</ref>)     height;</webidl>
+      <Type type="union">
+        <Type type="long"/>
+        <Type name="LongRange"/>
+      </Type>
+    </DictionaryMember>
+    <DictionaryMember name="aspectRatio" id="::MediaTrackCapabilities::aspectRatio">
+      <webidl>             (double or <ref>DoubleRange</ref>) aspectRatio;</webidl>
+      <Type type="union">
+        <Type type="double"/>
+        <Type name="DoubleRange"/>
+      </Type>
+    </DictionaryMember>
+    <DictionaryMember name="frameRate" id="::MediaTrackCapabilities::frameRate">
+      <webidl>             (double or <ref>DoubleRange</ref>) frameRate;</webidl>
+      <Type type="union">
+        <Type type="double"/>
+        <Type name="DoubleRange"/>
+      </Type>
+    </DictionaryMember>
+    <DictionaryMember name="facingMode" id="::MediaTrackCapabilities::facingMode">
+      <webidl>             sequence&lt;DOMString>     facingMode;</webidl>
+      <Type type="sequence">
+        <Type type="DOMString"/>
+      </Type>
+    </DictionaryMember>
+    <DictionaryMember name="volume" id="::MediaTrackCapabilities::volume">
+      <webidl>             (double or <ref>DoubleRange</ref>) volume;</webidl>
+      <Type type="union">
+        <Type type="double"/>
+        <Type name="DoubleRange"/>
+      </Type>
+    </DictionaryMember>
+    <DictionaryMember name="sampleRate" id="::MediaTrackCapabilities::sampleRate">
+      <webidl>             (long or <ref>LongRange</ref>)     sampleRate;</webidl>
+      <Type type="union">
+        <Type type="long"/>
+        <Type name="LongRange"/>
+      </Type>
+    </DictionaryMember>
+    <DictionaryMember name="sampleSize" id="::MediaTrackCapabilities::sampleSize">
+      <webidl>             (long or <ref>LongRange</ref>)     sampleSize;</webidl>
+      <Type type="union">
+        <Type type="long"/>
+        <Type name="LongRange"/>
+      </Type>
+    </DictionaryMember>
+    <DictionaryMember name="echoCancellation" id="::MediaTrackCapabilities::echoCancellation">
+      <webidl>             sequence&lt;boolean>       echoCancellation;</webidl>
+      <Type type="sequence">
+        <Type type="boolean"/>
+      </Type>
+    </DictionaryMember>
+    <DictionaryMember name="latency" id="::MediaTrackCapabilities::latency">
+      <webidl>             (double or <ref>DoubleRange</ref>) latency;</webidl>
+      <Type type="union">
+        <Type type="double"/>
+        <Type name="DoubleRange"/>
+      </Type>
+    </DictionaryMember>
+    <DictionaryMember name="channelCount" id="::MediaTrackCapabilities::channelCount">
+      <webidl>             (long or <ref>LongRange</ref>)     channelCount;</webidl>
+      <Type type="union">
+        <Type type="long"/>
+        <Type name="LongRange"/>
+      </Type>
+    </DictionaryMember>
+    <DictionaryMember name="deviceId" id="::MediaTrackCapabilities::deviceId">
+      <webidl>             DOMString               deviceId;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+    <DictionaryMember name="groupId" id="::MediaTrackCapabilities::groupId">
+      <webidl>             DOMString               groupId;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="MediaTrackConstraints" id="::MediaTrackConstraints">
+    <webidl>dictionary MediaTrackConstraints : <ref>MediaTrackConstraintSet</ref> {
+             sequence&lt;<ref>MediaTrackConstraintSet</ref>> advanced;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="MediaTrackConstraintSet"/>
+    </DictionaryInheritance>
+    <DictionaryMember name="advanced" id="::MediaTrackConstraints::advanced">
+      <webidl>             sequence&lt;<ref>MediaTrackConstraintSet</ref>> advanced;</webidl>
+      <Type type="sequence">
+        <Type name="MediaTrackConstraintSet"/>
+      </Type>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="MediaTrackConstraintSet" id="::MediaTrackConstraintSet">
+    <webidl>dictionary MediaTrackConstraintSet {
+             <ref>ConstrainLong</ref>      width;
+             <ref>ConstrainLong</ref>      height;
+             <ref>ConstrainDouble</ref>    aspectRatio;
+             <ref>ConstrainDouble</ref>    frameRate;
+             <ref>ConstrainDOMString</ref> facingMode;
+             <ref>ConstrainDouble</ref>    volume;
+             <ref>ConstrainLong</ref>      sampleRate;
+             <ref>ConstrainLong</ref>      sampleSize;
+             <ref>ConstrainBoolean</ref>   echoCancellation;
+             <ref>ConstrainDouble</ref>    latency;
+             <ref>ConstrainLong</ref>      channelCount;
+             <ref>ConstrainDOMString</ref> deviceId;
+             <ref>ConstrainDOMString</ref> groupId;
+};</webidl>
+    <DictionaryMember name="width" id="::MediaTrackConstraintSet::width">
+      <webidl>             <ref>ConstrainLong</ref>      width;</webidl>
+      <Type name="ConstrainLong"/>
+    </DictionaryMember>
+    <DictionaryMember name="height" id="::MediaTrackConstraintSet::height">
+      <webidl>             <ref>ConstrainLong</ref>      height;</webidl>
+      <Type name="ConstrainLong"/>
+    </DictionaryMember>
+    <DictionaryMember name="aspectRatio" id="::MediaTrackConstraintSet::aspectRatio">
+      <webidl>             <ref>ConstrainDouble</ref>    aspectRatio;</webidl>
+      <Type name="ConstrainDouble"/>
+    </DictionaryMember>
+    <DictionaryMember name="frameRate" id="::MediaTrackConstraintSet::frameRate">
+      <webidl>             <ref>ConstrainDouble</ref>    frameRate;</webidl>
+      <Type name="ConstrainDouble"/>
+    </DictionaryMember>
+    <DictionaryMember name="facingMode" id="::MediaTrackConstraintSet::facingMode">
+      <webidl>             <ref>ConstrainDOMString</ref> facingMode;</webidl>
+      <Type name="ConstrainDOMString"/>
+    </DictionaryMember>
+    <DictionaryMember name="volume" id="::MediaTrackConstraintSet::volume">
+      <webidl>             <ref>ConstrainDouble</ref>    volume;</webidl>
+      <Type name="ConstrainDouble"/>
+    </DictionaryMember>
+    <DictionaryMember name="sampleRate" id="::MediaTrackConstraintSet::sampleRate">
+      <webidl>             <ref>ConstrainLong</ref>      sampleRate;</webidl>
+      <Type name="ConstrainLong"/>
+    </DictionaryMember>
+    <DictionaryMember name="sampleSize" id="::MediaTrackConstraintSet::sampleSize">
+      <webidl>             <ref>ConstrainLong</ref>      sampleSize;</webidl>
+      <Type name="ConstrainLong"/>
+    </DictionaryMember>
+    <DictionaryMember name="echoCancellation" id="::MediaTrackConstraintSet::echoCancellation">
+      <webidl>             <ref>ConstrainBoolean</ref>   echoCancellation;</webidl>
+      <Type name="ConstrainBoolean"/>
+    </DictionaryMember>
+    <DictionaryMember name="latency" id="::MediaTrackConstraintSet::latency">
+      <webidl>             <ref>ConstrainDouble</ref>    latency;</webidl>
+      <Type name="ConstrainDouble"/>
+    </DictionaryMember>
+    <DictionaryMember name="channelCount" id="::MediaTrackConstraintSet::channelCount">
+      <webidl>             <ref>ConstrainLong</ref>      channelCount;</webidl>
+      <Type name="ConstrainLong"/>
+    </DictionaryMember>
+    <DictionaryMember name="deviceId" id="::MediaTrackConstraintSet::deviceId">
+      <webidl>             <ref>ConstrainDOMString</ref> deviceId;</webidl>
+      <Type name="ConstrainDOMString"/>
+    </DictionaryMember>
+    <DictionaryMember name="groupId" id="::MediaTrackConstraintSet::groupId">
+      <webidl>             <ref>ConstrainDOMString</ref> groupId;</webidl>
+      <Type name="ConstrainDOMString"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="MediaTrackSettings" id="::MediaTrackSettings">
+    <webidl>dictionary MediaTrackSettings {
+             long      width;
+             long      height;
+             double    aspectRatio;
+             double    frameRate;
+             DOMString facingMode;
+             double    volume;
+             long      sampleRate;
+             long      sampleSize;
+             boolean   echoCancellation;
+             double    latency;
+             long      channelCount;
+             DOMString deviceId;
+             DOMString groupId;
+};</webidl>
+    <DictionaryMember name="width" id="::MediaTrackSettings::width">
+      <webidl>             long      width;</webidl>
+      <Type type="long"/>
+    </DictionaryMember>
+    <DictionaryMember name="height" id="::MediaTrackSettings::height">
+      <webidl>             long      height;</webidl>
+      <Type type="long"/>
+    </DictionaryMember>
+    <DictionaryMember name="aspectRatio" id="::MediaTrackSettings::aspectRatio">
+      <webidl>             double    aspectRatio;</webidl>
+      <Type type="double"/>
+    </DictionaryMember>
+    <DictionaryMember name="frameRate" id="::MediaTrackSettings::frameRate">
+      <webidl>             double    frameRate;</webidl>
+      <Type type="double"/>
+    </DictionaryMember>
+    <DictionaryMember name="facingMode" id="::MediaTrackSettings::facingMode">
+      <webidl>             DOMString facingMode;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+    <DictionaryMember name="volume" id="::MediaTrackSettings::volume">
+      <webidl>             double    volume;</webidl>
+      <Type type="double"/>
+    </DictionaryMember>
+    <DictionaryMember name="sampleRate" id="::MediaTrackSettings::sampleRate">
+      <webidl>             long      sampleRate;</webidl>
+      <Type type="long"/>
+    </DictionaryMember>
+    <DictionaryMember name="sampleSize" id="::MediaTrackSettings::sampleSize">
+      <webidl>             long      sampleSize;</webidl>
+      <Type type="long"/>
+    </DictionaryMember>
+    <DictionaryMember name="echoCancellation" id="::MediaTrackSettings::echoCancellation">
+      <webidl>             boolean   echoCancellation;</webidl>
+      <Type type="boolean"/>
+    </DictionaryMember>
+    <DictionaryMember name="latency" id="::MediaTrackSettings::latency">
+      <webidl>             double    latency;</webidl>
+      <Type type="double"/>
+    </DictionaryMember>
+    <DictionaryMember name="channelCount" id="::MediaTrackSettings::channelCount">
+      <webidl>             long      channelCount;</webidl>
+      <Type type="long"/>
+    </DictionaryMember>
+    <DictionaryMember name="deviceId" id="::MediaTrackSettings::deviceId">
+      <webidl>             DOMString deviceId;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+    <DictionaryMember name="groupId" id="::MediaTrackSettings::groupId">
+      <webidl>             DOMString groupId;</webidl>
+      <Type type="DOMString"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Enum name="VideoFacingModeEnum" id="::VideoFacingModeEnum">
+    <webidl>enum VideoFacingModeEnum {
+    &quot;user&quot;,
+    &quot;environment&quot;,
+    &quot;left&quot;,
+    &quot;right&quot;
+};</webidl>
+    <EnumValue stringvalue="user">
+      <webidl>    &quot;user</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="environment">
+      <webidl>    &quot;environment</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="left">
+      <webidl>    &quot;left</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="right">
+      <webidl>    &quot;right</webidl>
+    </EnumValue>
+  </Enum>
+  <Dictionary name="MediaStreamTrackEventInit" id="::MediaStreamTrackEventInit">
+    <webidl>dictionary MediaStreamTrackEventInit : <ref>EventInit</ref> {
+    required <ref>MediaStreamTrack</ref> track;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="EventInit"/>
+    </DictionaryInheritance>
+    <DictionaryMember required="required" name="track" id="::MediaStreamTrackEventInit::track">
+      <webidl>    required <ref>MediaStreamTrack</ref> track;</webidl>
+      <Type name="MediaStreamTrack"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Interface name="MediaStreamTrackEvent" id="::MediaStreamTrackEvent">
+    <webidl>[Exposed=<ref>Window</ref>,
+ Constructor (DOMString type, <ref>MediaStreamTrackEventInit</ref> eventInitDict)]
+interface MediaStreamTrackEvent : <ref>Event</ref> {
+    [SameObject]
+    readonly        attribute <ref>MediaStreamTrack</ref> track;
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="Exposed">
+        <webidl>Exposed=<ref>Window</ref>,</webidl>
+        <TypeList>
+          <Type name="Window"/>
+        </TypeList>
+      </ExtendedAttribute>
+      <ExtendedAttribute name="Constructor">
+        <webidl> Constructor (DOMString type, <ref>MediaStreamTrackEventInit</ref> eventInitDict)</webidl>
+        <ArgumentList>
+          <Argument name="type">
+            <Type type="DOMString"/>
+          </Argument>
+          <Argument name="eventInitDict">
+            <Type name="MediaStreamTrackEventInit"/>
+          </Argument>
+        </ArgumentList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <InterfaceInheritance>
+      <Name name="Event"/>
+    </InterfaceInheritance>
+    <Attribute name="track" readonly="readonly" id="::MediaStreamTrackEvent::track">
+      <webidl>    [SameObject]
+    readonly        attribute <ref>MediaStreamTrack</ref> track;</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="SameObject">
+          <webidl>SameObject</webidl>
+        </ExtendedAttribute>
+      </ExtendedAttributeList>
+      <Type name="MediaStreamTrack"/>
+    </Attribute>
+  </Interface>
+  <Dictionary name="OverconstrainedErrorEventInit" id="::OverconstrainedErrorEventInit">
+    <webidl>dictionary OverconstrainedErrorEventInit : <ref>EventInit</ref> {
+             <ref>OverconstrainedError</ref>? error = null;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="EventInit"/>
+    </DictionaryInheritance>
+    <DictionaryMember name="error" value="null" id="::OverconstrainedErrorEventInit::error">
+      <webidl>             <ref>OverconstrainedError</ref>? error = null;</webidl>
+      <Type name="OverconstrainedError" nullable="nullable"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Interface name="OverconstrainedErrorEvent" id="::OverconstrainedErrorEvent">
+    <webidl>[Exposed=<ref>Window</ref>,
+ Constructor (DOMString type, <ref>OverconstrainedErrorEventInit</ref> eventInitDict)]
+interface OverconstrainedErrorEvent : <ref>Event</ref> {
+    readonly        attribute <ref>OverconstrainedError</ref>? error;
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="Exposed">
+        <webidl>Exposed=<ref>Window</ref>,</webidl>
+        <TypeList>
+          <Type name="Window"/>
+        </TypeList>
+      </ExtendedAttribute>
+      <ExtendedAttribute name="Constructor">
+        <webidl> Constructor (DOMString type, <ref>OverconstrainedErrorEventInit</ref> eventInitDict)</webidl>
+        <ArgumentList>
+          <Argument name="type">
+            <Type type="DOMString"/>
+          </Argument>
+          <Argument name="eventInitDict">
+            <Type name="OverconstrainedErrorEventInit"/>
+          </Argument>
+        </ArgumentList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <InterfaceInheritance>
+      <Name name="Event"/>
+    </InterfaceInheritance>
+    <Attribute name="error" readonly="readonly" id="::OverconstrainedErrorEvent::error">
+      <webidl>    readonly        attribute <ref>OverconstrainedError</ref>? error;</webidl>
+      <Type name="OverconstrainedError" nullable="nullable"/>
+    </Attribute>
+  </Interface>
+  <Dictionary name="ErrorEventInit" id="::ErrorEventInit">
+    <webidl>dictionary ErrorEventInit : <ref>EventInit</ref> {
+             <ref>Error</ref>? error = null;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="EventInit"/>
+    </DictionaryInheritance>
+    <DictionaryMember name="error" value="null" id="::ErrorEventInit::error">
+      <webidl>             <ref>Error</ref>? error = null;</webidl>
+      <Type name="Error" nullable="nullable"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Interface name="ErrorEvent" id="::ErrorEvent">
+    <webidl>[Exposed=<ref>Window</ref>,
+ Constructor (DOMString type, <ref>ErrorEventInit</ref> eventInitDict)]
+interface ErrorEvent : <ref>Event</ref> {
+    readonly        attribute <ref>Error</ref>? error;
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="Exposed">
+        <webidl>Exposed=<ref>Window</ref>,</webidl>
+        <TypeList>
+          <Type name="Window"/>
+        </TypeList>
+      </ExtendedAttribute>
+      <ExtendedAttribute name="Constructor">
+        <webidl> Constructor (DOMString type, <ref>ErrorEventInit</ref> eventInitDict)</webidl>
+        <ArgumentList>
+          <Argument name="type">
+            <Type type="DOMString"/>
+          </Argument>
+          <Argument name="eventInitDict">
+            <Type name="ErrorEventInit"/>
+          </Argument>
+        </ArgumentList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <InterfaceInheritance>
+      <Name name="Event"/>
+    </InterfaceInheritance>
+    <Attribute name="error" readonly="readonly" id="::ErrorEvent::error">
+      <webidl>    readonly        attribute <ref>Error</ref>? error;</webidl>
+      <Type name="Error" nullable="nullable"/>
+    </Attribute>
+  </Interface>
+  <Interface name="NavigatorUserMedia" id="::NavigatorUserMedia">
+    <webidl>[Exposed=<ref>Window</ref>, NoInterfaceObject]
+interface NavigatorUserMedia {
+    [SameObject]
+    readonly        attribute <ref>MediaDevices</ref> mediaDevices;
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="Exposed">
+        <webidl>Exposed=<ref>Window</ref>,</webidl>
+        <TypeList>
+          <Type name="Window"/>
+        </TypeList>
+      </ExtendedAttribute>
+      <ExtendedAttribute name="NoInterfaceObject">
+        <webidl> NoInterfaceObject</webidl>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <Attribute name="mediaDevices" readonly="readonly" id="::NavigatorUserMedia::mediaDevices">
+      <webidl>    [SameObject]
+    readonly        attribute <ref>MediaDevices</ref> mediaDevices;</webidl>
+      <ExtendedAttributeList>
+        <ExtendedAttribute name="SameObject">
+          <webidl>SameObject</webidl>
+        </ExtendedAttribute>
+      </ExtendedAttributeList>
+      <Type name="MediaDevices"/>
+    </Attribute>
+  </Interface>
+  <Implements name1="Navigator" name2="NavigatorUserMedia">
+    <webidl><ref>Navigator</ref> implements <ref>NavigatorUserMedia</ref>;</webidl>
+  </Implements>
+  <Interface name="MediaDevices" id="::MediaDevices">
+    <webidl>[Exposed=<ref>Window</ref>]
+interface MediaDevices : <ref>EventTarget</ref> {
+                    attribute <ref>EventHandler</ref> ondevicechange;
+    Promise&lt;sequence&lt;<ref>MediaDeviceInfo</ref>>> enumerateDevices ();
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="Exposed">
+        <webidl>Exposed=<ref>Window</ref>]</webidl>
+        <TypeList>
+          <Type name="Window"/>
+        </TypeList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <InterfaceInheritance>
+      <Name name="EventTarget"/>
+    </InterfaceInheritance>
+    <Attribute name="ondevicechange" id="::MediaDevices::ondevicechange">
+      <webidl>                    attribute <ref>EventHandler</ref> ondevicechange;</webidl>
+      <Type name="EventHandler"/>
+    </Attribute>
+    <Operation name="enumerateDevices" id="::MediaDevices::enumerateDevices">
+      <webidl>    Promise&lt;sequence&lt;<ref>MediaDeviceInfo</ref>>> enumerateDevices ();</webidl>
+      <Type type="Promise">
+        <Type type="sequence">
+          <Type name="MediaDeviceInfo"/>
+        </Type>
+      </Type>
+      <ArgumentList/>
+    </Operation>
+  </Interface>
+  <Interface name="MediaDeviceInfo" id="::MediaDeviceInfo">
+    <webidl>[Exposed=<ref>Window</ref>]
+interface MediaDeviceInfo {
+    readonly        attribute DOMString       deviceId;
+    readonly        attribute <ref>MediaDeviceKind</ref> kind;
+    readonly        attribute DOMString       label;
+    readonly        attribute DOMString       groupId;
+    serializer = {attribute};
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="Exposed">
+        <webidl>Exposed=<ref>Window</ref>]</webidl>
+        <TypeList>
+          <Type name="Window"/>
+        </TypeList>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <Attribute name="deviceId" readonly="readonly" id="::MediaDeviceInfo::deviceId">
+      <webidl>    readonly        attribute DOMString       deviceId;</webidl>
+      <Type type="DOMString"/>
+    </Attribute>
+    <Attribute name="kind" readonly="readonly" id="::MediaDeviceInfo::kind">
+      <webidl>    readonly        attribute <ref>MediaDeviceKind</ref> kind;</webidl>
+      <Type name="MediaDeviceKind"/>
+    </Attribute>
+    <Attribute name="label" readonly="readonly" id="::MediaDeviceInfo::label">
+      <webidl>    readonly        attribute DOMString       label;</webidl>
+      <Type type="DOMString"/>
+    </Attribute>
+    <Attribute name="groupId" readonly="readonly" id="::MediaDeviceInfo::groupId">
+      <webidl>    readonly        attribute DOMString       groupId;</webidl>
+      <Type type="DOMString"/>
+    </Attribute>
+    <Serializer>
+      <webidl>    serializer = {attribute};</webidl>
+      <Map pattern="all"/>
+    </Serializer>
+  </Interface>
+  <Enum name="MediaDeviceKind" id="::MediaDeviceKind">
+    <webidl>enum MediaDeviceKind {
+    &quot;audioinput&quot;,
+    &quot;audiooutput&quot;,
+    &quot;videoinput&quot;
+};</webidl>
+    <EnumValue stringvalue="audioinput">
+      <webidl>    &quot;audioinput</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="audiooutput">
+      <webidl>    &quot;audiooutput</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="videoinput">
+      <webidl>    &quot;videoinput</webidl>
+    </EnumValue>
+  </Enum>
+  <Interface name="InputDeviceInfo" id="::InputDeviceInfo">
+    <webidl>interface InputDeviceInfo : <ref>MediaDeviceInfo</ref> {
+    <ref>MediaTrackCapabilities</ref> getCapabilities ();
+};</webidl>
+    <InterfaceInheritance>
+      <Name name="MediaDeviceInfo"/>
+    </InterfaceInheritance>
+    <Operation name="getCapabilities" id="::InputDeviceInfo::getCapabilities">
+      <webidl>    <ref>MediaTrackCapabilities</ref> getCapabilities ();</webidl>
+      <Type name="MediaTrackCapabilities"/>
+      <ArgumentList/>
+    </Operation>
+  </Interface>
+  <Interface name="NavigatorUserMedia" partial="partial" id="::NavigatorUserMedia">
+    <webidl>partial interface NavigatorUserMedia {
+    void getUserMedia (<ref>MediaStreamConstraints</ref> constraints, <ref>NavigatorUserMediaSuccessCallback</ref> successCallback, <ref>NavigatorUserMediaErrorCallback</ref> errorCallback);
+};</webidl>
+    <Operation name="getUserMedia" id="::NavigatorUserMedia::getUserMedia">
+      <webidl>    void getUserMedia (<ref>MediaStreamConstraints</ref> constraints, <ref>NavigatorUserMediaSuccessCallback</ref> successCallback, <ref>NavigatorUserMediaErrorCallback</ref> errorCallback);</webidl>
+      <Type type="void"/>
+      <ArgumentList>
+        <Argument name="constraints">
+          <Type name="MediaStreamConstraints"/>
+        </Argument>
+        <Argument name="successCallback">
+          <Type name="NavigatorUserMediaSuccessCallback"/>
+        </Argument>
+        <Argument name="errorCallback">
+          <Type name="NavigatorUserMediaErrorCallback"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+  </Interface>
+  <Interface name="MediaDevices" partial="partial" id="::MediaDevices">
+    <webidl>partial interface MediaDevices {
+    <ref>MediaTrackSupportedConstraints</ref> getSupportedConstraints ();
+    Promise&lt;<ref>MediaStream</ref>>           getUserMedia (<ref>MediaStreamConstraints</ref> constraints);
+};</webidl>
+    <Operation name="getSupportedConstraints" id="::MediaDevices::getSupportedConstraints">
+      <webidl>    <ref>MediaTrackSupportedConstraints</ref> getSupportedConstraints ();</webidl>
+      <Type name="MediaTrackSupportedConstraints"/>
+      <ArgumentList/>
+    </Operation>
+    <Operation name="getUserMedia" id="::MediaDevices::getUserMedia">
+      <webidl>    Promise&lt;<ref>MediaStream</ref>>           getUserMedia (<ref>MediaStreamConstraints</ref> constraints);</webidl>
+      <Type type="Promise">
+        <Type name="MediaStream"/>
+      </Type>
+      <ArgumentList>
+        <Argument name="constraints">
+          <Type name="MediaStreamConstraints"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+  </Interface>
+  <Dictionary name="MediaStreamConstraints" id="::MediaStreamConstraints">
+    <webidl>dictionary MediaStreamConstraints {
+             (boolean or <ref>MediaTrackConstraints</ref>) video = false;
+             (boolean or <ref>MediaTrackConstraints</ref>) audio = false;
+};</webidl>
+    <DictionaryMember name="video" value="false" id="::MediaStreamConstraints::video">
+      <webidl>             (boolean or <ref>MediaTrackConstraints</ref>) video = false;</webidl>
+      <Type type="union">
+        <Type type="boolean"/>
+        <Type name="MediaTrackConstraints"/>
+      </Type>
+    </DictionaryMember>
+    <DictionaryMember name="audio" value="false" id="::MediaStreamConstraints::audio">
+      <webidl>             (boolean or <ref>MediaTrackConstraints</ref>) audio = false;</webidl>
+      <Type type="union">
+        <Type type="boolean"/>
+        <Type name="MediaTrackConstraints"/>
+      </Type>
+    </DictionaryMember>
+  </Dictionary>
+  <Callback name="NavigatorUserMediaSuccessCallback" id="::NavigatorUserMediaSuccessCallback">
+    <webidl>callback NavigatorUserMediaSuccessCallback = void (<ref>MediaStream</ref> stream);</webidl>
+    <Type type="void"/>
+    <ArgumentList>
+      <Argument name="stream">
+        <Type name="MediaStream"/>
+      </Argument>
+    </ArgumentList>
+  </Callback>
+  <Callback name="NavigatorUserMediaErrorCallback" id="::NavigatorUserMediaErrorCallback">
+    <webidl>callback NavigatorUserMediaErrorCallback = void (<ref>MediaStreamError</ref> error);</webidl>
+    <Type type="void"/>
+    <ArgumentList>
+      <Argument name="error">
+        <Type name="MediaStreamError"/>
+      </Argument>
+    </ArgumentList>
+  </Callback>
+  <Typedef name="MediaStreamError" id="::MediaStreamError">
+    <webidl>typedef object MediaStreamError;</webidl>
+    <Type type="object"/>
+  </Typedef>
+  <Interface name="ConstrainablePattern" id="::ConstrainablePattern">
+    <webidl>[NoInterfaceObject]
+interface ConstrainablePattern {
+    <ref>Capabilities</ref>  getCapabilities ();
+    <ref>Constraints</ref>   getConstraints ();
+    <ref>Settings</ref>      getSettings ();
+    Promise&lt;void> applyConstraints (optional <ref>Constraints</ref> constraints);
+                    attribute <ref>EventHandler</ref> onoverconstrained;
+};</webidl>
+    <ExtendedAttributeList>
+      <ExtendedAttribute name="NoInterfaceObject">
+        <webidl>NoInterfaceObject</webidl>
+      </ExtendedAttribute>
+    </ExtendedAttributeList>
+    <Operation name="getCapabilities" id="::ConstrainablePattern::getCapabilities">
+      <webidl>    <ref>Capabilities</ref>  getCapabilities ();</webidl>
+      <Type name="Capabilities"/>
+      <ArgumentList/>
+    </Operation>
+    <Operation name="getConstraints" id="::ConstrainablePattern::getConstraints">
+      <webidl>    <ref>Constraints</ref>   getConstraints ();</webidl>
+      <Type name="Constraints"/>
+      <ArgumentList/>
+    </Operation>
+    <Operation name="getSettings" id="::ConstrainablePattern::getSettings">
+      <webidl>    <ref>Settings</ref>      getSettings ();</webidl>
+      <Type name="Settings"/>
+      <ArgumentList/>
+    </Operation>
+    <Operation name="applyConstraints" id="::ConstrainablePattern::applyConstraints">
+      <webidl>    Promise&lt;void> applyConstraints (optional <ref>Constraints</ref> constraints);</webidl>
+      <Type type="Promise">
+        <Type type="void"/>
+      </Type>
+      <ArgumentList>
+        <Argument optional="optional" name="constraints">
+          <Type name="Constraints"/>
+        </Argument>
+      </ArgumentList>
+    </Operation>
+    <Attribute name="onoverconstrained" id="::ConstrainablePattern::onoverconstrained">
+      <webidl>                    attribute <ref>EventHandler</ref> onoverconstrained;</webidl>
+      <Type name="EventHandler"/>
+    </Attribute>
+  </Interface>
+  <Dictionary name="DoubleRange" id="::DoubleRange">
+    <webidl>dictionary DoubleRange {
+             double max;
+             double min;
+};</webidl>
+    <DictionaryMember name="max" id="::DoubleRange::max">
+      <webidl>             double max;</webidl>
+      <Type type="double"/>
+    </DictionaryMember>
+    <DictionaryMember name="min" id="::DoubleRange::min">
+      <webidl>             double min;</webidl>
+      <Type type="double"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="ConstrainDoubleRange" id="::ConstrainDoubleRange">
+    <webidl>dictionary ConstrainDoubleRange : <ref>DoubleRange</ref> {
+             double exact;
+             double ideal;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="DoubleRange"/>
+    </DictionaryInheritance>
+    <DictionaryMember name="exact" id="::ConstrainDoubleRange::exact">
+      <webidl>             double exact;</webidl>
+      <Type type="double"/>
+    </DictionaryMember>
+    <DictionaryMember name="ideal" id="::ConstrainDoubleRange::ideal">
+      <webidl>             double ideal;</webidl>
+      <Type type="double"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="LongRange" id="::LongRange">
+    <webidl>dictionary LongRange {
+             long max;
+             long min;
+};</webidl>
+    <DictionaryMember name="max" id="::LongRange::max">
+      <webidl>             long max;</webidl>
+      <Type type="long"/>
+    </DictionaryMember>
+    <DictionaryMember name="min" id="::LongRange::min">
+      <webidl>             long min;</webidl>
+      <Type type="long"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="ConstrainLongRange" id="::ConstrainLongRange">
+    <webidl>dictionary ConstrainLongRange : <ref>LongRange</ref> {
+             long exact;
+             long ideal;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="LongRange"/>
+    </DictionaryInheritance>
+    <DictionaryMember name="exact" id="::ConstrainLongRange::exact">
+      <webidl>             long exact;</webidl>
+      <Type type="long"/>
+    </DictionaryMember>
+    <DictionaryMember name="ideal" id="::ConstrainLongRange::ideal">
+      <webidl>             long ideal;</webidl>
+      <Type type="long"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="ConstrainBooleanParameters" id="::ConstrainBooleanParameters">
+    <webidl>dictionary ConstrainBooleanParameters {
+             boolean exact;
+             boolean ideal;
+};</webidl>
+    <DictionaryMember name="exact" id="::ConstrainBooleanParameters::exact">
+      <webidl>             boolean exact;</webidl>
+      <Type type="boolean"/>
+    </DictionaryMember>
+    <DictionaryMember name="ideal" id="::ConstrainBooleanParameters::ideal">
+      <webidl>             boolean ideal;</webidl>
+      <Type type="boolean"/>
+    </DictionaryMember>
+  </Dictionary>
+  <Dictionary name="ConstrainDOMStringParameters" id="::ConstrainDOMStringParameters">
+    <webidl>dictionary ConstrainDOMStringParameters {
+             (DOMString or sequence&lt;DOMString>) exact;
+             (DOMString or sequence&lt;DOMString>) ideal;
+};</webidl>
+    <DictionaryMember name="exact" id="::ConstrainDOMStringParameters::exact">
+      <webidl>             (DOMString or sequence&lt;DOMString>) exact;</webidl>
+      <Type type="union">
+        <Type type="DOMString"/>
+        <Type type="sequence">
+          <Type type="DOMString"/>
+        </Type>
+      </Type>
+    </DictionaryMember>
+    <DictionaryMember name="ideal" id="::ConstrainDOMStringParameters::ideal">
+      <webidl>             (DOMString or sequence&lt;DOMString>) ideal;</webidl>
+      <Type type="union">
+        <Type type="DOMString"/>
+        <Type type="sequence">
+          <Type type="DOMString"/>
+        </Type>
+      </Type>
+    </DictionaryMember>
+  </Dictionary>
+  <Typedef name="ConstrainLong" id="::ConstrainLong">
+    <webidl>typedef (long or <ref>ConstrainLongRange</ref>) ConstrainLong;</webidl>
+    <Type type="union">
+      <Type type="long"/>
+      <Type name="ConstrainLongRange"/>
+    </Type>
+  </Typedef>
+  <Typedef name="ConstrainDouble" id="::ConstrainDouble">
+    <webidl>typedef (double or <ref>ConstrainDoubleRange</ref>) ConstrainDouble;</webidl>
+    <Type type="union">
+      <Type type="double"/>
+      <Type name="ConstrainDoubleRange"/>
+    </Type>
+  </Typedef>
+  <Typedef name="ConstrainBoolean" id="::ConstrainBoolean">
+    <webidl>typedef (boolean or <ref>ConstrainBooleanParameters</ref>) ConstrainBoolean;</webidl>
+    <Type type="union">
+      <Type type="boolean"/>
+      <Type name="ConstrainBooleanParameters"/>
+    </Type>
+  </Typedef>
+  <Typedef name="ConstrainDOMString" id="::ConstrainDOMString">
+    <webidl>typedef (DOMString or sequence&lt;DOMString> or <ref>ConstrainDOMStringParameters</ref>) ConstrainDOMString;</webidl>
+    <Type type="union">
+      <Type type="DOMString"/>
+      <Type type="sequence">
+        <Type type="DOMString"/>
+      </Type>
+      <Type name="ConstrainDOMStringParameters"/>
+    </Type>
+  </Typedef>
+  <Dictionary name="Capabilities" id="::Capabilities">
+    <webidl>dictionary Capabilities {
+};</webidl>
+  </Dictionary>
+  <Dictionary name="Settings" id="::Settings">
+    <webidl>dictionary Settings {
+};</webidl>
+  </Dictionary>
+  <Dictionary name="ConstraintSet" id="::ConstraintSet">
+    <webidl>dictionary ConstraintSet {
+};</webidl>
+  </Dictionary>
+  <Dictionary name="Constraints" id="::Constraints">
+    <webidl>dictionary Constraints : <ref>ConstraintSet</ref> {
+             sequence&lt;<ref>ConstraintSet</ref>> advanced;
+};</webidl>
+    <DictionaryInheritance>
+      <Name name="ConstraintSet"/>
+    </DictionaryInheritance>
+    <DictionaryMember name="advanced" id="::Constraints::advanced">
+      <webidl>             sequence&lt;<ref>ConstraintSet</ref>> advanced;</webidl>
+      <Type type="sequence">
+        <Type name="ConstraintSet"/>
+      </Type>
+    </DictionaryMember>
+  </Dictionary>
+</Definitions>
+<Definitions>
   <webidl>[Exposed=<ref>Worker</ref>] interface WorkerGlobalScope : <ref>EventTarget</ref> {
   readonly attribute <ref>WorkerGlobalScope</ref> self;
   readonly attribute <ref>WorkerLocation</ref> location;
