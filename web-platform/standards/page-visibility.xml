@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Definitions>
+  <webidl>enum VisibilityState { &quot;hidden&quot;, &quot;visible&quot;, &quot;prerender&quot;, &quot;unloaded&quot; };
+
+partial interface Document {
+  readonly attribute boolean hidden;
+  readonly attribute <ref>VisibilityState</ref> visibilityState; 
+};</webidl>
+  <Enum name="VisibilityState" id="::VisibilityState">
+    <webidl>enum VisibilityState { &quot;hidden&quot;, &quot;visible&quot;, &quot;prerender&quot;, &quot;unloaded&quot; };</webidl>
+    <EnumValue stringvalue="hidden">
+      <webidl> &quot;hidden</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="visible">
+      <webidl> &quot;visible</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="prerender">
+      <webidl> &quot;prerender</webidl>
+    </EnumValue>
+    <EnumValue stringvalue="unloaded">
+      <webidl> &quot;unloaded</webidl>
+    </EnumValue>
+  </Enum>
+  <Interface name="Document" partial="partial" id="::Document">
+    <webidl>partial interface Document {
+  readonly attribute boolean hidden;
+  readonly attribute <ref>VisibilityState</ref> visibilityState; 
+};</webidl>
+    <Attribute name="hidden" readonly="readonly" id="::Document::hidden">
+      <webidl>  readonly attribute boolean hidden;</webidl>
+      <Type type="boolean"/>
+    </Attribute>
+    <Attribute name="visibilityState" readonly="readonly" id="::Document::visibilityState">
+      <webidl>  readonly attribute <ref>VisibilityState</ref> visibilityState;</webidl>
+      <Type name="VisibilityState"/>
+    </Attribute>
+  </Interface>
+</Definitions>
