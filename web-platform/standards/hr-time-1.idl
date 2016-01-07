@@ -1,0 +1,6 @@
+typedef double DOMHighResTimeStamp;
+				
+partial interface Performance {
+  DOMHighResTimeStamp now();
+};
+

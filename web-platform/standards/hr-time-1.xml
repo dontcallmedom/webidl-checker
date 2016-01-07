@@ -1,0 +1,21 @@
+<Definitions>
+  <webidl>typedef double DOMHighResTimeStamp;
+                             
+partial interface Performance {
+  <ref>DOMHighResTimeStamp</ref> now();
+};</webidl>
+  <Typedef name="DOMHighResTimeStamp" id="::DOMHighResTimeStamp">
+    <webidl>typedef double DOMHighResTimeStamp;</webidl>
+    <Type type="double"/>
+  </Typedef>
+  <Interface name="Performance" partial="partial" id="::Performance">
+    <webidl>partial interface Performance {
+  <ref>DOMHighResTimeStamp</ref> now();
+};</webidl>
+    <Operation name="now" id="::Performance::now">
+      <webidl>  <ref>DOMHighResTimeStamp</ref> now();</webidl>
+      <Type name="DOMHighResTimeStamp"/>
+      <ArgumentList/>
+    </Operation>
+  </Interface>
+</Definitions>

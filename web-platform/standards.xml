@@ -8309,6 +8309,27 @@ partial interface Document {
   </Interface>
 </Definitions>
 <Definitions>
+  <webidl>typedef double DOMHighResTimeStamp;
+                             
+partial interface Performance {
+  <ref>DOMHighResTimeStamp</ref> now();
+};</webidl>
+  <Typedef name="DOMHighResTimeStamp" id="::DOMHighResTimeStamp">
+    <webidl>typedef double DOMHighResTimeStamp;</webidl>
+    <Type type="double"/>
+  </Typedef>
+  <Interface name="Performance" partial="partial" id="::Performance">
+    <webidl>partial interface Performance {
+  <ref>DOMHighResTimeStamp</ref> now();
+};</webidl>
+    <Operation name="now" id="::Performance::now">
+      <webidl>  <ref>DOMHighResTimeStamp</ref> now();</webidl>
+      <Type name="DOMHighResTimeStamp"/>
+      <ArgumentList/>
+    </Operation>
+  </Interface>
+</Definitions>
+<Definitions>
   <webidl>[Constructor(DOMString type, optional <ref>MessageEventInit</ref> eventInitDict), Exposed=(<ref>Window</ref>,<ref>Worker</ref>)]
 interface MessageEvent : <ref>Event</ref> {
   readonly attribute any data;
