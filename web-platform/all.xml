@@ -8271,7 +8271,6 @@ interface NavigatorPlugins {
     </Operation>
   </Interface>
 </Definitions>
-<?xml version="1.0" encoding="UTF-8"?>
 <Definitions>
   <webidl>enum VisibilityState { &quot;hidden&quot;, &quot;visible&quot;, &quot;prerender&quot;, &quot;unloaded&quot; };
 
