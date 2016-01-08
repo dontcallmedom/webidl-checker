@@ -1,5 +1,0 @@
-New exception (RedundantException) defined; minting new exceptions should only be done if additional fields are needed on top of DOMException.
-New exception (AnotherRedundantException) defined; minting new exceptions should only be done if additional fields are needed on top of DOMException.
-New exception (AnotherAnotherRedundantException) defined; minting new exceptions should only be done if additional fields are needed on top of DOMException.
-New exception (URIError) defined; minting new exceptions should only be done if additional fields are needed on top of DOMException.
-Exception URIError clashes with predefined ECMAScript error objects.
