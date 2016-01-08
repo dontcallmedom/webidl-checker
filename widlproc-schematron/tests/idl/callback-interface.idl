@@ -1,4 +1,6 @@
 callback interface InvalidCallbackInheritance : HTMLElement {
+  double getValue();
+  attribute DOMString name;
 };
 
 interface InvalidNonCallbackInheriantce : InvalidCallbackInheritance {
@@ -9,5 +11,10 @@ callback interface InvalidStaticAttribute {
 };
 
 callback interface InvalidStaticOperation {
+  attribute DOMString name;
   static double getValue();
+};
+
+callback interface InvalidSingleOperation {
+  double getValue();
 };

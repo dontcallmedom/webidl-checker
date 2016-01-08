@@ -1,3 +1,4 @@
+Callback interface EventHandler has only a single operation, it should use a callback function instead if no legacy requirement prevents it
 Extended attribute TreatNonCallableAsNull used on Interface BogusTreatNonCallableAsNullUsedOnInterface ; specifications SHOULD NOT use [TreatNonCallableAsNull] unless required to specify the behavior of legacy APIs.
 Extended attribute TreatNonCallableAsNull used on Interface BogusTreatNonCallableAsNullUsedOnInterface can only be used on attributes or operation arguments
 Extended attribute TreatNonCallableAsNull used on Attribute handler ; specifications SHOULD NOT use [TreatNonCallableAsNull] unless required to specify the behavior of legacy APIs.
