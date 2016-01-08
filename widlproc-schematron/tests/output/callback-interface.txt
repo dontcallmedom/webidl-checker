@@ -1,2 +1,4 @@
 Callback interface InvalidCallbackInheritance inherits from non-callback interface HTMLElement
+Callback interface InvalidStaticAttribute has a static attribute or operation name
+Callback interface InvalidStaticOperation has a static attribute or operation getValue
 Non-callback interface InvalidNonCallbackInheriantce inherits from callback interface InvalidCallbackInheritance
