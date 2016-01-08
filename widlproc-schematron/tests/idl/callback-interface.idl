@@ -1,3 +1,6 @@
 callback interface InvalidCallbackInheritance : HTMLElement {
 
 };
+
+interface InvalidNonCallbackInheriantce : InvalidCallbackInheritance {
+};

@@ -19,6 +19,12 @@
        </rule>
      </pattern>
      <pattern>
+       <title>regular interfaces do not inherit from callback interface</title>
+       <rule context="//Interface[not(@callback)]">
+	 <assert role="warning" test="not(InterfaceInheritance) or (//Interface[@name=current()/InterfaceInheritance/Name/@name and not(@callback)] or $standards//Interface[@name=current()/InterfaceInheritance/Name/@name and not(@callback)])">Non-callback interface <value-of select="@name" /> inherits from callback interface <value-of select="InterfaceInheritance/Name/@name"/></assert>
+       </rule>
+     </pattern>
+     <pattern>
        <title>Names of interfaces / exceptions / dictionaries don't clash</title>
        <rule context="//Typedef[@id]|//Dictionary[@id]">
 	 <assert test="not(preceding::*[local-name()='Interface' or local-name()='Typedef' or local-name()='Dictionary'][@id=current()/@id])"><value-of select="concat(local-name(.), ' ', @name)"/> clashes with previous definition of <value-of select="concat(local-name(preceding::*[local-name()='Interface'  or local-name()='Typedef' or local-name()='Dictionary'][@name=current()/@name][1]),' ', @name)"/></assert>

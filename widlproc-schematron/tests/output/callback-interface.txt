@@ -1,1 +1,2 @@
 Callback interface InvalidCallbackInheritance inherits from non-callback interface HTMLElement
+Non-callback interface InvalidNonCallbackInheriantce inherits from callback interface InvalidCallbackInheritance
