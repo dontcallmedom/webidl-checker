@@ -347,7 +347,7 @@ def process(url,output='default',semantic=False):
 
     try:
         (info,idls,xmlOutput,errors)=extractIdls(url)
-        if not len(errors):
+        if not len(errors) and semantic:
             xmlWrapper = "<Module>" + "".join(xmlOutput) + "</Module>"
             errors.extend(semantic_check(xmlWrapper, "\n".join(idls), 0, 0))
     except UnparseableDocumentException,e:
