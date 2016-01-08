@@ -1,4 +1,4 @@
 Extended attribute SameObject used on Interface — SameObject expected only on attributes.
-Extended attribute SameObject used on an attribute whose type (boolean) is not an interface type interface.
+Extended attribute SameObject used on an attribute whose type (boolean) is not an interface type or a promise.
 Extended attribute SameObject used on non-readonly attribute InvalidSameObjectEAUsedOnNonReadOnlyTypeAttribute.implementation — SameObject expected only on readonly attributes.
 Extended attribute SameObject used with arguments on Attribute implementation.

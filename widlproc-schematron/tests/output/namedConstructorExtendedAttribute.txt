@@ -1,4 +1,3 @@
 Extended attribute NamedConstructor used on Attribute — NamedConstructor expected only on interfaces.
 Extended attribute NamedConstructor with identifier Foo in FooBar2 interface clashes with NamedConstructor on interface FooBar.
 Extended attribute NamedConstructor with identifier FooBar in FooBar3 interface clashes with  interface FooBar.
-Extended attribute NamedConstructor with identifier Bar in FooBar4 interface clashes with exception interface Bar.

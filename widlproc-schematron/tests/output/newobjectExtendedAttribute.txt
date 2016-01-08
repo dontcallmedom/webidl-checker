@@ -1,4 +1,4 @@
 Extended attribute NewObject used with arguments on Operation createElement.
 Extended attribute NewObject used on an operation without identifier in InvalidNewObjectEAOnNonRegularOperation — NewObject expected only on regular or static operations.
 Extended attribute NewObject used on Stringifier — NewObject expected only on operations.
-Extended attribute NewObject used on an operation whose return type (boolean) is not an interface type interface.
+Extended attribute NewObject used on an operation whose return type (boolean) is not an interface type or a promise.

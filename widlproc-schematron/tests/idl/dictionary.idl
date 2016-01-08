@@ -7,11 +7,6 @@ interface InvalidDictionaryAsAttribute {
   attribute ValidDictionary dict;
 };
 
-exception InvalidDictionaryAsExceptionField {
-  ValidDictionary field;
-};
-
-
 interface ValidDictionaryAsArgument {
   void paintCar(ValidDictionary paint);
 };

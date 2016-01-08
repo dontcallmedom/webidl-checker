@@ -19,12 +19,3 @@ interface FooBar2 {
 [NamedConstructor=FooBar]
 interface FooBar3 {
 };
-
-/* clash with existing exception interface identifier */
-exception Bar {
-  DOMString foo;
-};
-
-[NamedConstructor=Bar] 
-interface FooBar4 {
-};

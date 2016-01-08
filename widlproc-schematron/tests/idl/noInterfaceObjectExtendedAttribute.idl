@@ -25,7 +25,3 @@ interface InvalidNoInterFaceObjectUsageOnInterfaceWithStaticOperation {
 interface ValidNoInterFaceObjectUsageOnInterface {
 };
 
-[NoInterfaceObject]
-exception ValidNoInterFaceObjectUsageOnException {
-  DOMString foo;
-};

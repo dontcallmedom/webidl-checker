@@ -1,4 +1,3 @@
-Exception NameA clashes with previous definition of Interface NameA
-Dictionary NameA clashes with previous definition of Exception NameA
+Dictionary NameA clashes with previous definition of Interface NameA
 Typedef NameA clashes with previous definition of Dictionary NameA
 Interface NameA clashes with previous definition of Typedef NameA

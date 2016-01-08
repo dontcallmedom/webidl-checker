@@ -1,3 +1,2 @@
 Dictionary member fillPattern in ClashingDictionaryMembers clashes with another dictionary member.
 Attribute dict in Interface InvalidDictionaryAsAttribute is defined as a dictionary.
-ExceptionField field in Exception InvalidDictionaryAsExceptionField is defined as a dictionary.
