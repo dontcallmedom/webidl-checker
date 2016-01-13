@@ -13,6 +13,12 @@
        </rule>
      </pattern>
      <pattern>
+       <title>partial interface don't specifcy inheritance</title>
+       <rule context="//Interface[@partial]">
+	 <assert role="warning" test="not(InterfaceInheritance)">Partial interface <value-of select="@name" /> cannot specify interface inheritance</assert>
+       </rule>
+     </pattern>
+     <pattern>
        <title>callback interface do not inherit from non callback interface</title>
        <rule context="//Interface[@callback]">
 	 <assert role="warning" test="not(InterfaceInheritance) or (//Interface[@name=current()/InterfaceInheritance/Name/@name and @callback] or $standards//Interface[@name=current()/InterfaceInheritance/Name/@name and @callback])">Callback interface <value-of select="@name" /> inherits from non-callback interface <value-of select="InterfaceInheritance/Name/@name"/></assert>

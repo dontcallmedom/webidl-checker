@@ -2,7 +2,11 @@
 partial interface UnknowInterface {
 };
 
+partial interface Foo : Base {
+};
 
+interface Base {
+};
 // Valid partial interface definition
 interface Foo {
 };

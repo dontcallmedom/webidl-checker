@@ -1,1 +1,2 @@
 Partial interface UnknowInterface does not have matching full interface
+Partial interface Foo cannot specify interface inheritance
