@@ -1,16 +1,16 @@
-// [ArrayClass] used on dictionary
-[ArrayClass] dictionary BogusArrayClassOnDictionary {
+// [LegacyArrayClass] used on dictionary
+[LegacyArrayClass] dictionary BogusArrayClassOnDictionary {
 };
 
 
-// [ArrayClass] used on interface with inheritance
+// [LegacyArrayClass] used on interface with inheritance
 interface Foo {};
-[ArrayClass]
+[LegacyArrayClass]
 interface BogusArrayClassOnInterfaceWithInheritance : Foo {
 };
 
 // Valid usage
-[ArrayClass]
+[LegacyArrayClass]
 interface ImmutableItemList {
   readonly attribute unsigned long length;
   getter object getItem(unsigned long index);

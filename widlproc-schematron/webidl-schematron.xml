@@ -153,7 +153,7 @@
      <pattern>
        <title>Extended attributes are well-known</title>
        <rule context="//ExtendedAttribute[@name]">
-	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#es-extended-attributes" test="@name='ArrayClass' or @name='Constructor' or @name='NamedConstructor' or @name='NoInterfaceObject' or @name='OverrideBuiltins' or @name='PutForwards' or @name='Replaceable' or @name='TreatNullAs' or @name='TreatUndefinedAs' or @name='TreatNonCallableAsNull' or @name='TreatNonCallableAsNull' or @name='Clamp' or @name='Unforgeable' or @name='EnforceRange' or @name='ImplicitThis' or @name='LenientThis' or @name='SameObject' or @name='NewObject' or @name='EnsureUTF16' or @name='Global' or @name='MapClass' or @name='Exposed' or @name='LegacyArrayClass'">Extended attribute of <value-of select="@name"/> is unknown in WebIDL.</assert>
+	 <assert see="http://dev.w3.org/2006/webapi/WebIDL/#es-extended-attributes" test="@name='Constructor' or @name='NamedConstructor' or @name='NoInterfaceObject' or @name='OverrideBuiltins' or @name='PutForwards' or @name='Replaceable' or @name='TreatNullAs' or @name='TreatUndefinedAs' or @name='TreatNonCallableAsNull' or @name='TreatNonCallableAsNull' or @name='Clamp' or @name='Unforgeable' or @name='EnforceRange' or @name='ImplicitThis' or @name='LenientThis' or @name='SameObject' or @name='NewObject' or @name='EnsureUTF16' or @name='Global' or @name='MapClass' or @name='Exposed' or @name='LegacyArrayClass'">Extended attribute of <value-of select="@name"/> is unknown in WebIDL.</assert>
        </rule>
      </pattern>
      <pattern>
@@ -330,8 +330,8 @@
        </rule>
      </pattern>
      <pattern>
-       <title>Extended attribute ArrayClass</title>
-       <rule context="//ExtendedAttribute[@name='ArrayClass']">
+       <title>Extended attribute LegacyArrayClass</title>
+       <rule context="//ExtendedAttribute[@name='LegacyArrayClass']">
 	 <extends rule="extendedAttributeNoArg"/>
 	 <extends rule="extendedAttributeAppliesToInterface"/>
 	 <extends rule="extendedAttributeNotWithInheritance"/>

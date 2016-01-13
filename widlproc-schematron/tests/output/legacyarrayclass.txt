@@ -1,0 +1,2 @@
+Extended attribute LegacyArrayClass used on Dictionary — LegacyArrayClass expected only on interfaces.
+The interface BogusArrayClassOnInterfaceWithInheritance has extended attribute LegacyArrayClass but inherits from another interface (Foo).
