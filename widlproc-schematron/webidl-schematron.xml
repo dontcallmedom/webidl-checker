@@ -13,9 +13,15 @@
        </rule>
      </pattern>
      <pattern>
-       <title>partial interface don't specifcy inheritance</title>
+       <title>partial interface don't specify inheritance</title>
        <rule context="//Interface[@partial]">
 	 <assert role="warning" test="not(InterfaceInheritance)">Partial interface <value-of select="@name" /> cannot specify interface inheritance</assert>
+       </rule>
+     </pattern>
+     <pattern>
+       <title>partial interface don't use forbidden extended attributes</title>
+       <rule context="//Interface[@partial]">
+	 <assert role="warning" test="not(ExtendedAttributeList/ExtendedAttribute[@name='Constructor' or @name='ImplicitThis' or @name='LegacyArrayClass' or @name='NamedConstructor' or @name='NoInterfaceObject'])">Partial interface <value-of select="@name" /> uses a forbidden extended attribute</assert>
        </rule>
      </pattern>
      <pattern>

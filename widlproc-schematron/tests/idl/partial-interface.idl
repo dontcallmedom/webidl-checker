@@ -7,6 +7,10 @@ partial interface Foo : Base {
 
 interface Base {
 };
+
+[ImplicitThis]
+partial interface Foo {
+};
 // Valid partial interface definition
 interface Foo {
 };

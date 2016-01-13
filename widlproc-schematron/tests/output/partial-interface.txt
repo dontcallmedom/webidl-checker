@@ -1,2 +1,3 @@
 Partial interface UnknowInterface does not have matching full interface
 Partial interface Foo cannot specify interface inheritance
+Partial interface Foo uses a forbidden extended attribute
