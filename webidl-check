@@ -272,7 +272,7 @@ def extractIdls(doc, sourceHeaders={}):
             title = tree.xpath("/html:html/html:head/html:title/text()",namespaces=ns)
             if len(title):
                 srcheaders["title"] = title[0]
-            idls = tree.xpath("/html:html/html:body//html:pre[@class='idl' or contains(@class,'webidl') or html:code[@class='idl-code']]",namespaces=ns)
+            idls = tree.xpath("/html:html/html:body//html:pre[contains(@class,'idl') or contains(@class,'webidl') or html:code[@class='idl-code']]",namespaces=ns)
             for counter, idlHtml in enumerate(idls, 1):
                 idl = "".join(idlHtml.xpath("descendant-or-self::text()"))
                 idlOutput.append(idl)
