@@ -86,7 +86,7 @@ def copyHeader(copy_func, source, key, header_name=None):
         return False
     elif header_name is None:
         header_name = key
-    copy_func("%s: %s" % (header_name, value))
+    copy_func(header_name, value)
     return True
 
 def setupRequest(source_headers):
@@ -127,7 +127,7 @@ def serveRequest():
             except WrongConfigurationException,e:
                 printError(output,doc, textoutputselected, "Could not run widlproc", str(e))
             for header_name in ('Last-Modified', 'Expires'):
-                if copyHeader(sys.stdout.write, srcheaders, header_name):
+                if copyHeader(lambda header, value: sys.stdout.write("%s: %s" %(header, value)), srcheaders, header_name):
                     print
             title = srcheaders.get('title', title)
         elif inp:
